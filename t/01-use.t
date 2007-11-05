@@ -1,5 +1,5 @@
 use Test::More tests => 1;
 
-BEGIN { 
+BEGIN {
     use_ok( 'Image::TextMode' );
 }

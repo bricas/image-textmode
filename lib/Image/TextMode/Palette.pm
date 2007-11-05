@@ -8,32 +8,30 @@ use base qw( Class::Data::Accessor );
 __PACKAGE__->mk_classaccessor( colors => [] );
 
 sub get {
-	my $self  = shift;
-	my $index = shift;
+    my $self  = shift;
+    my $index = shift;
 
-	return $self->colors->[ $index ]; 
+    return $self->colors->[ $index ];
 }
 
 sub set {
-	my $self = shift;
-	my( $index, $rgb ) = @_;
+    my $self = shift;
+    my ( $index, $rgb ) = @_;
 
-	$self->colors->[ $index ] = $rgb; 
+    $self->colors->[ $index ] = $rgb;
 }
 
 sub clear {
-	my $self = shift;
+    my $self = shift;
 
-	$self->colors( [] );
+    $self->colors( [] );
 }
 
 sub fill_gd_palette {
     my $self  = shift;
     my $image = shift;
 
-    my @allocations = map {
-        $image->colorAllocate( @$_ )
-    } @{ $self->colors };
+    my @allocations = map { $image->colorAllocate( @$_ ) } @{ $self->colors };
 
     return \@allocations;
 }
