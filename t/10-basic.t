@@ -1,4 +1,4 @@
-use Test::More tests => 15;
+use Test::More tests => 29;
 
 use_ok( 'Image::TextMode' );
 
@@ -27,5 +27,39 @@ isa_ok( $image, 'Image::TextMode' );
     is( $pixel->blink, 1,   'blink' );
 }
 
-is( $image->as_ascii, "Hi\n", 'as_ascii' );
+{
+    use_ok( 'Image::TextMode::Pixel' );
+    my $pixel = Image::TextMode::Pixel->new( {
+        char => '!',
+        fg   => 0,
+        bg   => 7,
+        blink => 0,
+    } );
+
+    isa_ok( $pixel, 'Image::TextMode::Pixel' );
+    is( $pixel->char, '!', 'char' );
+    is( $pixel->attr, 112 , 'attr' );
+    is( $pixel->fg, 0, 'fg' );
+    is( $pixel->bg, 7, 'bg' );
+    is( $pixel->blink, 0, 'blink' );
+
+    $image->putpixel( 2, 0, $pixel );
+
+    {
+        my $pixel = $image->getpixel( 2, 0 );
+        isa_ok( $pixel, 'Image::TextMode::Pixel' );
+        is( $pixel->char, '!', 'char' );
+        is( $pixel->attr, 112 , 'attr' );
+        is( $pixel->fg, 0, 'fg' );
+        is( $pixel->bg, 7, 'bg' );
+        is( $pixel->blink, 0, 'blink' );
+    }
+}
+
+is( $image->as_ascii, "Hi!\n", 'as_ascii' );
+
+{
+    $image->clear_line( 0 );
+    is_deeply( $image->_image->[ 0 ], [], 'clear_line' );
+}
 

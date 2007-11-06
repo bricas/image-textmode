@@ -9,6 +9,15 @@ __PACKAGE__->mk_classaccessor( width  => 0 );
 __PACKAGE__->mk_classaccessor( height => 0 );
 __PACKAGE__->mk_classaccessor( chars  => [] );
 
+sub new {
+    my $class = shift;
+    my $options = ( @_ == 1 && ref $_[ 0 ] eq 'HASH' ) ? $_[ 0 ] : { @_ };
+
+    my $self = bless $options, $class;
+
+    return $self;
+}
+
 sub get {
     my $self  = shift;
     my $index = shift;
@@ -37,22 +46,23 @@ sub characters {
 }
 
 sub as_gd {
-        require GD;
-        require File::Temp;
+    my $self = shift;
+    require GD;
+    require File::Temp;
 
-        my $temp = File::Temp->new;
+    my $temp = File::Temp->new;
 
-        binmode( $temp );
+    binmode( $temp );
 
-        print $temp
-            pack( 'VVVV', $self->characters, 0, $self->width, $self->height );
-        for my $char ( @{ $self->chars } ) {
-            print $temp pack( 'C*', split( //, sprintf( '%08b', $_ ) ) )
-                for @$char;
-        }
-        close $temp;
+    print $temp
+        pack( 'VVVV', $self->characters, 0, $self->width, $self->height );
+    for my $char ( @{ $self->chars } ) {
+        print $temp pack( 'C*', split( //, sprintf( '%08b', $_ ) ) )
+            for @$char;
+    }
+    close $temp;
 
-        return GD::Font->load( $temp->filename );
+    return GD::Font->load( $temp->filename );
 }
 
 1;

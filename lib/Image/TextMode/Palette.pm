@@ -7,6 +7,15 @@ use base qw( Class::Data::Accessor );
 
 __PACKAGE__->mk_classaccessor( colors => [] );
 
+sub new {
+    my $class = shift;
+    my $options = ( @_ == 1 && ref $_[ 0 ] eq 'HASH' ) ? $_[ 0 ] : { @_ };
+
+    my $self = bless $options, $class;
+
+    return $self;
+}
+
 sub get {
     my $self  = shift;
     my $index = shift;

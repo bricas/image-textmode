@@ -7,8 +7,12 @@ use base qw( Class::Data::Accessor );
 
 use Image::TextMode::Pixel;
 use File::SAUCE;
+use IO::File;
+use IO::String;
 
-__PACKAGE__->mk_classaccessors( qw( width height _image sauce ) );
+__PACKAGE__->mk_classaccessors( qw( width height _image sauce font palette ) );
+__PACKAGE__->mk_classaccessor( font_class => 'Image::TextMode::Font::8x16' );
+__PACKAGE__->mk_classaccessor( palette_class => 'Image::TextMode::Palette::VGA' );
 
 sub new {
     my $class = shift;
@@ -23,6 +27,26 @@ sub clear {
     $self->$_( undef ) for qw( width height );
     $self->_image( [] );
     $self->sauce( File::SAUCE->new );
+
+    for( qw( font palette ) ) {
+        my $method = "${_}_class";
+        my $class = $self->$method;
+        eval "use $class";
+        die $@ if $@;
+        $self->$_( $class->new );
+    }
+}
+
+sub read {
+    my( $self, $options ) = ( shift, shift );
+    return $self->parse( $self->create_io_object( $options ), @_ );
+}
+
+sub write {
+    my( $self, $options ) = ( shift, shift );
+	my $file = $self->create_io_object( $options, '>' );
+	
+	$file->print( $self->as_string( @_ ) );
 }
 
 sub getpixel {
@@ -54,6 +78,15 @@ sub putpixel {
     $self->_image->[ $y ]->[ $x ] = [ $char, $attr ];
 }
 
+sub clear_line {
+	my $self = shift;
+	my $y    = shift;
+
+	my $line = $self->_image->[ $y ];
+
+	$self->_image->[ $y ] = [ ] if defined $line;
+}
+
 sub as_ascii {
     my ( $self ) = @_;
 
@@ -63,6 +96,42 @@ sub as_ascii {
     }
 
     return $output;
+}
+
+sub _create_io_object {
+	my( $self, $options, $perms ) = @_;
+
+    if( !ref $options ) {
+        $options = { file => $options };
+    }
+
+	my $file;
+
+	# use appropriate IO object for what we get in
+	if( exists $options->{ file } ) {
+		$file = IO::File->new( $options->{ file }, $perms ) || die "$!";
+	}
+	elsif( exists $options->{ string } ) {
+		$file = IO::String->new( $options->{ string }, $perms );
+	}
+	elsif( exists $options->{ handle } ) {
+		$file = $options->{ handle };
+	}
+	else {
+		die "No valid read type. Must be one of 'file', 'string' or 'handle'.";
+	}
+
+	binmode( $file );
+	return $file;
+}
+
+
+sub parse {
+    die 'Abstract method!';
+}
+
+sub as_string {
+    die 'Abstract method!';
 }
 
 1;
