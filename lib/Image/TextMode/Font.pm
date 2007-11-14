@@ -5,9 +5,10 @@ use warnings;
 
 use base qw( Class::Data::Accessor );
 
-__PACKAGE__->mk_classaccessor( width  => 0 );
-__PACKAGE__->mk_classaccessor( height => 0 );
-__PACKAGE__->mk_classaccessor( chars  => [] );
+__PACKAGE__->mk_classaccessor( width         => 0 );
+__PACKAGE__->mk_classaccessor( height        => 0 );
+__PACKAGE__->mk_classaccessor( chars         => [] );
+__PACKAGE__->mk_classaccessor( intensity_map => [] );
 
 sub new {
     my $class = shift;

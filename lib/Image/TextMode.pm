@@ -10,9 +10,11 @@ use File::SAUCE;
 use IO::File;
 use IO::String;
 
-__PACKAGE__->mk_classaccessors( qw( width height _image sauce font palette ) );
+__PACKAGE__->mk_classaccessors(
+    qw( width height _image sauce font palette ) );
 __PACKAGE__->mk_classaccessor( font_class => 'Image::TextMode::Font::8x16' );
-__PACKAGE__->mk_classaccessor( palette_class => 'Image::TextMode::Palette::VGA' );
+__PACKAGE__->mk_classaccessor(
+    palette_class => 'Image::TextMode::Palette::VGA' );
 
 sub new {
     my $class = shift;
@@ -27,9 +29,9 @@ sub clear {
     $self->clear_screen;
     $self->sauce( File::SAUCE->new );
 
-    for( qw( font palette ) ) {
+    for ( qw( font palette ) ) {
         my $method = "${_}_class";
-        my $class = $self->$method;
+        my $class  = $self->$method;
         eval "use $class";
         die $@ if $@;
         $self->$_( $class->new );
@@ -43,15 +45,15 @@ sub clear_screen {
 }
 
 sub read {
-    my( $self, $options ) = ( shift, shift );
+    my ( $self, $options ) = ( shift, shift );
     return $self->parse( $self->_create_io_object( $options ), @_ );
 }
 
 sub write {
-    my( $self, $options ) = ( shift, shift );
-	my $file = $self->_create_io_object( $options, '>' );
-	
-	$file->print( $self->as_string( @_ ) );
+    my ( $self, $options ) = ( shift, shift );
+    my $file = $self->_create_io_object( $options, '>' );
+
+    $file->print( $self->as_string( @_ ) );
 }
 
 sub getpixel {
@@ -61,8 +63,7 @@ sub getpixel {
         and exists $self->_image->[ $y ]->[ $x ] )
     {
         my $data = $self->_image->[ $y ]->[ $x ];
-        return
-            wantarray
+        return wantarray
             ? @$data
             : Image::TextMode::Pixel->new(
             { char => $data->[ 0 ], attr => $data->[ 1 ] } );
@@ -84,12 +85,12 @@ sub putpixel {
 }
 
 sub clear_line {
-	my $self = shift;
-	my $y    = shift;
+    my $self = shift;
+    my $y    = shift;
 
-	my $line = $self->_image->[ $y ];
+    my $line = $self->_image->[ $y ];
 
-	$self->_image->[ $y ] = [ ] if defined $line;
+    $self->_image->[ $y ] = [] if defined $line;
 }
 
 sub as_ascii {
@@ -97,41 +98,43 @@ sub as_ascii {
 
     my $output = '';
     for my $row ( @{ $self->_image } ) {
-        $output .= join( '', map { defined $_->[ 0 ] ? $_->[ 0 ] : ' ' } @$row ) . "\n";
+        $output
+            .= join( '', map { defined $_->[ 0 ] ? $_->[ 0 ] : ' ' } @$row )
+            . "\n";
     }
 
     return $output;
 }
 
 sub _create_io_object {
-	my( $self, $options, $perms ) = @_;
+    my ( $self, $options, $perms ) = @_;
 
-    if( !ref $options ) {
+    if ( !ref $options ) {
         $options = { file => $options };
     }
 
     $perms = '<' unless $perms;
 
-	my $file;
+    my $file;
 
-	# use appropriate IO object for what we get in
-	if( exists $options->{ file } ) {
-		$file = IO::File->new( $options->{ file }, $perms ) || die "$!";
-	}
-	elsif( exists $options->{ string } ) {
-		$file = IO::String->new( $options->{ string }, $perms );
-	}
-	elsif( exists $options->{ handle } ) {
-		$file = $options->{ handle };
-	}
-	else {
-		die "No valid read type. Must be one of 'file', 'string' or 'handle'.";
-	}
+    # use appropriate IO object for what we get in
+    if ( exists $options->{ file } ) {
+        $file = IO::File->new( $options->{ file }, $perms ) || die "$!";
+    }
+    elsif ( exists $options->{ string } ) {
+        $file = IO::String->new( $options->{ string }, $perms );
+    }
+    elsif ( exists $options->{ handle } ) {
+        $file = $options->{ handle };
+    }
+    else {
+        die
+            "No valid read type. Must be one of 'file', 'string' or 'handle'.";
+    }
 
-	binmode( $file );
-	return $file;
+    binmode( $file );
+    return $file;
 }
-
 
 sub parse {
     die 'Abstract method!';

@@ -29,30 +29,31 @@ isa_ok( $image, 'Image::TextMode' );
 
 {
     use_ok( 'Image::TextMode::Pixel' );
-    my $pixel = Image::TextMode::Pixel->new( {
-        char => '!',
-        fg   => 0,
-        bg   => 7,
-        blink => 0,
-    } );
+    my $pixel = Image::TextMode::Pixel->new(
+        {   char  => '!',
+            fg    => 0,
+            bg    => 7,
+            blink => 0,
+        }
+    );
 
     isa_ok( $pixel, 'Image::TextMode::Pixel' );
-    is( $pixel->char, '!', 'char' );
-    is( $pixel->attr, 112 , 'attr' );
-    is( $pixel->fg, 0, 'fg' );
-    is( $pixel->bg, 7, 'bg' );
-    is( $pixel->blink, 0, 'blink' );
+    is( $pixel->char,  '!', 'char' );
+    is( $pixel->attr,  112, 'attr' );
+    is( $pixel->fg,    0,   'fg' );
+    is( $pixel->bg,    7,   'bg' );
+    is( $pixel->blink, 0,   'blink' );
 
     $image->putpixel( 2, 0, $pixel );
 
     {
         my $pixel = $image->getpixel( 2, 0 );
         isa_ok( $pixel, 'Image::TextMode::Pixel' );
-        is( $pixel->char, '!', 'char' );
-        is( $pixel->attr, 112 , 'attr' );
-        is( $pixel->fg, 0, 'fg' );
-        is( $pixel->bg, 7, 'bg' );
-        is( $pixel->blink, 0, 'blink' );
+        is( $pixel->char,  '!', 'char' );
+        is( $pixel->attr,  112, 'attr' );
+        is( $pixel->fg,    0,   'fg' );
+        is( $pixel->bg,    7,   'bg' );
+        is( $pixel->blink, 0,   'blink' );
     }
 }
 
