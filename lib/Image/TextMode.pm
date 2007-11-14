@@ -24,8 +24,7 @@ sub new {
 
 sub clear {
     my $self = shift;
-    $self->$_( undef ) for qw( width height );
-    $self->_image( [] );
+    $self->clear_screen;
     $self->sauce( File::SAUCE->new );
 
     for( qw( font palette ) ) {
@@ -37,14 +36,20 @@ sub clear {
     }
 }
 
+sub clear_screen {
+    my $self = shift;
+    $self->$_( undef ) for qw( width height );
+    $self->_image( [] );
+}
+
 sub read {
     my( $self, $options ) = ( shift, shift );
-    return $self->parse( $self->create_io_object( $options ), @_ );
+    return $self->parse( $self->_create_io_object( $options ), @_ );
 }
 
 sub write {
     my( $self, $options ) = ( shift, shift );
-	my $file = $self->create_io_object( $options, '>' );
+	my $file = $self->_create_io_object( $options, '>' );
 	
 	$file->print( $self->as_string( @_ ) );
 }
@@ -92,7 +97,7 @@ sub as_ascii {
 
     my $output = '';
     for my $row ( @{ $self->_image } ) {
-        $output .= join( '', map { $_->[ 0 ] || ' ' } @$row ) . "\n";
+        $output .= join( '', map { defined $_->[ 0 ] ? $_->[ 0 ] : ' ' } @$row ) . "\n";
     }
 
     return $output;
@@ -104,6 +109,8 @@ sub _create_io_object {
     if( !ref $options ) {
         $options = { file => $options };
     }
+
+    $perms = '<' unless $perms;
 
 	my $file;
 
