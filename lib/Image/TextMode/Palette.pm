@@ -16,6 +16,10 @@ sub new {
     return $self;
 }
 
+sub colours {
+    return shift->colors( @_ );
+}
+
 sub get {
     my $self  = shift;
     my $index = shift;

@@ -46,7 +46,13 @@ sub clear_screen {
 
 sub read {
     my ( $self, $options ) = ( shift, shift );
-    return $self->parse( $self->_create_io_object( $options ), @_ );
+    my $file =  $self->_create_io_object( $options );
+    $self->clear;
+
+    # attempt to find a sauce record in the file
+    $self->sauce->read( handle => $file );
+
+    return $self->parse( $file, @_ );
 }
 
 sub write {
@@ -134,6 +140,22 @@ sub _create_io_object {
 
     binmode( $file );
     return $file;
+}
+
+sub has_sauce {
+    return shift->sauce->has_sauce;
+}
+
+sub calculate_and_set_dimensions {
+    my $self = shift;
+    my $image = $self->_image;
+    $self->height( scalar @$image );
+    my $max_x = 0;
+    for( @$image ) {
+        my $x = scalar @$_;
+        $max_x = $x if $x > $max_x;
+    }
+    $self->width( $max_x );
 }
 
 sub parse {
