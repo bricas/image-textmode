@@ -41,12 +41,34 @@ sub clear {
 }
 
 sub fill_gd_palette {
-    my $self  = shift;
-    my $image = shift;
+    my ( $self, $image ) = @_;
 
     my @allocations = map { $image->colorAllocate( @$_ ) } @{ $self->colors };
-
     return \@allocations;
+}
+
+sub fill_gd_palette_8step {
+    my ( $self, $image ) = @_;
+    my @colors;
+
+    for my $bg ( 0 .. 7 ) {
+        my $pal_bg = $self->get( $bg );
+        for my $fg ( 0 .. 15 ) {
+            my $pal_fg = $self->get( $fg );
+            for my $z ( 0 .. 8 ) {
+                $colors[ $fg * 8 + $bg ]->[ 8 - $z ] = $image->colorAllocate(
+                    $z / 8 * ( $pal_bg->[ 0 ] )
+                        + ( 8 - $z ) / 8 * ( $pal_fg->[ 0 ] ),
+                    $z / 8 * ( $pal_bg->[ 1 ] )
+                        + ( 8 - $z ) / 8 * ( $pal_fg->[ 1 ] ),
+                    $z / 8 * ( $pal_bg->[ 2 ] )
+                        + ( 8 - $z ) / 8 * ( $pal_fg->[ 2 ] ),
+                );
+            }
+        }
+    }
+
+    return \@colors;
 }
 
 1;

@@ -6,6 +6,8 @@ use warnings;
 use base qw( Class::Data::Accessor );
 
 use Image::TextMode::Pixel;
+use Image::TextMode::Palette::VGA;
+use Image::TextMode::Font::8x16;
 use File::SAUCE;
 use IO::File;
 use IO::String;
@@ -21,28 +23,12 @@ sub new {
     return $self;
 }
 
-sub set_font {
-    my ( $self, $class ) = @_;
-
-    eval "use $class";
-    die $@ if $@;
-    return $self->font( $class->new );
-}
-
-sub set_palette {
-    my ( $self, $class ) = @_;
-
-    eval "use $class";
-    die $@ if $@;
-    return $self->palette( $class->new );
-}
-
 sub clear {
     my $self = shift;
     $self->clear_screen;
     $self->sauce( File::SAUCE->new );
-    $self->set_font( 'Image::TextMode::Font::8x16' );
-    $self->set_palette( 'Image::TextMode::Palette::VGA' );
+    $self->font( Image::TextMode::Font::8x16->new );
+    $self->palette( Image::TextMode::Palette::VGA->new );
 }
 
 sub clear_screen {
@@ -166,7 +152,7 @@ sub calculate_dimensions {
     my $height = scalar @$image;
     my $max_x  = 0;
     for ( @$image ) {
-        my $x = scalar @$_;
+        my $x = $_ ? scalar @$_ : 0;
         $max_x = $x if $x > $max_x;
     }
     return $max_x, $height;
@@ -188,8 +174,7 @@ sub as_string {
 sub as_bitmap_full {
     my ( $self, %options ) = @_;
 
-    my $font     = $self->font;
-    my $gdfont   = $font->as_gd;
+    my $font     = $self->font->as_gd;
     my $ftheight = $font->height;
     my $ftwidth  = $font->width;
 
@@ -198,8 +183,7 @@ sub as_bitmap_full {
 
     require GD;
     my $image = GD::Image->new( $width * $ftwidth, $height * $ftheight );
-    my @colors
-        = map { $image->colorAllocate( @$_ ) } @{ $self->palette->colors };
+    my $colors = $self->palette->fill_gd_palette( $image );
 
     for my $y ( 0 .. $height - 1 ) {
         for my $x ( 0 .. $width - 1 ) {
@@ -213,15 +197,56 @@ sub as_bitmap_full {
                     $y * $ftheight,
                     ( $x + 1 ) * $ftwidth,
                     ( $y + 1 ) * $ftheight - 1,
-                    $colors[ $pixel->bg ]
+                    $colors->[ $pixel->bg ]
                 );
             }
 
             $image->string(
-                $gdfont,
+                $font,
                 $x * $ftwidth,
                 $y * $ftheight,
-                $pixel->char, $colors[ $pixel->fg ]
+                $pixel->char, $colors->[ $pixel->fg ]
+            );
+        }
+    }
+
+    my $output = $options{ format } || 'png';
+
+    return $image->$output;
+}
+
+sub as_bitmap_thumbnail {
+    my ( $self, %options ) = @_;
+
+    my $font     = $self->font;
+    my $ftheight = int( $font->height / 8 + 0.5 );
+
+    my ( $width, $height )
+        = $self->width ? $self->dimensions : $self->calculate_dimensions;
+
+    require GD;
+    my $image     = GD::Image->new( $width, $height * $ftheight, 1 );
+    my $intensity = $font->intensity_map;
+    my $colors    = $self->palette->fill_gd_palette_8step( $image );
+
+    for my $y ( 0 .. $height - 1 ) {
+        for my $x ( 0 .. $width - 1 ) {
+            my $pixel = $self->getpixel( $x, $y );
+            next unless $pixel;
+
+            my $offset  = $pixel->fg * 8 + $pixel->bg;
+            my $charint = $intensity->[ ord( $pixel->char ) ];
+            unless ( $ftheight == 1 ) {
+                $image->setPixel(
+                    $x,
+                    $y * $ftheight + 1,
+                    $colors->[ $offset ]->[ $charint & 15 ]
+                );
+            }
+            $image->setPixel(
+                $x,
+                $y * $ftheight,
+                $colors->[ $offset ]->[ $charint >> 4 ]
             );
         }
     }
