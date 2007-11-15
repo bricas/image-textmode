@@ -12,9 +12,6 @@ use IO::String;
 
 __PACKAGE__->mk_classaccessors(
     qw( width height _image sauce font palette ) );
-__PACKAGE__->mk_classaccessor( font_class => 'Image::TextMode::Font::8x16' );
-__PACKAGE__->mk_classaccessor(
-    palette_class => 'Image::TextMode::Palette::VGA' );
 
 sub new {
     my $class = shift;
@@ -24,18 +21,28 @@ sub new {
     return $self;
 }
 
+sub set_font {
+    my ( $self, $class ) = @_;
+
+    eval "use $class";
+    die $@ if $@;
+    return $self->font( $class->new );
+}
+
+sub set_palette {
+    my ( $self, $class ) = @_;
+
+    eval "use $class";
+    die $@ if $@;
+    return $self->palette( $class->new );
+}
+
 sub clear {
     my $self = shift;
     $self->clear_screen;
     $self->sauce( File::SAUCE->new );
-
-    for ( qw( font palette ) ) {
-        my $method = "${_}_class";
-        my $class  = $self->$method;
-        eval "use $class";
-        die $@ if $@;
-        $self->$_( $class->new );
-    }
+    $self->set_font( 'Image::TextMode::Font::8x16' );
+    $self->set_palette( 'Image::TextMode::Palette::VGA' );
 }
 
 sub clear_screen {
@@ -46,7 +53,7 @@ sub clear_screen {
 
 sub read {
     my ( $self, $options ) = ( shift, shift );
-    my $file =  $self->_create_io_object( $options );
+    my $file = $self->_create_io_object( $options );
     $self->clear;
 
     # attempt to find a sauce record in the file
@@ -148,14 +155,26 @@ sub has_sauce {
 
 sub calculate_and_set_dimensions {
     my $self = shift;
-    my $image = $self->_image;
-    $self->height( scalar @$image );
-    my $max_x = 0;
-    for( @$image ) {
+    my ( $width, $height ) = $self->calculate_dimensions;
+    $self->width( $width );
+    $self->height( $height );
+}
+
+sub calculate_dimensions {
+    my $self   = shift;
+    my $image  = $self->_image;
+    my $height = scalar @$image;
+    my $max_x  = 0;
+    for ( @$image ) {
         my $x = scalar @$_;
         $max_x = $x if $x > $max_x;
     }
-    $self->width( $max_x );
+    return $max_x, $height;
+}
+
+sub dimensions {
+    my $self = shift;
+    return $self->width, $self->height;
 }
 
 sub parse {
@@ -164,6 +183,52 @@ sub parse {
 
 sub as_string {
     die 'Abstract method!';
+}
+
+sub as_bitmap_full {
+    my ( $self, %options ) = @_;
+
+    my $font     = $self->font;
+    my $gdfont   = $font->as_gd;
+    my $ftheight = $font->height;
+    my $ftwidth  = $font->width;
+
+    my ( $width, $height )
+        = $self->width ? $self->dimensions : $self->calculate_dimensions;
+
+    require GD;
+    my $image = GD::Image->new( $width * $ftwidth, $height * $ftheight );
+    my @colors
+        = map { $image->colorAllocate( @$_ ) } @{ $self->palette->colors };
+
+    for my $y ( 0 .. $height - 1 ) {
+        for my $x ( 0 .. $width - 1 ) {
+            my $pixel = $self->getpixel( $x, $y );
+
+            next unless $pixel;
+
+            if ( $pixel->bg ) {
+                $image->filledRectangle(
+                    $x * $ftwidth,
+                    $y * $ftheight,
+                    ( $x + 1 ) * $ftwidth,
+                    ( $y + 1 ) * $ftheight - 1,
+                    $colors[ $pixel->bg ]
+                );
+            }
+
+            $image->string(
+                $gdfont,
+                $x * $ftwidth,
+                $y * $ftheight,
+                $pixel->char, $colors[ $pixel->fg ]
+            );
+        }
+    }
+
+    my $output = $options{ format } || 'png';
+
+    return $image->$output;
 }
 
 1;
