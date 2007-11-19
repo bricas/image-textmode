@@ -22,7 +22,7 @@ sub new_from_raw_data {
     my @values = unpack( 'C*', $data );
     my @palette;
 
-    for my $i ( 0 .. 15 ) {
+    for my $i ( 0 .. @values / 3 - 1 ) {
         $palette[ $i ] = [
             $values[ $i * 3 ] / 63 * 255,
             $values[ $i * 3 + 1 ] / 63 * 255,
