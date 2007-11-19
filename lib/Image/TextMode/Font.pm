@@ -20,14 +20,21 @@ sub new {
 }
 
 sub new_from_raw_data {
-    my( $class, $data, $height ) = @_;
+    my ( $class, $data, $height ) = @_;
     my @chars;
 
-    for( 0..( length( $data ) / $height ) - 1 ) {
-        push @chars, [ unpack( 'C*', substr( $data, $_ * $height, $height ) ) ];
+    for ( 0 .. ( length( $data ) / $height ) - 1 ) {
+        push @chars,
+            [ unpack( 'C*', substr( $data, $_ * $height, $height ) ) ];
     }
 
-    return $class->new( { width => 8, height => $height, chars => \@chars, intensity_map => [] } );
+    return $class->new(
+        {   width         => 8,
+            height        => $height,
+            chars         => \@chars,
+            intensity_map => []
+        }
+    );
 }
 
 sub get {
