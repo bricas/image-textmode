@@ -24,9 +24,9 @@ sub new_from_raw_data {
 
     for my $i ( 0 .. @values / 3 - 1 ) {
         $palette[ $i ] = [
-            $values[ $i * 3 ] / 63 * 255,
-            $values[ $i * 3 + 1 ] / 63 * 255,
-            $values[ $i * 3 + 2 ] / 63 * 255,
+            $values[ $i * 3 ] * 4,
+            $values[ $i * 3 + 1 ] * 4,
+            $values[ $i * 3 + 2 ] * 4,
         ];
     }
 
