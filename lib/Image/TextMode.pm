@@ -13,7 +13,7 @@ use IO::File;
 use IO::String;
 
 __PACKAGE__->mk_classaccessors(
-    qw( width height _image sauce font palette ) );
+    qw( width height _image sauce font palette blink_mode ) );
 
 sub new {
     my $class = shift;
@@ -27,6 +27,7 @@ sub clear {
     my $self = shift;
     $self->clear_screen;
     $self->sauce( File::SAUCE->new );
+    $self->blink_mode( 0 );
     $self->font( Image::TextMode::Font::8x16->new );
     $self->palette( Image::TextMode::Palette::VGA->new );
 }
@@ -65,7 +66,11 @@ sub getpixel {
         return wantarray
             ? @$data
             : Image::TextMode::Pixel->new(
-            { char => $data->[ 0 ], attr => $data->[ 1 ] } );
+            {   char       => $data->[ 0 ],
+                attr       => $data->[ 1 ],
+                blink_mode => $self->blink_mode
+            }
+            );
     }
 
     return;
@@ -171,6 +176,8 @@ sub as_string {
     die 'Abstract method!';
 }
 
+## TODO: custom gd-font
+
 sub as_bitmap_full {
     my ( $self, %options ) = @_;
 
@@ -180,6 +187,7 @@ sub as_bitmap_full {
 
     my ( $width, $height )
         = $self->width ? $self->dimensions : $self->calculate_dimensions;
+    $height = $options{ crop } if $options{ crop };
 
     require GD;
     my $image = GD::Image->new( $width * $ftwidth, $height * $ftheight );
@@ -223,6 +231,7 @@ sub as_bitmap_thumbnail {
 
     my ( $width, $height )
         = $self->width ? $self->dimensions : $self->calculate_dimensions;
+    $height = $options{ crop } if $options{ crop };
 
     require GD;
     my $image     = GD::Image->new( $width, $height * $ftheight, 1 );
@@ -253,7 +262,18 @@ sub as_bitmap_thumbnail {
 
     my $output = $options{ format } || 'png';
 
-    return $image->$output;
+    return $image->$output unless $options{ zoom } > 1;
+
+    my ( $iwidth, $iheight ) = $image->getBounds;
+
+    my $scalex = $iwidth * $options{ zoom };
+    my $scaley = $iheight * $options{ zoom };
+
+    my $image2 = GD::Image->new( $scalex, $scaley );
+    $image2->copyResized( $image, 0, 0, 0, 0, $scalex, $scaley, $iwidth,
+        $iheight );
+
+    return $image2->$output;
 }
 
 1;

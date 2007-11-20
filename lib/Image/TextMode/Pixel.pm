@@ -6,11 +6,12 @@ use strict;
 use warnings;
 
 # Attribute byte constants
+use constant ATTR_BG_NB => 240;
 use constant ATTR_BLINK => 128;
 use constant ATTR_BG    => 112;
 use constant ATTR_FG    => 15;
 
-__PACKAGE__->mk_classaccessors( qw( char fg bg blink ) );
+__PACKAGE__->mk_classaccessors( qw( char fg bg blink blink_mode ) );
 
 sub new {
     my $class = shift;
@@ -25,19 +26,27 @@ sub new {
 }
 
 sub attr {
-    my $self = shift;
-    my $attr = $_[ 0 ];
+    my $self     = shift;
+    my ( $attr ) = @_;
+    my $mode     = $self->blink_mode;
 
     if ( @_ ) {
         $self->fg( $attr & ATTR_FG );
-        $self->bg(    ( $attr & ATTR_BG ) >> 4 );
-        $self->blink( ( $attr & ATTR_BLINK ) >> 7 );
+        if ( defined $mode && $mode ) {
+            $self->bg(    ( $attr & ATTR_BG ) >> 4 );
+            $self->blink( ( $attr & ATTR_BLINK ) >> 7 );
+        }
+        else {
+            $self->bg( ( $attr & ATTR_BG_NB ) >> 4 );
+        }
     }
     else {
         $attr = 0;
         $attr |= $self->fg;
         $attr |= ( $self->bg << 4 );
-        $attr |= ( $self->blink << 7 );
+        if ( defined $mode && $mode ) {
+            $attr |= ( $self->blink << 7 );
+        }
     }
 
     return $attr;

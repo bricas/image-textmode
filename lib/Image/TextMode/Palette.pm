@@ -23,10 +23,11 @@ sub new_from_raw_data {
     my @palette;
 
     for my $i ( 0 .. @values / 3 - 1 ) {
+        my $offset = $i * 3;
         $palette[ $i ] = [
-            $values[ $i * 3 ] * 4,
-            $values[ $i * 3 + 1 ] * 4,
-            $values[ $i * 3 + 2 ] * 4,
+            $values[ $offset ] * 4,
+            $values[ $offset + 1 ] * 4,
+            $values[ $offset + 2 ] * 4,
         ];
     }
 
