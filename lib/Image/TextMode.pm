@@ -35,6 +35,24 @@ Image::TextMode - A base class for text mode graphics
 
 =head1 DESCRIPTION
 
+=head1 ACCESSORS
+
+=over 4
+
+=item * width - The width of the image
+
+=item * height - The height of the image
+
+=item * sauce - The SAUCE metadata
+
+=item * font - A font instance
+
+=item * palette - A palette instance
+
+=item * blink_mode - A boolean for blink mode
+
+=back
+
 =head1 METHODS
 
 =head2 new( \%opts )
@@ -122,7 +140,7 @@ sub getpixel {
     return;
 }
 
-=head2 new( $x, $y, ( $char, $attr || $pixel ) )
+=head2 putpixel( $x, $y, ( $char, $attr || $pixel ) )
 
 =cut
 
@@ -293,7 +311,7 @@ sub as_bitmap_full {
     return $image->$output;
 }
 
-=head2 as_bitmap_full( \%options )
+=head2 as_bitmap_thumbnail( \%options )
 
 =cut
 
@@ -353,7 +371,7 @@ sub as_bitmap_thumbnail {
 
 =head1 ABSTRACT METHODS
 
-=head2 parse( )
+=head2 parse( $fh, @args )
 
 =cut
 
@@ -361,7 +379,7 @@ sub parse {
     die 'Abstract method!';
 }
 
-=head2 as_string( )
+=head2 as_string( @args )
 
 =cut
 

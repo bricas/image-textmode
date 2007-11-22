@@ -804,4 +804,23 @@ __PACKAGE__->intensity_map(
     ]
 );
 
+=head1 NAME
+
+Image::TextMode::Font::8x16 - 8 x 16 text mode font
+
+=head1 DESCRIPTION
+
+=head1 AUTHOR
+
+Brian Cassidy E<lt>bricas@cpan.orgE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2007 by Brian Cassidy
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself. 
+
+=cut
+
 1;

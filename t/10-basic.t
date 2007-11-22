@@ -13,7 +13,7 @@ isa_ok( $image, 'Image::TextMode' );
     is( $pixel->attr,  7,   'attr' );
     is( $pixel->fg,    7,   'fg' );
     is( $pixel->bg,    0,   'bg' );
-    is( $pixel->blink, 0,   'blink' );
+    is( $pixel->blink, undef,   'blink' );
 }
 
 {
@@ -23,8 +23,8 @@ isa_ok( $image, 'Image::TextMode' );
     is( $pixel->char,  'i', 'char' );
     is( $pixel->attr,  199, 'attr' );
     is( $pixel->fg,    7,   'fg' );
-    is( $pixel->bg,    4,   'bg' );
-    is( $pixel->blink, 1,   'blink' );
+    is( $pixel->bg,    12,   'bg' );
+    is( $pixel->blink, undef,   'blink' );
 }
 
 {
@@ -33,7 +33,6 @@ isa_ok( $image, 'Image::TextMode' );
         {   char  => '!',
             fg    => 0,
             bg    => 7,
-            blink => 0,
         }
     );
 
@@ -42,7 +41,7 @@ isa_ok( $image, 'Image::TextMode' );
     is( $pixel->attr,  112, 'attr' );
     is( $pixel->fg,    0,   'fg' );
     is( $pixel->bg,    7,   'bg' );
-    is( $pixel->blink, 0,   'blink' );
+    is( $pixel->blink, undef,   'blink' );
 
     $image->putpixel( 2, 0, $pixel );
 
@@ -53,7 +52,7 @@ isa_ok( $image, 'Image::TextMode' );
         is( $pixel->attr,  112, 'attr' );
         is( $pixel->fg,    0,   'fg' );
         is( $pixel->bg,    7,   'bg' );
-        is( $pixel->blink, 0,   'blink' );
+        is( $pixel->blink, undef,   'blink' );
     }
 }
 

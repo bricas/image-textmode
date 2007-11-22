@@ -13,6 +13,36 @@ use constant ATTR_FG    => 15;
 
 __PACKAGE__->mk_classaccessors( qw( char fg bg blink blink_mode ) );
 
+=head1 NAME
+
+Image::TextMode::Pixel - A base class to represent a text mode "pixel"
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+=head1 ACCESSORS
+
+=over 4
+
+=item * char - The character for the pixel
+
+=item * fg - The foreground palette index
+
+=item * bg - The background palette index
+
+=item * blink - The blink bit
+
+=item * blink_mode - Boolean for blink mode
+
+=back
+
+=head1 METHODS
+
+=head2 new( \%opts )
+
+=cut
+
 sub new {
     my $class = shift;
     my $options = ( @_ == 1 && ref $_[ 0 ] eq 'HASH' ) ? $_[ 0 ] : { @_ };
@@ -24,6 +54,10 @@ sub new {
 
     return $self;
 }
+
+=head2 attr( [$byte] )
+
+=cut
 
 sub attr {
     my $self     = shift;
@@ -51,5 +85,18 @@ sub attr {
 
     return $attr;
 }
+
+=head1 AUTHOR
+
+Brian Cassidy E<lt>bricas@cpan.orgE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2007 by Brian Cassidy
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself. 
+
+=cut
 
 1;
