@@ -1,4 +1,4 @@
-use Test::More tests => 29;
+use Test::More tests => 35;
 
 use_ok( 'Image::TextMode' );
 
@@ -25,6 +25,20 @@ isa_ok( $image, 'Image::TextMode' );
     is( $pixel->fg,    7,   'fg' );
     is( $pixel->bg,    12,   'bg' );
     is( $pixel->blink, undef,   'blink' );
+}
+
+{ # blink mode test
+    $image->blink_mode( 1 );
+    my $pixel = $image->getpixel( 1, 0 );
+    isa_ok( $pixel, Image::TextMode::Pixel );
+    is( $pixel->char,  'i', 'char' );
+    is( $pixel->attr,  199, 'attr' );
+    is( $pixel->fg,    7,   'fg' );
+    is( $pixel->bg,    4,   'bg' );
+    is( $pixel->blink, 1,   'blink' );
+
+    # turn it off again
+    $image->blink_mode( 0 );
 }
 
 {
