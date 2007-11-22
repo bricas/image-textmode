@@ -242,14 +242,14 @@ sub dimensions {
     return $self->width, $self->height;
 }
 
-=head2 as_bitmap_full( %options )
+=head2 as_bitmap_full( \%options )
 
 =cut
 
 ## TODO: custom gd-font
 
 sub as_bitmap_full {
-    my ( $self, %options ) = @_;
+    my ( $self, $options ) = @_;
 
     my $font     = $self->font->as_gd;
     my $ftheight = $font->height;
@@ -257,7 +257,7 @@ sub as_bitmap_full {
 
     my ( $width, $height )
         = $self->width ? $self->dimensions : $self->calculate_dimensions;
-    $height = $options{ crop } if $options{ crop };
+    $height = $options->{ crop } if $options->{ crop };
 
     require GD;
     my $image = GD::Image->new( $width * $ftwidth, $height * $ftheight );
@@ -288,24 +288,24 @@ sub as_bitmap_full {
         }
     }
 
-    my $output = $options{ format } || 'png';
+    my $output = $options->{ format } || 'png';
 
     return $image->$output;
 }
 
-=head2 as_bitmap_full( %options )
+=head2 as_bitmap_full( \%options )
 
 =cut
 
 sub as_bitmap_thumbnail {
-    my ( $self, %options ) = @_;
+    my ( $self, $options ) = @_;
 
     my $font     = $self->font;
     my $ftheight = int( $font->height / 8 + 0.5 );
 
     my ( $width, $height )
         = $self->width ? $self->dimensions : $self->calculate_dimensions;
-    $height = $options{ crop } if $options{ crop };
+    $height = $options->{ crop } if $options->{ crop };
 
     require GD;
     my $image     = GD::Image->new( $width, $height * $ftheight, 1 );
@@ -334,14 +334,15 @@ sub as_bitmap_thumbnail {
         }
     }
 
-    my $output = $options{ format } || 'png';
+    my $output = $options->{ format } || 'png';
+    my $zoom   = $options->{ zoom } || 1;
 
-    return $image->$output unless $options{ zoom } > 1;
+    return $image->$output unless $zoom > 1;
 
     my ( $iwidth, $iheight ) = $image->getBounds;
 
-    my $scalex = $iwidth * $options{ zoom };
-    my $scaley = $iheight * $options{ zoom };
+    my $scalex = $iwidth * $zoom;
+    my $scaley = $iheight * $zoom;
 
     my $image2 = GD::Image->new( $scalex, $scaley );
     $image2->copyResized( $image, 0, 0, 0, 0, $scalex, $scaley, $iwidth,
