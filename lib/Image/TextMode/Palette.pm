@@ -58,6 +58,12 @@ sub clear {
     $self->colors( [] );
 }
 
+sub as_string {
+    my $self = shift;
+    return
+        pack( 'C*', join( '', map { join( '', @$_ ) } @{ $self->colors } ) );
+}
+
 sub fill_gd_palette {
     my ( $self, $image ) = @_;
 
