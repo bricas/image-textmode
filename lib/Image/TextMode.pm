@@ -15,6 +15,32 @@ use IO::String;
 __PACKAGE__->mk_classaccessors(
     qw( width height _image sauce font palette blink_mode ) );
 
+our $VERSION = '0.01';
+
+=head1 NAME
+
+Image::TextMode - A base class for text mode graphics
+
+=head1 SYNOPSIS
+
+    package MyFormat;
+    
+    use base qw( Image::TextMode );
+
+    sub parse { ... }
+
+    sub as_string { ... }
+
+    1;
+
+=head1 DESCRIPTION
+
+=head1 METHODS
+
+=head2 new( \%opts )
+
+=cut
+
 sub new {
     my $class = shift;
     my $args  = ( @_ == 1 && ref $_[ 0 ] eq 'HASH' ) ? $_[ 0 ] : { @_ };
@@ -22,6 +48,10 @@ sub new {
     $self->clear;
     return $self;
 }
+
+=head2 clear( )
+
+=cut
 
 sub clear {
     my $self = shift;
@@ -32,11 +62,19 @@ sub clear {
     $self->palette( Image::TextMode::Palette::VGA->new );
 }
 
+=head2 clear_screen( )
+
+=cut
+
 sub clear_screen {
     my $self = shift;
     $self->$_( undef ) for qw( width height );
     $self->_image( [] );
 }
+
+=head2 read( \%opts )
+
+=cut
 
 sub read {
     my ( $self, $options ) = ( shift, shift );
@@ -49,12 +87,20 @@ sub read {
     return $self->parse( $file, @_ );
 }
 
+=head2 write( \%opts )
+
+=cut
+
 sub write {
     my ( $self, $options ) = ( shift, shift );
     my $file = $self->_create_io_object( $options, '>' );
 
     $file->print( $self->as_string( @_ ) );
 }
+
+=head2 getpixel( $x, $y )
+
+=cut
 
 sub getpixel {
     my ( $self, $x, $y ) = @_;
@@ -76,6 +122,10 @@ sub getpixel {
     return;
 }
 
+=head2 new( $x, $y, ( $char, $attr || $pixel ) )
+
+=cut
+
 sub putpixel {
     my ( $self, $x, $y, $pixel, $attr ) = @_;
     my $char = $pixel;
@@ -88,6 +138,10 @@ sub putpixel {
     $self->_image->[ $y ]->[ $x ] = [ $char, $attr ];
 }
 
+=head2 clear_line( $line )
+
+=cut
+
 sub clear_line {
     my $self = shift;
     my $y    = shift;
@@ -96,6 +150,10 @@ sub clear_line {
 
     $self->_image->[ $y ] = [] if defined $line;
 }
+
+=head2 as_ascii( )
+
+=cut
 
 sub as_ascii {
     my ( $self ) = @_;
@@ -140,9 +198,17 @@ sub _create_io_object {
     return $file;
 }
 
+=head2 has_sauce( )
+
+=cut
+
 sub has_sauce {
     return shift->sauce->has_sauce;
 }
+
+=head2 calculate_and_set_dimensions( )
+
+=cut
 
 sub calculate_and_set_dimensions {
     my $self = shift;
@@ -150,6 +216,10 @@ sub calculate_and_set_dimensions {
     $self->width( $width );
     $self->height( $height );
 }
+
+=head2 calculate_dimensions( )
+
+=cut
 
 sub calculate_dimensions {
     my $self   = shift;
@@ -163,18 +233,18 @@ sub calculate_dimensions {
     return $max_x, $height;
 }
 
+=head2 dimensions( )
+
+=cut
+
 sub dimensions {
     my $self = shift;
     return $self->width, $self->height;
 }
 
-sub parse {
-    die 'Abstract method!';
-}
+=head2 as_bitmap_full( %options )
 
-sub as_string {
-    die 'Abstract method!';
-}
+=cut
 
 ## TODO: custom gd-font
 
@@ -222,6 +292,10 @@ sub as_bitmap_full {
 
     return $image->$output;
 }
+
+=head2 as_bitmap_full( %options )
+
+=cut
 
 sub as_bitmap_thumbnail {
     my ( $self, %options ) = @_;
@@ -275,5 +349,36 @@ sub as_bitmap_thumbnail {
 
     return $image2->$output;
 }
+
+=head1 ABSTRACT METHODS
+
+=head2 parse( )
+
+=cut
+
+sub parse {
+    die 'Abstract method!';
+}
+
+=head2 as_string( )
+
+=cut
+
+sub as_string {
+    die 'Abstract method!';
+}
+
+=head1 AUTHOR
+
+Brian Cassidy E<lt>bricas@cpan.orgE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2007 by Brian Cassidy
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself. 
+
+=cut
 
 1;
