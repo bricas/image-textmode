@@ -9,6 +9,7 @@ all_from 'lib/Image/TextMode.pm';
 
 requires 'Class::Data::Accessor';
 requires 'File::SAUCE';
+requires 'GD';
 
 test_requires 'Test::More';
 
