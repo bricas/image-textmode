@@ -19,7 +19,17 @@ Image::TextMode::Pixel - A base class to represent a text mode "pixel"
 
 =head1 SYNOPSIS
 
+    my $pixel = Image::TextMode::Pixel->new( {
+        char => $char,
+        attr => $attr,
+        blink_mode => $mode,
+    } );
+
 =head1 DESCRIPTION
+
+Represent a "pixel, i.e. a character plus an attribute byte. Also includes
+a blink_mode setting in order to figure out how to interpret the attribute
+byte data.
 
 =head1 ACCESSORS
 
@@ -41,6 +51,8 @@ Image::TextMode::Pixel - A base class to represent a text mode "pixel"
 
 =head2 new( \%opts )
 
+Creates a new pixel.
+
 =cut
 
 sub new {
@@ -56,6 +68,9 @@ sub new {
 }
 
 =head2 attr( [$byte] )
+
+If a byte is passed to this function, it is separated into its fg, bg and
+blink parts. Returns the data otherwise.
 
 =cut
 

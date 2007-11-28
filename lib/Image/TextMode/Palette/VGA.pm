@@ -31,6 +31,8 @@ Image::TextMode::Palette::VGA - 16-color VGA palette
 
 =head1 DESCRIPTION
 
+This is the default VGA palette.
+
 =head1 AUTHOR
 
 Brian Cassidy E<lt>bricas@cpan.orgE<gt>

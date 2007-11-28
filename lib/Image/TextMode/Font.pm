@@ -18,6 +18,9 @@ Image::TextMode::Font - A base class for text mode fonts
 
 =head1 DESCRIPTION
 
+Represents a font in text mode. That is, an array of characters represented
+by an array of byte scanlines.
+
 =head1 ACCESSORS
 
 =over 4
@@ -36,6 +39,8 @@ Image::TextMode::Font - A base class for text mode fonts
 
 =head2 new( \%opts )
 
+Creates a new font object.
+
 =cut
 
 sub new {
@@ -48,6 +53,9 @@ sub new {
 }
 
 =head2 new_from_raw_data( $data, $height )
+
+Reads basic raw data and parses out the scanlines for character of a 
+given C<$height>.
 
 =cut
 
@@ -71,6 +79,8 @@ sub new_from_raw_data {
 
 =head2 get( $index )
 
+Get the character at C<$index>.
+
 =cut
 
 sub get {
@@ -82,6 +92,8 @@ sub get {
 
 =head2 set( $index, \@lines )
 
+Set the character data at C<$index>.
+
 =cut
 
 sub set {
@@ -92,6 +104,8 @@ sub set {
 }
 
 =head2 clear( )
+
+Clears all char data.
 
 =cut
 
@@ -105,6 +119,8 @@ sub clear {
 
 =head2 characters( )
 
+Returns the number of characters in the font.
+
 =cut
 
 sub characters {
@@ -113,6 +129,8 @@ sub characters {
 }
 
 =head2 as_string( )
+
+Packs the data into a raw string.
 
 =cut
 
@@ -123,6 +141,8 @@ sub as_string {
 }
 
 =head2 as_gd( )
+
+Returns the object as a C<GD::Font>.
 
 =cut
 

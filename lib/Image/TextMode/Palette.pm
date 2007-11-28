@@ -15,17 +15,21 @@ Image::TextMode::Palette - A base class for text mode palettes
 
 =head1 DESCRIPTION
 
+Represents a palette in text mode. That is, an array of RGB triples.
+
 =head1 ACCESSORS
 
 =over 4
 
-=item * colors - An array of R, G, B, triples
+=item * colors - An array of RGB triples
 
 =back
 
 =head1 METHODS
 
 =head2 new( \%opts )
+
+Creates a new palette object.
 
 =cut
 
@@ -39,6 +43,8 @@ sub new {
 }
 
 =head2 new_from_raw_data( $data )
+
+Reads a raw string and parses out RGB triples.
 
 =cut
 
@@ -62,6 +68,8 @@ sub new_from_raw_data {
 
 =head2 colours( )
 
+Alias to C<colors()>.
+
 =cut
 
 sub colours {
@@ -69,6 +77,8 @@ sub colours {
 }
 
 =head2 get( $index )
+
+Get the RGB data at C<$index>.
 
 =cut
 
@@ -81,6 +91,8 @@ sub get {
 
 =head2 set( $index, \@rgb )
 
+Set the RGB data at C<$index>.
+
 =cut
 
 sub set {
@@ -92,6 +104,8 @@ sub set {
 
 =head2 clear( )
 
+Clear all palette data.
+
 =cut
 
 sub clear {
@@ -101,6 +115,8 @@ sub clear {
 }
 
 =head2 as_string( )
+
+Packs the data into a raw string.
 
 =cut
 
@@ -112,6 +128,8 @@ sub as_string {
 
 =head2 fill_gd_palette( $image )
 
+Fills a GD image palette with the local data.
+
 =cut
 
 sub fill_gd_palette {
@@ -122,6 +140,8 @@ sub fill_gd_palette {
 }
 
 =head2 fill_gd_palette_8step( $image )
+
+Fills the GD image palette with 8-step data used for thumbnails.
 
 =cut
 

@@ -810,6 +810,8 @@ Image::TextMode::Font::8x16 - 8 x 16 text mode font
 
 =head1 DESCRIPTION
 
+The default 8x16 font.
+
 =head1 AUTHOR
 
 Brian Cassidy E<lt>bricas@cpan.orgE<gt>

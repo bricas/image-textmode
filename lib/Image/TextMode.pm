@@ -35,6 +35,27 @@ Image::TextMode - A base class for text mode graphics
 
 =head1 DESCRIPTION
 
+This module provides the basic structure to represent a text mode image such
+as an ANSI file.
+
+The basic structure of the image is an array of arrays to represent lines
+and "pixels." A "pixel" in this case is a character and attribute byte pair.
+With blink_mode on, an attribute byte is repsented as:
+
+    +---+---+---+---+---+---+---+---+
+    | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+    +---+---+---+---+---+---+---+---+
+    
+    bits 0-3: foreground color index
+    bits 4-6: background color index
+    bit 7: blink on/off
+
+With blink_mode off, byte 7 becomes part of the background color index.
+
+Some textmode formats supply special font and palette data which can be
+stored as well. The basic VGA palette and an 8x16 font are available as
+defaults.
+
 =head1 ACCESSORS
 
 =over 4
@@ -57,6 +78,8 @@ Image::TextMode - A base class for text mode graphics
 
 =head2 new( \%opts )
 
+Creates a new Image::ANSI instance.
+
 =cut
 
 sub new {
@@ -68,6 +91,8 @@ sub new {
 }
 
 =head2 clear( )
+
+Resets the data to the default state.
 
 =cut
 
@@ -82,6 +107,8 @@ sub clear {
 
 =head2 clear_screen( )
 
+Clears the image data plus width and height information.
+
 =cut
 
 sub clear_screen {
@@ -91,6 +118,8 @@ sub clear_screen {
 }
 
 =head2 read( \%opts )
+
+The public method for reading file data. Calls the C<parse()> method.
 
 =cut
 
@@ -107,6 +136,8 @@ sub read {
 
 =head2 write( \%opts )
 
+The public method for writing to a file. Calls the C<as_string()> metod.
+
 =cut
 
 sub write {
@@ -117,6 +148,9 @@ sub write {
 }
 
 =head2 getpixel( $x, $y )
+
+Returns the "pixel" at C<$x>, C<$y>. In scalar mode this means a Pixel object,
+in list mode it means raw char and attribute bytes.
 
 =cut
 
@@ -142,6 +176,9 @@ sub getpixel {
 
 =head2 putpixel( $x, $y, ( $char, $attr || $pixel ) )
 
+Sets the pixel at C<$x>, C<$y>. Accepts a Pixel object or a char-attribute
+pair.
+
 =cut
 
 sub putpixel {
@@ -158,6 +195,8 @@ sub putpixel {
 
 =head2 clear_line( $line )
 
+Clears the specified (0-indexed) line.
+
 =cut
 
 sub clear_line {
@@ -170,6 +209,8 @@ sub clear_line {
 }
 
 =head2 as_ascii( )
+
+Returns only the char attributes for the image.
 
 =cut
 
@@ -218,6 +259,8 @@ sub _create_io_object {
 
 =head2 has_sauce( )
 
+Returns status of SAUCE record (useful after C<read()>).
+
 =cut
 
 sub has_sauce {
@@ -225,6 +268,8 @@ sub has_sauce {
 }
 
 =head2 calculate_and_set_dimensions( )
+
+Calls C<calculate_dimensions> and sets the width and height with those values.
 
 =cut
 
@@ -236,6 +281,8 @@ sub calculate_and_set_dimensions {
 }
 
 =head2 calculate_dimensions( )
+
+Finds out the width and height of the image based on the stored data.
 
 =cut
 
@@ -253,6 +300,8 @@ sub calculate_dimensions {
 
 =head2 dimensions( )
 
+Shortcut to return the width and height.
+
 =cut
 
 sub dimensions {
@@ -261,6 +310,16 @@ sub dimensions {
 }
 
 =head2 as_bitmap_full( \%options )
+
+Outputs a bitmap image of the text mode data. Options include:
+
+=over 4
+
+=item * crop - limit the output to the specified number of text mode lines
+
+=item * format - output this format (default: png)
+
+=back
 
 =cut
 
@@ -312,6 +371,9 @@ sub as_bitmap_full {
 }
 
 =head2 as_bitmap_thumbnail( \%options )
+
+Outputs a thumbnailed bitmap image of the text mode data. Options are the
+same as C<as_bitmap_full()>.
 
 =cut
 
@@ -373,6 +435,8 @@ sub as_bitmap_thumbnail {
 
 =head2 parse( $fh, @args )
 
+Subclasses should read data from C<$fh>.
+
 =cut
 
 sub parse {
@@ -380,6 +444,8 @@ sub parse {
 }
 
 =head2 as_string( @args )
+
+Subclasses should serialize the data as a string.
 
 =cut
 

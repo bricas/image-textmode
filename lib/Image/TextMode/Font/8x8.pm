@@ -298,6 +298,8 @@ Image::TextMode::Font::8x8 - 8 x 8 text mode font
 
 =head1 DESCRIPTION
 
+An 8x8 font.
+
 =head1 AUTHOR
 
 Brian Cassidy E<lt>bricas@cpan.orgE<gt>
