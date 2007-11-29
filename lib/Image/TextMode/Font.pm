@@ -148,6 +148,7 @@ Returns the object as a C<GD::Font>.
 
 sub as_gd {
     my $self = shift;
+    my $options = shift || {};
     require GD;
     require File::Temp;
 
@@ -155,11 +156,20 @@ sub as_gd {
 
     binmode( $temp );
 
+    my $ninth = $options->{ '9th_bit' };
     print $temp
-        pack( 'VVVV', $self->characters, 0, $self->width, $self->height );
-    for my $char ( @{ $self->chars } ) {
-        print $temp pack( 'C*', split( //, sprintf( '%08b', $_ ) ) )
-            for @$char;
+        pack( 'VVVV', $self->characters, 0, $self->width + ( $ninth ? 1 : 0 ), $self->height );
+    for my $charval ( 0..$self->characters - 1 ) {
+        my $char = $self->chars->[ $charval ];
+        for( @$char ) {
+            my @binary = split( //, sprintf( '%08b', $_ ) );
+
+            if( $ninth ) {
+                push @binary, ( $charval >= 0xc0 and $charval <= 0xdf ? $binary[ -1 ] : 0 ) ;
+            }
+
+            print $temp pack( 'C*', @binary )
+        }
     }
     close $temp;
 

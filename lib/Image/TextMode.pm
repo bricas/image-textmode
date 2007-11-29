@@ -328,7 +328,7 @@ Outputs a bitmap image of the text mode data. Options include:
 sub as_bitmap_full {
     my ( $self, $options ) = @_;
 
-    my $font     = $self->font->as_gd;
+    my $font     = $self->font->as_gd( { '9th_bit' => delete $options->{ '9th_bit' } } );
     my $ftheight = $font->height;
     my $ftwidth  = $font->width;
 
