@@ -257,14 +257,15 @@ sub _create_io_object {
     return $file;
 }
 
-=head2 has_sauce( )
+=head2 has_sauce( [$bool] )
 
-Returns status of SAUCE record (useful after C<read()>).
+Returns or sets the status of the SAUCE record (useful for C<read()> and
+C<write()> operations).
 
 =cut
 
 sub has_sauce {
-    return shift->sauce->has_sauce;
+    return shift->sauce->has_sauce( @_ );
 }
 
 =head2 calculate_and_set_dimensions( )
@@ -318,6 +319,8 @@ Outputs a bitmap image of the text mode data. Options include:
 =item * crop - limit the output to the specified number of text mode lines
 
 =item * format - output this format (default: png)
+
+=item * 9th_bit - use 720px mode which adds a ninth bit to each character (default: off)
 
 =back
 

@@ -140,9 +140,15 @@ sub as_string {
         pack( 'C*', join( '', map { join( '', @$_ ) } @{ $self->chars } ) );
 }
 
-=head2 as_gd( )
+=head2 as_gd( \%options )
 
-Returns the object as a C<GD::Font>.
+Returns the object as a C<GD::Font>. Options include:
+
+=over 4
+
+=item * 9th_bit - adds another bit to each character for 720px mode
+
+=back
 
 =cut
 
