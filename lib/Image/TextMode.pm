@@ -331,7 +331,8 @@ Outputs a bitmap image of the text mode data. Options include:
 sub as_bitmap_full {
     my ( $self, $options ) = @_;
 
-    my $font     = $self->font->as_gd( { '9th_bit' => delete $options->{ '9th_bit' } } );
+    my $font = $self->font->as_gd(
+        { '9th_bit' => delete $options->{ '9th_bit' } } );
     my $ftheight = $font->height;
     my $ftwidth  = $font->width;
 
@@ -376,7 +377,16 @@ sub as_bitmap_full {
 =head2 as_bitmap_thumbnail( \%options )
 
 Outputs a thumbnailed bitmap image of the text mode data. Options are the
-same as C<as_bitmap_full()>.
+same as C<as_bitmap_full()>, except:
+
+=over 4
+
+=item * zoom - a positive integer; it will enlarge the picture by that factor
+
+=back
+
+For images with a non-standard font, it is recommended you take the output of
+C<as_bitmap_full()> and resize it instead.
 
 =cut
 
@@ -402,23 +412,22 @@ sub as_bitmap_thumbnail {
 
             my $offset  = $pixel->fg * 8 + $pixel->bg;
             my $charint = $intensity->[ ord( $pixel->char ) ];
+            my $color   = $colors->[ $offset ];
+            next unless $color;
+
             unless ( $ftheight == 1 ) {
                 $image->setPixel(
                     $x,
                     $y * $ftheight + 1,
-                    $colors->[ $offset ]->[ $charint & 15 ]
+                    $color->[ $charint & 15 ]
                 );
             }
-            $image->setPixel(
-                $x,
-                $y * $ftheight,
-                $colors->[ $offset ]->[ $charint >> 4 ]
-            );
+            $image->setPixel( $x, $y * $ftheight, $color->[ $charint >> 4 ] );
         }
     }
 
     my $output = $options->{ format } || 'png';
-    my $zoom   = $options->{ zoom } || 1;
+    my $zoom   = $options->{ zoom }   || 1;
 
     return $image->$output unless $zoom > 1;
 
