@@ -12,8 +12,12 @@ use File::SAUCE;
 use IO::File;
 use IO::String;
 
-__PACKAGE__->mk_classaccessors(
-    qw( width height _image sauce font palette blink_mode ) );
+__PACKAGE__->mk_classaccessors( qw( width height ) );
+__PACKAGE__->mk_classaccessor( _image => [] );
+__PACKAGE__->mk_classaccessor( blink_mode => 0);
+__PACKAGE__->mk_classaccessor( sauce => File::SAUCE->new );
+__PACKAGE__->mk_classaccessor( palette => Image::TextMode::Palette::VGA->new );
+__PACKAGE__->mk_classaccessor( font => Image::TextMode::Font::8x16->new );
 
 our $VERSION = '0.01';
 
@@ -86,23 +90,7 @@ sub new {
     my $class = shift;
     my $args  = ( @_ == 1 && ref $_[ 0 ] eq 'HASH' ) ? $_[ 0 ] : { @_ };
     my $self  = bless $args, $class;
-    $self->clear;
     return $self;
-}
-
-=head2 clear( )
-
-Resets the data to the default state.
-
-=cut
-
-sub clear {
-    my $self = shift;
-    $self->clear_screen;
-    $self->sauce( File::SAUCE->new );
-    $self->blink_mode( 0 );
-    $self->font( Image::TextMode::Font::8x16->new );
-    $self->palette( Image::TextMode::Palette::VGA->new );
 }
 
 =head2 clear_screen( )
@@ -119,14 +107,14 @@ sub clear_screen {
 
 =head2 read( \%opts )
 
-The public method for reading file data. Calls the C<parse()> method.
+The public class method for reading file data. Calls the C<parse()> method.
 
 =cut
 
 sub read {
-    my ( $self, $options ) = ( shift, shift );
-    my $file = $self->_create_io_object( $options );
-    $self->clear;
+    my ( $class, $options ) = ( shift, shift );
+    my $file = $class->_create_io_object( $options );
+    my $self = $class->new;
 
     # attempt to find a sauce record in the file
     $self->sauce->read( handle => $file );
