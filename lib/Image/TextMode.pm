@@ -350,7 +350,7 @@ sub as_bitmap_full {
 
             next unless $pixel;
 
-            if ( $pixel->bg ) {
+            if ( defined $pixel->bg ) {
                 $image->filledRectangle(
                     $x * $ftwidth,
                     $y * $ftheight,
