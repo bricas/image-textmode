@@ -14,8 +14,6 @@ __PACKAGE__->mk_classaccessor( intensity_map => [] );
 
 Image::TextMode::Font - A base class for text mode fonts
 
-=head1 SYNOPSIS
-
 =head1 DESCRIPTION
 
 Represents a font in text mode. That is, an array of characters represented

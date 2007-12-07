@@ -11,8 +11,6 @@ __PACKAGE__->mk_classaccessor( colors => [] );
 
 Image::TextMode::Palette - A base class for text mode palettes
 
-=head1 SYNOPSIS
-
 =head1 DESCRIPTION
 
 Represents a palette in text mode. That is, an array of RGB triples.
