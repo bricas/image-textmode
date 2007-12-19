@@ -79,7 +79,10 @@ sub attr {
     my ( $attr ) = @_;
     my $mode     = $self->blink_mode;
 
-    if ( @_ ) {
+    if ( @_ and ref $attr ) {
+        $self->$_( $attr->{ $_ } ) for keys %$attr;
+    }
+    elsif ( @_ ) {
         $self->fg( $attr & ATTR_FG );
         if ( defined $mode && $mode ) {
             $self->bg(    ( $attr & ATTR_BG ) >> 4 );

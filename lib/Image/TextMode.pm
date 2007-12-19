@@ -328,8 +328,10 @@ sub as_bitmap_full {
         = $self->width ? $self->dimensions : $self->calculate_dimensions;
     $height = $options->{ crop } if $options->{ crop };
 
+    $options->{ truecolor } ||= 0;
+
     require GD;
-    my $image = GD::Image->new( $width * $ftwidth, $height * $ftheight );
+    my $image = GD::Image->new( $width * $ftwidth, $height * $ftheight, $options->{ truecolor } );
     my $colors = $self->palette->fill_gd_palette( $image );
 
     for my $y ( 0 .. $height - 1 ) {
