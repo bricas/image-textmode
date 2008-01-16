@@ -1,15 +1,15 @@
-package Image::XBin;
+package Image::TextMode::XBin;
 
 =head1 NAME
 
-Image::XBin - Load, create, manipulate and save XBin image files
+Image::TextMode::XBin - Load, create, manipulate and save XBin image files
 
 =head1 SYNOPSIS
 
-	use Image::XBin;
+	use Image::TextMode::XBin;
 
 	# Read in a file...
-	my $img = Image::XBin->read( { file => 'myxbin.xb' } );
+	my $img = Image::TextMode::XBin->read( { file => 'myxbin.xb' } );
 
 	# Image width and height
 	my $w = $img->width;
@@ -75,7 +75,7 @@ use base qw( Image::TextMode );
 use strict;
 use warnings;
 
-use Image::XBin::Parser;
+use Image::TextMode::XBin::Parser;
 
 our $VERSION = '0.06';
 
@@ -100,15 +100,15 @@ See L<Image::TextMode> for the base API.
 
 =head2 parse( $file, %options )
 
-Calls L<Image::XBin::Parser>'s C<parse> method.
+Calls L<Image::TextMode::XBin::Parser>'s C<parse> method.
 
 =cut
 
 sub parse {
     my $self = shift;
 
-    require Image::XBin::Parser;
-    Image::XBin::Parser->parse( $self, @_ );
+    require Image::TextMode::XBin::Parser;
+    Image::TextMode::XBin::Parser->parse( $self, @_ );
 
     return $self;
 }

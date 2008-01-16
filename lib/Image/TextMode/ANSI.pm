@@ -1,15 +1,15 @@
-package Image::ANSI;
+package Image::TextMode::ANSI;
 
 =head1 NAME
 
-Image::ANSI - Load, create, manipulate and save ANSI files
+Image::TextMode::ANSI - Load, create, manipulate and save ANSI files
 
 =head1 SYNOPSIS
 
-	use Image::ANSI;
+	use Image::TextMode::ANSI;
 
 	# Read in a file...
-	my $img = Image::ANSI->read( { file => 'file.ans' } );
+	my $img = Image::TextMode::ANSI->read( { file => 'file.ans' } );
 
 	# Image width and height
 	my $w = $img->width;
@@ -41,9 +41,9 @@ use warnings;
 
 use base qw( Image::TextMode );
 
-use Image::ANSI::Palette;
+use Image::TextMode::ANSI::Palette;
 
-__PACKAGE__->palette( Image::ANSI::Palette->new );
+__PACKAGE__->palette( Image::TextMode::ANSI::Palette->new );
 
 our $VERSION = '0.10';
 
@@ -54,13 +54,13 @@ our $VERSION = '0.10';
 Creates a new ANSI image. Currently only reads in data.
 
 	# filename
-	$ansi = Image::ANSI->new( file => 'file.ans' );
+	$ansi = Image::TextMode::ANSI->new( file => 'file.ans' );
 	
 	# file handle
-	$ansi = Image::ANSI->new( handle => $handle );
+	$ansi = Image::TextMode::ANSI->new( handle => $handle );
 
 	# string
-	$ansi = Image::ANSI->new( string => $string );
+	$ansi = Image::TextMode::ANSI->new( string => $string );
 
 =cut
 

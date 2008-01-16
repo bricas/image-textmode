@@ -1,4 +1,4 @@
-package Image::Tundra;
+package Image::TextMode::Tundra;
 
 =head1 NAME
 
@@ -116,8 +116,8 @@ Explicitly reads in an XBin.
 sub parse {
     my $self = shift;
 
-    require Image::Tundra::Parser;
-    Image::Tundra::Parser->parse( $self, @_ );
+    require Image::TextMode::Tundra::Parser;
+    Image::TextMode::Tundra::Parser->parse( $self, @_ );
 
     return $self;
 }

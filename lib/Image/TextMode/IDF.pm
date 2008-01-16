@@ -1,4 +1,4 @@
-package Image::IDF;
+package Image::TextMode::IDF;
 
 =head1 NAME
 
@@ -85,7 +85,7 @@ use strict;
 use warnings;
 
 use Carp;
-use Image::IDF::Parser;
+use Image::TextMode::IDF::Parser;
 
 our $VERSION = '0.01';
 
@@ -143,8 +143,8 @@ Explicitly reads in an XBin.
 sub parse {
     my $self = shift;
 
-    require Image::IDF::Parser;
-    Image::IDF::Parser->parse( $self, @_ );
+    require Image::TextMode::IDF::Parser;
+    Image::TextMode::IDF::Parser->parse( $self, @_ );
 
     return $self;
 }

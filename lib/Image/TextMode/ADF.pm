@@ -1,15 +1,15 @@
-package Image::ADF;
+package Image::TextMode::ADF;
 
 =head1 NAME
 
-Image::ADF - Load, create, manipulate and save ADF image files
+Image::TextMode::ADF - Load, create, manipulate and save ADF image files
 
 =head1 SYNOPSIS
 
-	use Image::ADF;
+	use Image::TextMode::ADF;
 
 	# Read in a file...
-	my $img = Image::ADF->new( file => 'myADF.xb' );
+	my $img = Image::TextMode::ADF->new( file => 'myADF.xb' );
 
 	# Image width and height
 	my $w = $img->width;
@@ -76,7 +76,7 @@ use strict;
 use warnings;
 
 use Carp;
-use Image::ADF::Parser;
+use Image::TextMode::ADF::Parser;
 
 our $VERSION = '0.01';
 
@@ -89,13 +89,13 @@ __PACKAGE__->mk_classaccessors( 'version' );
 Creates a new ADF image. Currently only reads in data.
 
 	# filename
-	$ADF = Image::ADF->new( file => 'file.xb' );
+	$ADF = Image::TextMode::ADF->new( file => 'file.xb' );
 	
 	# file handle
-	$ADF = Image::ADF->new( handle => $handle );
+	$ADF = Image::TextMode::ADF->new( handle => $handle );
 
 	# string
-	$ADF = Image::ADF->new( string => $string );
+	$ADF = Image::TextMode::ADF->new( string => $string );
 
 =cut
 
@@ -130,8 +130,8 @@ Explicitly reads in an ADF.
 sub parse {
     my $self = shift;
 
-    require Image::ADF::Parser;
-    Image::ADF::Parser->parse( $self, @_ );
+    require Image::TextMode::ADF::Parser;
+    Image::TextMode::ADF::Parser->parse( $self, @_ );
 
     return $self;
 }

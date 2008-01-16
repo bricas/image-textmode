@@ -1,4 +1,4 @@
-package Image::Bin;
+package Image::TextMode::Bin;
 
 =head1 NAME
 
