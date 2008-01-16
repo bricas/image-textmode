@@ -1,13 +1,13 @@
-package Image::XBin::Parser;
+package Image::TextMode::XBin::Parser;
 
 =head1 NAME
 
-Image::XBin::Parser - Reads in XBin image files
+Image::TextMode::XBin::Parser - Reads in XBin image files
 
 =head1 SYNOPSIS
 
-    # This module is used by Image::XBin's read()
-    my $xbin = Image::XBin-read( { file => 'xbin.xb' } );
+    # This module is used by Image::TextMode::XBin's read()
+    my $xbin = Image::TextMode::XBin-read( { file => 'xbin.xb' } );
 
 =cut
 

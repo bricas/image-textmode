@@ -1,4 +1,4 @@
-package Image::ANSI::Palette;
+package Image::TextMode::ANSI::Palette;
 
 use strict;
 use warnings;

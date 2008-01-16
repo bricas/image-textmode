@@ -1,4 +1,4 @@
-package Image::IDF::Parser;
+package Image::TextMode::IDF::Parser;
 
 =head1 NAME
 

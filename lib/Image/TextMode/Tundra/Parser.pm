@@ -1,4 +1,4 @@
-package Image::Tundra::Parser;
+package Image::TextMode::Tundra::Parser;
 
 =head1 NAME
 
