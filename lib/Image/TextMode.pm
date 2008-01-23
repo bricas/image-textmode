@@ -119,7 +119,18 @@ sub read {
     # attempt to find a sauce record in the file
     $self->sauce->read( handle => $file );
 
-    return $self->parse( $file, @_ );
+    $self->parse( $file, @_ );
+
+    if( $self->has_sauce ) {
+        my $sauce = $self->sauce;
+        $self->width( $sauce->tinfo1 );
+        $self->height( $sauce->tinfo2 );
+    }
+    else {
+        $self->calculate_and_set_dimensions;
+    }
+
+    return $self;
 }
 
 =head2 write( \%opts )

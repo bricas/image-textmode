@@ -2,31 +2,17 @@ package Image::TextMode::IDF;
 
 =head1 NAME
 
-Image::XBin - Load, create, manipulate and save XBin image files
+Image::TextMode::IDF - Load, create, manipulate and save IDF image files
 
 =head1 SYNOPSIS
 
-	use Image::XBin;
+	use Image::TextMode::IDF;
 
 	# Read in a file...
-	my $img = Image::XBin->new( file => 'myxbin.xb' );
-
-	# Image width and height
-	my $w = $img->width;
-	my $h = $img->height;
-
-	# get and put "pixels"
-	my $pixel = $img->getpixel( $x, $y );
-	$img->putpixel( $x, $y, $pixel );
-
-	# font (XBin::Font)
-	my $font = $img->font;
-
-	# palette (XBin::Palette)
-	my $palette = $img->palette;
+	my $img = Image::TextMode::IDF->read( { file => 'my.idf' } );
 
 	# save the data to a file
-	$img->write( file => 'x.xb' );
+	$img->write( { file => 'mynew.idf' } );
 
 =head1 DESCRIPTION
 
@@ -61,22 +47,6 @@ XBin file stucture:
 Note, the only required element is a header. See the XBin specs for for information.
 http://www.acid.org/info/xbin/xbin.htm
 
-=head1 INSTALLATION
-
-To install this module via Module::Build:
-
-	perl Build.PL
-	./Build         # or `perl Build`
-	./Build test    # or `perl Build test`
-	./Build install # or `perl Build install`
-
-To install this module via ExtUtils::MakeMaker:
-
-	perl Makefile.PL
-	make
-	make test
-	make install
-
 =cut
 
 use base qw( Image::TextMode );
@@ -92,29 +62,6 @@ our $VERSION = '0.01';
 __PACKAGE__->mk_classaccessors( qw( id x0 y0 x1 y1 ) );
 
 =head1 METHODS
-
-=head2 new( %options )
-
-Creates a new XBin image. Currently only reads in data.
-
-	# filename
-	$xbin = Image::XBin->new( file => 'file.xb' );
-	
-	# file handle
-	$xbin = Image::XBin->new( handle => $handle );
-
-	# string
-	$xbin = Image::XBin->new( string => $string );
-
-=cut
-
-sub new {
-    my $class = shift;
-    my $args  = ( @_ == 1 && ref $_[ 0 ] eq 'HASH' ) ? $_[ 0 ] : { @_ };
-    my $self  = bless $args, $class;
-    $self->clear;
-    return $self;
-}
 
 =head2 clear(  )
 
@@ -136,107 +83,102 @@ sub clear {
 
 =head2 read( %options )
 
-Explicitly reads in an XBin.
+Explicitly reads in an IDF.
 
 =cut
 
 sub parse {
     my $self = shift;
+    my ( $file, %options ) = @_;
 
-    require Image::TextMode::IDF::Parser;
-    Image::TextMode::IDF::Parser->parse( $self, @_ );
+    seek( $file, 0, 0 );
+
+    my $buffer;
+    $file->read( $buffer, 4 );
+    $self->id( unpack('A4', $buffer ) );
+
+    $file->read( $buffer, 8 );
+    my @dim = unpack('v*', $buffer );
+
+    $self->x0( $dim[ 0 ] );
+    $self->y0( $dim[ 1 ] );
+    $self->x1( $dim[ 2 ] );
+    $self->y1( $dim[ 3 ] );
+
+    $file->seek( -48 - 4096, 2 );
+    if( $self->has_sauce ) {
+        $file->seek( -128, 1 );
+    }
+
+    my $max = $file->tell;
+
+    $file->read( $buffer, 4096 );
+    $self->font(
+        Image::TextMode::Font->new_from_raw_data( $buffer, 16 )
+    );
+
+    $file->read( $buffer, 48 );
+    $self->palette(
+        Image::TextMode::Palette->new_from_raw_data( $buffer ) );
+
+    $file->seek( 12, 0 );
+    my ( $x, $y ) = ( 0, 0 );
+    while ( $file->tell < $max ) {
+        $file->read( $buffer, 2 );
+        my $info = unpack( 'v', $buffer );
+
+        my $len;
+        if( $info == 1 ) {
+            $file->read( $info, 2 );
+            $len = unpack( 'v', $info ) & 255 ;
+            $file->read( $buffer, 2 );
+        }
+        else {
+            $len = 1;
+        }
+
+        my @data = unpack( 'aC', $buffer );            
+        for( 1..$len ) {
+            $self->putpixel( $x, $y, @data );
+            $x++;
+            if ( $x > $dim[ 2 ] ) {
+                $x = 0;
+                $y++;
+            }
+        }
+    }
 
     return $self;
 }
 
 =head2 as_string( )
 
-Returns the XBin data as a string - suitable for saving.
+Returns the IDF data as a string - suitable for saving.
 
 =cut
 sub as_string {
-
-=pod
-
     my $self = shift;
 
     my $output;
+    $output .= pack( 'A4', $self->id );
+    $output .= pack( 'v*', map { $self->$_ } qw( x0 y0 x1 y1 ) );
 
-# must set header to uncompressed because we don't have a compression alg yet.
-# set old value back when done.
-# this is temporary!!!
-    my $compressed = $self->is_compressed;
-    $self->compress( 0 );
-
-    # header
-    $output .= pack( $header_template, map { $self->$_ } @header_fields );
-
-    # palette
-    if ( $self->has_palette ) {
-        $output .= $self->palette->as_string;
-    }
-
-    # font
-    if ( $self->has_font ) {
-        $output .= $self->font->as_string;
-    }
-
-    # image
-    if ( $self->is_compressed ) {
-
-        # RLE compression alg.
-    }
-    else {
-        for my $y ( 0 .. $self->height - 1 ) {
-            for my $x ( 0 .. $self->width - 1 ) {
-                my $pixel = $self->getpixel( $x, $y );
-                $output .= pack( 'C*', ord( $pixel->char ), $pixel->attr );
-            }
-        }
-    }
+###
 
     if ( $self->sauce ) {
         $output .= $self->sauce->as_string;
     }
 
-    # set old value
-    $self->compress( $compressed );
-
     return $output;
-
-=cut
-
 }
-
-=head2 width( )
-
-Returns the image width.
-
-=head2 height( )
-
-Returns the image height.
-
-=head1 TODO
-
-=over 4
-
-=item * fix write() method to include compression
-
-=item * use new()'s options to create a new file from scratch
-
-=back
 
 =head1 AUTHOR
 
-=over 4 
-
-=item * Brian Cassidy E<lt>bricas@cpan.orgE<gt>
-
-=back
+Brian Cassidy E<lt>bricas@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2005 by Brian Cassidy
+Copyright 2008 by Brian Cassidy
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 

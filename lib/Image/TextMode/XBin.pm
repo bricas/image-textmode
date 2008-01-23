@@ -61,13 +61,6 @@ XBin file stucture:
 Note, the only required element is a header. See the XBin specs for for information.
 http://www.acid.org/info/xbin/xbin.htm
 
-=head1 INSTALLATION
-
-	perl Makefile.PL
-	make
-	make test
-	make install
-
 =cut
 
 use base qw( Image::TextMode );
@@ -300,7 +293,7 @@ Brian Cassidy E<lt>bricas@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2007 by Brian Cassidy
+Copyright 2008 by Brian Cassidy
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 

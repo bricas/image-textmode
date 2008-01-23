@@ -2,31 +2,17 @@ package Image::TextMode::Tundra;
 
 =head1 NAME
 
-Image::XBin - Load, create, manipulate and save XBin image files
+Image::TextMode::Tundra - Load, create, manipulate and save Tundra image files
 
 =head1 SYNOPSIS
 
-	use Image::XBin;
+	use Image::TextMode::Tundra;
 
 	# Read in a file...
-	my $img = Image::XBin->new( file => 'myxbin.xb' );
-
-	# Image width and height
-	my $w = $img->width;
-	my $h = $img->height;
-
-	# get and put "pixels"
-	my $pixel = $img->getpixel( $x, $y );
-	$img->putpixel( $x, $y, $pixel );
-
-	# font (XBin::Font)
-	my $font = $img->font;
-
-	# palette (XBin::Palette)
-	my $palette = $img->palette;
+	my $img = Image::TextMode::Tundra->read( { file => 'my.tnd' } );
 
 	# save the data to a file
-	$img->write( file => 'x.xb' );
+	$img->write( { file => 'mynew.tnd' } );
 
 =head1 DESCRIPTION
 
@@ -60,22 +46,6 @@ XBin file stucture:
 
 Note, the only required element is a header. See the XBin specs for for information.
 http://www.acid.org/info/xbin/xbin.htm
-
-=head1 INSTALLATION
-
-To install this module via Module::Build:
-
-	perl Build.PL
-	./Build         # or `perl Build`
-	./Build test    # or `perl Build test`
-	./Build install # or `perl Build install`
-
-To install this module via ExtUtils::MakeMaker:
-
-	perl Makefile.PL
-	make
-	make test
-	make install
 
 =cut
 
@@ -187,35 +157,13 @@ sub as_string {
 
 }
 
-=head2 width( )
-
-Returns the image width.
-
-=head2 height( )
-
-Returns the image height.
-
-=head1 TODO
-
-=over 4
-
-=item * fix write() method to include compression
-
-=item * use new()'s options to create a new file from scratch
-
-=back
-
 =head1 AUTHOR
 
-=over 4 
-
-=item * Brian Cassidy E<lt>bricas@cpan.orgE<gt>
-
-=back
+Brian Cassidy E<lt>bricas@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2005 by Brian Cassidy
+Copyright 2008 by Brian Cassidy
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 

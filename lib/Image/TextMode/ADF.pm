@@ -9,8 +9,10 @@ Image::TextMode::ADF - Load, create, manipulate and save ADF image files
 	use Image::TextMode::ADF;
 
 	# Read in a file...
-	my $img = Image::TextMode::ADF->new;
-    $img->read( { file => 'my.adf' } );
+	my $img = Image::TextMode::ADF->read( { file => 'my.adf' } );
+    
+	# save the data to a file
+	$img->write( { file => 'mynew.adf' } );
 
 =head1 DESCRIPTION
 
@@ -27,13 +29,6 @@ ADF file stucture:
 	+------------+
 	| Image Data |
 	+------------+
-
-=head1 INSTALLATION
-
-	perl Makefile.PL
-	make
-	make test
-	make install
 
 =cut
 
@@ -133,14 +128,14 @@ sub as_string {
     my $output;
 
     $output .= pack( 'C', $self->version );
+
+    ## broken - need 64 colors, not 16
     $output .= $self->palette->as_string;
+    ##
     $output .= $self->font->as_string;
 
-    for my $y ( 0 .. $self->height - 1 ) {
-        for my $x ( 0 .. $self->width - 1 ) {
-            my $pixel = $self->getpixel( $x, $y );
-            $output .= pack( 'C*', ord( $pixel->char ), $pixel->attr );
-        }
+    for my $row ( @{ $self->_image } ) {
+        $output .= join( '', map { pack( 'aC', @$_ ) } @$row )
     }
 
     if ( $self->sauce ) {
@@ -156,7 +151,7 @@ Brian Cassidy E<lt>bricas@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2007 by Brian Cassidy
+Copyright 2008 by Brian Cassidy
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 

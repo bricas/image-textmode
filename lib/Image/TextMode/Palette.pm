@@ -120,8 +120,8 @@ Packs the data into a raw string.
 
 sub as_string {
     my $self = shift;
-    return
-        pack( 'C*', join( '', map { join( '', @$_ ) } @{ $self->colors } ) );
+
+    return pack( 'C*', map { @$_ } @{ $self->colors } );
 }
 
 =head2 fill_gd_palette( $image )

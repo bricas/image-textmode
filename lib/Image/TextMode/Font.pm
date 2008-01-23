@@ -158,8 +158,7 @@ Packs the data into a raw string.
 
 sub as_string {
     my $self = shift;
-    return
-        pack( 'C*', join( '', map { join( '', @$_ ) } @{ $self->chars } ) );
+    return pack( 'C*', map { @$_ } @{ $self->chars } );
 }
 
 =head2 as_gd( \%options )
