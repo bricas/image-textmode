@@ -85,9 +85,73 @@ Explicitly reads in an XBin.
 
 sub parse {
     my $self = shift;
+    my ( $file, %options ) = @_;
 
-    require Image::TextMode::Tundra::Parser;
-    Image::TextMode::Tundra::Parser->parse( $self, @_ );
+    seek( $file, 0, 0 );
+
+    my $buffer;
+    $file->read( $buffer, 1 );
+    $self->int_id( unpack('C', $buffer ) );
+
+    $file->read( $buffer, 8 );
+    $self->id( unpack('A8', $buffer ) );
+
+    my $pal = Image::TextMode::Palette->new;
+    my $sauce = $self->sauce;
+    my $wrap = $options{ linewrap } || ( $sauce->has_sauce ? $sauce->tinfo1 : WRAP );
+
+    my( $x, $y, $attr, $fg, $bg, $pal_index ) = ( 0 ) x 6;
+    $pal->set( $pal_index++, [ 0, 0, 0 ] );
+
+    while( $file->read( $buffer, 1 ) ) {
+        my $command = ord( $buffer );
+
+        if( $command == 1 ) { # position
+            $file->read( $buffer, 8 );
+            ( $y, $x ) = unpack( 'N*', $buffer );
+            next;
+        }
+
+        my $char;
+
+        if( $command == 2 ) { # fg
+            $file->read( $char, 1 );
+            $file->read( $buffer, 4 );
+            my $rgb = unpack(  'N', $buffer );
+            $fg = $pal_index++;
+            $pal->set( $fg, [ ( $rgb >> 16 ) & 0x000000ff,( $rgb >> 8 ) & 0x000000ff, $rgb & 0x000000ff, ] );
+        }
+        elsif( $command == 4 ) { # bg
+            $file->read( $char, 1 );
+            $file->read( $buffer, 4 );
+            my $rgb = unpack(  'N', $buffer );
+            $bg = $pal_index++;
+            $pal->set( $bg, [ ( $rgb >> 16 ) & 0x000000ff,( $rgb >> 8 ) & 0x000000ff, $rgb & 0x000000ff, ] );
+        }
+        elsif( $command == 6 ) { # fg + bg
+            $file->read( $char, 1 );
+            $file->read( $buffer, 8 );
+            my @rgb = unpack(  'N*', $buffer );
+            $fg = $pal_index++;
+            $pal->set( $fg, [ ( $rgb[ 0 ] >> 16 ) & 0x000000ff,( $rgb[ 0 ] >> 8 ) & 0x000000ff, $rgb[ 0 ] & 0x000000ff, ] );
+            $bg = $pal_index++;
+            $pal->set( $bg, [ ( $rgb[ 1 ] >> 16 ) & 0x000000ff,( $rgb[ 1 ] >> 8 ) & 0x000000ff, $rgb[ 1 ] & 0x000000ff, ] );
+        }
+
+        if( !$char ) {
+            $char = chr( $command );
+        }
+
+        $self->putpixel( $x, $y, $char, { fg => $fg, bg => $bg } );
+        $x++;
+
+        if( $x == $wrap ) {
+            $x = 0;
+            $y++;
+        }
+    }
+
+    $self->palette( $pal );
 
     return $self;
 }
