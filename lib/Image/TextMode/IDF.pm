@@ -49,7 +49,7 @@ http://www.acid.org/info/xbin/xbin.htm
 
 =cut
 
-use base qw( Image::TextMode );
+use base qw( Image::TextMode::Base );
 
 use strict;
 use warnings;

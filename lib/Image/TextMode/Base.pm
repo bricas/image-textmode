@@ -27,7 +27,7 @@ Image::TextMode::Base - A base class for text mode graphics
 
     package MyFormat;
     
-    use base qw( Image::TextMode );
+    use base qw( Image::TextMode::Base );
 
     sub parse { ... }
 

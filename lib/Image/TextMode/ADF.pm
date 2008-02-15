@@ -32,7 +32,7 @@ ADF file stucture:
 
 =cut
 
-use base qw( Image::TextMode );
+use base qw( Image::TextMode::Base );
 
 use strict;
 use warnings;

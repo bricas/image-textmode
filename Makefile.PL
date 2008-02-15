@@ -4,6 +4,8 @@ if ( -e 'MANIFEST.SKIP' ) {
     system( 'pod2text lib/Image/TextMode.pm > README' );
 }
 
+perl_version '5.006';
+
 name 'Image-TextMode';
 all_from 'lib/Image/TextMode.pm';
 

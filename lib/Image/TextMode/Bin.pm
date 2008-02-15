@@ -21,7 +21,7 @@ attribute byte for each "pixel" on the screen.
 
 =cut
 
-use base qw( Image::TextMode );
+use base qw( Image::TextMode::Base );
 
 use strict;
 use warnings;

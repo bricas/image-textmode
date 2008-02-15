@@ -39,7 +39,7 @@ ANSI escape codes, aka ANSI art.
 use strict;
 use warnings;
 
-use base qw( Image::TextMode );
+use base qw( Image::TextMode::Base );
 
 use Image::TextMode::ANSI::Palette;
 
