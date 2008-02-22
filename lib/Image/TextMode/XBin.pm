@@ -226,7 +226,7 @@ sub font {
         $self->flags( $self->flags & ~FIVETWELVE_CHARS );
         $self->flags( $self->flags & ~FONT );
 
-        if( !$font->isa( 'Image::TextMode::Font::8x16' ) {
+        if( !$font->isa( 'Image::TextMode::Font::8x16' ) ) {
             $self->flags( $self->flags | FONT );
             $self->flags( $self->flags | FIVETWELVE_CHARS )
                 if $font->characters == 512;

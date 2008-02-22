@@ -17,5 +17,7 @@ requires 'IO::String';
 
 test_requires 'Test::More';
 
+tests 't/*/*.t';
+
 auto_install;
 WriteAll;
