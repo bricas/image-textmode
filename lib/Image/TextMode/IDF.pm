@@ -55,7 +55,6 @@ use strict;
 use warnings;
 
 use Carp;
-use Image::TextMode::IDF::Parser;
 
 our $VERSION = '0.01';
 

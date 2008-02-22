@@ -55,6 +55,7 @@ use strict;
 use warnings;
 
 use Carp;
+use constant WRAP => 80;
 
 our $VERSION = '0.01';
 
