@@ -6,13 +6,13 @@ Image::TextMode::ADF - Load, create, manipulate and save ADF image files
 
 =head1 SYNOPSIS
 
-	use Image::TextMode::ADF;
+    use Image::TextMode::ADF;
 
-	# Read in a file...
-	my $img = Image::TextMode::ADF->read( { file => 'my.adf' } );
+    # Read in a file...
+    my $img = Image::TextMode::ADF->read( { file => 'my.adf' } );
     
-	# save the data to a file
-	$img->write( { file => 'mynew.adf' } );
+    # save the data to a file
+    $img->write( { file => 'mynew.adf' } );
 
 =head1 DESCRIPTION
 
@@ -20,15 +20,15 @@ ADF stands for "Artworx Data Format"
 
 ADF file stucture:
 
-	+------------+
-	| Version    |
-	+------------+
-	| Palette    |
-	+------------+
-	| Font       |
-	+------------+
-	| Image Data |
-	+------------+
+    +------------+
+    | Version    |
+    +------------+
+    | Palette    |
+    +------------+
+    | Font       |
+    +------------+
+    | Image Data |
+    +------------+
 
 =cut
 

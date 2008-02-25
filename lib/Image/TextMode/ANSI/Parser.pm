@@ -6,8 +6,8 @@ Image::TextMode::ANSI::Parser - Reads in ANSI files
 
 =head1 SYNOPSIS
 
-	my $parser = Image::TextMode::ANSI::Parser->new;
-	my $ansi   = $parser->parse( file => 'file.ans' );
+    my $parser = Image::TextMode::ANSI::Parser->new;
+    my $ansi   = $parser->parse( file => 'file.ans' );
 
 =cut
 
@@ -48,16 +48,16 @@ sub reset {
 
 Reads in a file, handle or string
 
-	my $parser = Image::TextMode::ANSI::Parser->new;
+    my $parser = Image::TextMode::ANSI::Parser->new;
 
-	# filename
-	$ansi = $parser->parse( file => 'file.ans' );
-	
-	# file handle
-	$ansi = $parser->parse( handle => $handle );
+    # filename
+    $ansi = $parser->parse( file => 'file.ans' );
+    
+    # file handle
+    $ansi = $parser->parse( handle => $handle );
 
-	# string
-	$ansi = $parser->parse( string => $string );
+    # string
+    $ansi = $parser->parse( string => $string );
 
 =cut
 

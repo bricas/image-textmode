@@ -6,13 +6,13 @@ Image::TextMode::IDF - Load, create, manipulate and save IDF image files
 
 =head1 SYNOPSIS
 
-	use Image::TextMode::IDF;
+    use Image::TextMode::IDF;
 
-	# Read in a file...
-	my $img = Image::TextMode::IDF->read( { file => 'my.idf' } );
+    # Read in a file...
+    my $img = Image::TextMode::IDF->read( { file => 'my.idf' } );
 
-	# save the data to a file
-	$img->write( { file => 'mynew.idf' } );
+    # save the data to a file
+    $img->write( { file => 'mynew.idf' } );
 
 =head1 DESCRIPTION
 
@@ -34,15 +34,15 @@ XBin features:
 
 XBin file stucture:
 
-	+------------+
-	| Header     |
-	+------------+
-	| Palette    |
-	+------------+
-	| Font       |
-	+------------+
-	| Image Data |
-	+------------+
+    +------------+
+    | Header     |
+    +------------+
+    | Palette    |
+    +------------+
+    | Font       |
+    +------------+
+    | Image Data |
+    +------------+
 
 Note, the only required element is a header. See the XBin specs for for information.
 http://www.acid.org/info/xbin/xbin.htm

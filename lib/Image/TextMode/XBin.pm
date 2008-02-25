@@ -6,27 +6,27 @@ Image::TextMode::XBin - Load, create, manipulate and save XBin image files
 
 =head1 SYNOPSIS
 
-	use Image::TextMode::XBin;
+    use Image::TextMode::XBin;
 
-	# Read in a file...
-	my $img = Image::TextMode::XBin->read( { file => 'myxbin.xb' } );
+    # Read in a file...
+    my $img = Image::TextMode::XBin->read( { file => 'myxbin.xb' } );
 
-	# Image width and height
-	my $w = $img->width;
-	my $h = $img->height;
+    # Image width and height
+    my $w = $img->width;
+    my $h = $img->height;
 
-	# get and put "pixels"
-	my $pixel = $img->getpixel( $x, $y );
-	$img->putpixel( $x, $y, $pixel );
+    # get and put "pixels"
+    my $pixel = $img->getpixel( $x, $y );
+    $img->putpixel( $x, $y, $pixel );
 
-	# font
-	my $font = $img->font;
+    # font
+    my $font = $img->font;
 
-	# palette
-	my $palette = $img->palette;
+    # palette
+    my $palette = $img->palette;
 
-	# save the data to a file
-	$img->write( { file => 'x.xb' } );
+    # save the data to a file
+    $img->write( { file => 'x.xb' } );
 
 =head1 DESCRIPTION
 
@@ -48,15 +48,15 @@ XBin features:
 
 XBin file stucture:
 
-	+------------+
-	| Header     |
-	+------------+
-	| Palette    |
-	+------------+
-	| Font       |
-	+------------+
-	| Image Data |
-	+------------+
+    +------------+
+    | Header     |
+    +------------+
+    | Palette    |
+    +------------+
+    | Font       |
+    +------------+
+    | Image Data |
+    +------------+
 
 Note, the only required element is a header. See the XBin specs for for information.
 http://www.acid.org/info/xbin/xbin.htm

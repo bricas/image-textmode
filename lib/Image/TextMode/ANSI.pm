@@ -6,21 +6,21 @@ Image::TextMode::ANSI - Load, create, manipulate and save ANSI files
 
 =head1 SYNOPSIS
 
-	use Image::TextMode::ANSI;
+    use Image::TextMode::ANSI;
 
-	# Read in a file...
-	my $img = Image::TextMode::ANSI->read( { file => 'file.ans' } );
+    # Read in a file...
+    my $img = Image::TextMode::ANSI->read( { file => 'file.ans' } );
 
-	# Image width and height
-	my $w = $img->width;
-	my $h = $img->height;
+    # Image width and height
+    my $w = $img->width;
+    my $h = $img->height;
 
-	# get and put "pixels"
-	my $pixel = $img->getpixel( $x, $y );
-	$img->putpixel( $x, $y, $pixel );
+    # get and put "pixels"
+    my $pixel = $img->getpixel( $x, $y );
+    $img->putpixel( $x, $y, $pixel );
 
-	# write the ANSI to a file
-	$img->write( { file => 'out.ans' } );
+    # write the ANSI to a file
+    $img->write( { file => 'out.ans' } );
 
 =head1 DESCRIPTION
 
@@ -29,10 +29,10 @@ ANSI escape codes, aka ANSI art.
 
 =head1 INSTALLATION
 
-	perl Makefile.PL
-	make
-	make test
-	make install
+    perl Makefile.PL
+    make
+    make test
+    make install
 
 =cut
 
@@ -53,14 +53,14 @@ our $VERSION = '0.10';
 
 Creates a new ANSI image. Currently only reads in data.
 
-	# filename
-	$ansi = Image::TextMode::ANSI->new( file => 'file.ans' );
-	
-	# file handle
-	$ansi = Image::TextMode::ANSI->new( handle => $handle );
+    # filename
+    $ansi = Image::TextMode::ANSI->new( file => 'file.ans' );
+    
+    # file handle
+    $ansi = Image::TextMode::ANSI->new( handle => $handle );
 
-	# string
-	$ansi = Image::TextMode::ANSI->new( string => $string );
+    # string
+    $ansi = Image::TextMode::ANSI->new( string => $string );
 
 =cut
 

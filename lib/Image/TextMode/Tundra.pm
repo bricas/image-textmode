@@ -6,13 +6,13 @@ Image::TextMode::Tundra - Load, create, manipulate and save Tundra image files
 
 =head1 SYNOPSIS
 
-	use Image::TextMode::Tundra;
+    use Image::TextMode::Tundra;
 
-	# Read in a file...
-	my $img = Image::TextMode::Tundra->read( { file => 'my.tnd' } );
+    # Read in a file...
+    my $img = Image::TextMode::Tundra->read( { file => 'my.tnd' } );
 
-	# save the data to a file
-	$img->write( { file => 'mynew.tnd' } );
+    # save the data to a file
+    $img->write( { file => 'mynew.tnd' } );
 
 =head1 DESCRIPTION
 
@@ -34,15 +34,15 @@ XBin features:
 
 XBin file stucture:
 
-	+------------+
-	| Header     |
-	+------------+
-	| Palette    |
-	+------------+
-	| Font       |
-	+------------+
-	| Image Data |
-	+------------+
+    +------------+
+    | Header     |
+    +------------+
+    | Palette    |
+    +------------+
+    | Font       |
+    +------------+
+    | Image Data |
+    +------------+
 
 Note, the only required element is a header. See the XBin specs for for information.
 http://www.acid.org/info/xbin/xbin.htm
@@ -67,14 +67,14 @@ __PACKAGE__->mk_classaccessors( qw( int_id id ) );
 
 Creates a new XBin image. Currently only reads in data.
 
-	# filename
-	$xbin = Image::XBin->new( file => 'file.xb' );
-	
-	# file handle
-	$xbin = Image::XBin->new( handle => $handle );
+    # filename
+    $xbin = Image::XBin->new( file => 'file.xb' );
+    
+    # file handle
+    $xbin = Image::XBin->new( handle => $handle );
 
-	# string
-	$xbin = Image::XBin->new( string => $string );
+    # string
+    $xbin = Image::XBin->new( string => $string );
 
 =cut
 

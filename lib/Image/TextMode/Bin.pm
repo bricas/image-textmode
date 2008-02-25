@@ -6,13 +6,13 @@ Image::TextMode::Bin - Load, create, manipulate and save Bin image files
 
 =head1 SYNOPSIS
 
-	use Image::TextMode::Bin;
+    use Image::TextMode::Bin;
 
-	# Read in a file...
+    # Read in a file...
     my $img = Image::TextMode::Bin->read( { file => 'my.bin' } );
 
-	# save the data to a file
-	$img->write( { file => 'mynew.bin' } );
+    # save the data to a file
+    $img->write( { file => 'mynew.bin' } );
 
 =head1 DESCRIPTION
 
