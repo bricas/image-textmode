@@ -1,39 +1,23 @@
-use Test::More tests => 62;
+use Test::More tests => 60;
 
 use strict;
 use warnings;
 
-use_ok( 'Image::ANSI' );
-use_ok( 'Image::ANSI::Parser' );
+use_ok( 'Image::TextMode::ANSI' );
 
-my $parser = Image::ANSI::Parser->new;
-isa_ok( $parser, 'Image::ANSI::Parser' );
-
-{
-    my $ansi = $parser->parse( file => 't/data/test1.ans' );
-    isa_ok( $ansi, 'Image::ANSI' );
-
-    check_results( $ansi );
-}
-
-{
-    my $ansi = $parser->parse( file => 't/data/test2.ans' );
-    isa_ok( $ansi, 'Image::ANSI' );
-
-    check_results( $ansi );
-}
-
-{
-    my $ansi = $parser->parse( file => 't/data/test3.ans' );
-    isa_ok( $ansi,        'Image::ANSI' );
-    isa_ok( $ansi->sauce, 'File::SAUCE' );
-    is( $ansi->sauce->title, 'Test' );
-
-    check_results( $ansi );
+for( 1..3 ) {
+    check_results( Image::TextMode::ANSI->read( { file => "t/ansi/data/test${_}.ans" } ) );
 }
 
 sub check_results {
     my $ansi = shift;
+    isa_ok( $ansi, 'Image::TextMode::ANSI' );
+
+    if( $ansi->has_sauce ) {
+        isa_ok( $ansi->sauce, 'File::SAUCE' );
+        is( $ansi->sauce->title, 'Test' );
+    }
+
     is( $ansi->width,  4 );
     is( $ansi->height, 1 );
 

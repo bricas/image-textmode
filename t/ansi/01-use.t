@@ -1,18 +1,13 @@
-use Test::More tests => 10;
+use Test::More tests => 3;
 
 use strict;
 use warnings;
 
 BEGIN {
-    use_ok( 'Image::ANSI' );
-    use_ok( 'Image::ANSI::Parser' );
-    use_ok( 'Image::ANSI::Pixel' );
-    use_ok( 'Image::ANSI::Font' );
-    use_ok( 'Image::ANSI::Font::8x16' );
-    use_ok( 'Image::ANSI::Font::8x8' );
-    use_ok( 'Image::ANSI::Palette' );
-    use_ok( 'Image::ANSI::Palette::VGA' );
-    use_ok( 'Image::ANSIMation' );
-    use_ok( 'Image::ANSIMation::Parser' );
+    use_ok( 'Image::TextMode::ANSI' );
+    use_ok( 'Image::TextMode::ANSI::Parser' );
+    use_ok( 'Image::TextMode::ANSI::Palette' );
+#    use_ok( 'Image::ANSIMation' );
+#    use_ok( 'Image::ANSIMation::Parser' );
 }
 
