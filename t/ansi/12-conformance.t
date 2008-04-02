@@ -1,16 +1,12 @@
-use Test::More tests => 98;
+use Test::More tests => 96;
 use strict;
 use warnings;
 
-use_ok( 'Image::ANSI' );
-use_ok( 'Image::ANSI::Parser' );
-
-my $parser = Image::ANSI::Parser->new;
-isa_ok( $parser, 'Image::ANSI::Parser' );
+use_ok( 'Image::TextMode::ANSI' );
 
 {
-    my $ansi = $parser->parse( file => 't/data/tab.ans' );
-    isa_ok( $ansi, 'Image::ANSI' );
+    my $ansi = Image::TextMode::ANSI->read( { file => 't/ansi/data/tab.ans' } );
+    isa_ok( $ansi, 'Image::TextMode::ANSI' );
 
     is( $ansi->width,  18 );
     is( $ansi->height, 1 );
@@ -46,8 +42,8 @@ isa_ok( $parser, 'Image::ANSI::Parser' );
 }
 
 {
-    my $ansi = $parser->parse( file => 't/data/move.ans' );
-    isa_ok( $ansi, 'Image::ANSI' );
+    my $ansi = Image::TextMode::ANSI->read( { file => 't/ansi/data/move.ans' } );
+    isa_ok( $ansi, 'Image::TextMode::ANSI' );
 
     is( $ansi->width,  4 );
     is( $ansi->height, 1 );
@@ -83,8 +79,8 @@ isa_ok( $parser, 'Image::ANSI::Parser' );
 }
 
 {
-    my $ansi = $parser->parse( file => 't/data/saverestore.ans' );
-    isa_ok( $ansi, 'Image::ANSI' );
+    my $ansi = Image::TextMode::ANSI->read( { file => 't/ansi/data/saverestore.ans' } );
+    isa_ok( $ansi, 'Image::TextMode::ANSI' );
 
     is( $ansi->width,  4 );
     is( $ansi->height, 1 );
@@ -120,8 +116,8 @@ isa_ok( $parser, 'Image::ANSI::Parser' );
 }
 
 {
-    my $ansi = $parser->parse( file => 't/data/clearscreen.ans' );
-    isa_ok( $ansi, 'Image::ANSI' );
+    my $ansi = Image::TextMode::ANSI->read( { file => 't/ansi/data/clearscreen.ans' } );
+    isa_ok( $ansi, 'Image::TextMode::ANSI' );
 
     is( $ansi->width,  12 );
     is( $ansi->height, 1 );
@@ -157,8 +153,8 @@ isa_ok( $parser, 'Image::ANSI::Parser' );
 }
 
 {
-    my $ansi = $parser->parse( file => 't/data/clearline.ans' );
-    isa_ok( $ansi, 'Image::ANSI' );
+    my $ansi = Image::TextMode::ANSI->read( { file => 't/ansi/data/clearline.ans' } );
+    isa_ok( $ansi, 'Image::TextMode::ANSI' );
 
     is( $ansi->width,  12 );
     is( $ansi->height, 1 );
