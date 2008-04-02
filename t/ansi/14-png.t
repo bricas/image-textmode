@@ -1,30 +1,26 @@
-use Test::More tests => 7;
+use Test::More tests => 5;
 
 use strict;
 use warnings;
 
-use_ok( 'Image::ANSI' );
-use_ok( 'Image::ANSI::Parser' );
+use_ok( 'Image::TextMode::ANSI' );
 
 use GD qw( :cmp );
 
-my $parser = Image::ANSI::Parser->new;
-isa_ok( $parser, 'Image::ANSI::Parser' );
-
 {
-    my $ansi = $parser->parse( file => 't/data/test1.ans' );
-    isa_ok( $ansi, 'Image::ANSI' );
+    my $ansi = Image::TextMode::ANSI->read( { file => 't/ansi/data/test1.ans' } );
+    isa_ok( $ansi, 'Image::TextMode::ANSI' );
 
-    my $expected = GD::Image->new( 't/data/test1.png' );
-    my $generated = GD::Image->new( $ansi->as_png( mode => 'full' ) );
-    ok( !( $expected->compare( $generated ) & GD_CMP_IMAGE ) );
+    my $expected = GD::Image->new( 't/ansi/data/test1.png' );
+    my $generated = GD::Image->new( $ansi->as_bitmap_full );
+    ok( !( $expected->compare( $generated ) & GD_CMP_IMAGE ), 'full-size png output' );
 }
 
 {
-    my $ansi = $parser->parse( file => 't/data/test1.ans' );
-    isa_ok( $ansi, 'Image::ANSI' );
+    my $ansi = Image::TextMode::ANSI->read( { file => 't/ansi/data/test1.ans' } );
+    isa_ok( $ansi, 'Image::TextMode::ANSI' );
 
-    my $expected  = GD::Image->new( 't/data/test1thumbnail.png' );
-    my $generated = GD::Image->new( $ansi->as_png );
-    ok( !( $expected->compare( $generated ) & GD_CMP_IMAGE ) );
+    my $expected  = GD::Image->new( 't/ansi/data/test1thumbnail.png' );
+    my $generated = GD::Image->new( $ansi->as_bitmap_thumbnail );
+    ok( !( $expected->compare( $generated ) & GD_CMP_IMAGE ), 'thumbnail-size png output' );
 }
