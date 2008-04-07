@@ -1,27 +1,25 @@
-use Test::More qw( no_plan );
+use Test::More tests => 11;
 
 BEGIN {
-    use_ok( 'Image::XBin::Parser' );
+    use_ok( 'Image::TextMode::XBin' );
 }
 
-my $parser = Image::XBin::Parser->new;
+{
+    my $xbin = Image::TextMode::XBin->read( { file => 't/xbin/data/0699MEMB.XB' } );
 
-isa_ok( $parser, 'Image::XBin::Parser' );
+    isa_ok( $xbin,           'Image::TextMode::XBin' );
+    isa_ok( $xbin->font,     'Image::TextMode::Font' );
+    isa_ok( $xbin->palette,  'Image::TextMode::Palette' );
+    is( $xbin->has_sauce, 1, 'Has SAUCE' );
+    is( $xbin->compress, 0,  'Uncompressed XBin' );
+}
 
-my $xbin;
+{
+    my $xbin = Image::TextMode::XBin->read( { file => 't/xbin/data/CT-XBIN.XB' } );
 
-$xbin = $parser->parse( file => 't/data/0699MEMB.XB' );
-
-isa_ok( $xbin,          'Image::XBin' );
-isa_ok( $xbin->font,    'Image::XBin::Font' );
-isa_ok( $xbin->palette, 'Image::XBin::Palette' );
-isa_ok( $xbin->sauce,   'File::SAUCE' );
-is( $xbin->compress, 0, 'Uncompressed XBin' );
-
-$xbin = $parser->parse( file => 't/data/CT-XBIN.XB' );
-
-isa_ok( $xbin,          'Image::XBin' );
-isa_ok( $xbin->font,    'Image::XBin::Font' );
-isa_ok( $xbin->palette, 'Image::XBin::Palette' );
-is( $xbin->sauce,    undef, 'No SAUCE' );
-is( $xbin->compress, 1,     'Compressed XBin' );
+    isa_ok( $xbin,           'Image::TextMode::XBin' );
+    isa_ok( $xbin->font,     'Image::TextMode::Font' );
+    isa_ok( $xbin->palette,  'Image::TextMode::Palette' );
+    is( $xbin->has_sauce, 0, 'No SAUCE' );
+    is( $xbin->compress, 1,  'Compressed XBin' );
+}

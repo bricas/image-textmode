@@ -21,8 +21,8 @@ use base qw( Image::ANSI::Parser Class::Accessor );
 use strict;
 use warnings;
 
-use Image::ANSI;
-use Image::ANSIMation;
+use Image::TextMode::ANSI;
+use Image::TextMode::ANSIMation;
 
 our $VERSION = '0.02';
 

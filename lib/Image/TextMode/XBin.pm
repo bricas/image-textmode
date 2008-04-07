@@ -85,7 +85,8 @@ my $header_template = 'A4 C S S C C';
 my @header_fields   = qw( id eofchar width height fontsize flags );
 my $eof_char        = chr( 26 );
 
-__PACKAGE__->mk_classaccessors( @header_fields );
+__PACKAGE__->mk_classaccessors( qw( id eofchar width height fontsize ) );
+__PACKAGE__->mk_classaccessor( flags => 0 );
 
 =head1 METHODS
 

@@ -3,16 +3,16 @@ use Test::More tests => 61;
 use strict;
 use warnings;
 
-use_ok( 'Image::ANSI' );
+use_ok( 'Image::TextMode::ANSI' );
 use_ok( 'Image::ANSIMation' );
 
 {
-    my $ansi = Image::ANSI->new( file => 't/data/test1.ans' );
+    my $ansi = Image::TextMode::ANSI->read( { file => 't/ansi/data/test1.ans' } );
     my $output;
-    $ansi->write( string => \$output );
-    my $got = Image::ANSI->new( string => \$output );
+    $ansi->write( { string => \$output } );
+    my $got = Image::TextMode::ANSI->read( { string => \$output } );
 
-    isa_ok( $got, 'Image::ANSI' );
+    isa_ok( $got, 'Image::TextMode::ANSI' );
 
     check_results( $got );
 }

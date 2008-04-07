@@ -2,11 +2,11 @@ package Image::TextMode::ANSIMation;
 
 =head1 NAME
 
-Image::ANSIMation - Load, create, manipulate and save ANSI animation (ANSIMation) files
+Image::TextMode::ANSIMation - Load, create, manipulate and save ANSI animation (ANSIMation) files
 
 =head1 SYNOPSIS
 
-	use Image::ANSI::ANSIMation;
+	use Image::TextMode::ANSIMation;
 
 	# Read in a file...
 	my $anim = Image::ANSIMation->new( file => 'file.ans' );
@@ -26,7 +26,7 @@ of many frames creating an animation.
 
 =cut
 
-use base qw( Class::Accessor );
+use base qw( Image::TextMode::Base );
 
 use strict;
 use warnings;
@@ -53,26 +53,6 @@ Creates a new ANSIMation. Currently only reads in data.
 	$anim = Image::ANSIMation->new( string => $string );
 
 =cut
-
-sub new {
-    my $class = shift;
-
-    my $self = {};
-    bless $self, $class;
-
-    $self->frames( [] );
-    $self->current_frame( 0 );
-
-    my %options = @_;
-    if (   exists $options{ file }
-        or exists $options{ string }
-        or exists $options{ handle } )
-    {
-        return $self->read( @_ );
-    }
-
-    return $self;
-}
 
 =head2 read( %options )
 
