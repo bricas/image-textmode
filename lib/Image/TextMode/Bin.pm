@@ -26,19 +26,17 @@ use base qw( Image::TextMode::Base );
 use strict;
 use warnings;
 
-use Carp;
-
 our $VERSION = '0.01';
 
 =head1 METHODS
 
-=head2 parse( %options )
+=head2 _parse( %options )
 
-Reads in a Bin.
+Does the heavy lifting for reading in a Bin file.
 
 =cut
 
-sub parse {
+sub _parse {
     my ( $self, $file, %options ) = @_;
 
     seek( $file, 0, 0 );
@@ -71,8 +69,12 @@ Returns the Bin data as a string - suitable for saving.
 sub as_string {
     my $self = shift;
     my $output = '';
-    for my $row ( @{ $self->_image } ) {
+    for my $row ( @{ $self->pixeldata } ) {
         $output .= join( '', map { pack( 'aC', @$_ ) } @$row )
+    }
+
+    if ( $self->sauce ) {
+        $output .= $self->sauce->as_string;
     }
 
     return $output;

@@ -5,7 +5,9 @@ use warnings;
 
 use base qw( Image::TextMode::Palette );
 
-__PACKAGE__->colors(
+sub new {
+    my $self = shift->SUPER::new( @_ );
+    $self->colors(
     [   [ 0x00, 0x00, 0x00 ],
         [ 0x00, 0x00, 0xa8 ],
         [ 0x00, 0xa8, 0x00 ],
@@ -22,8 +24,11 @@ __PACKAGE__->colors(
         [ 0xfc, 0x54, 0xfc ],
         [ 0xfc, 0xfc, 0x54 ],
         [ 0xfc, 0xfc, 0xfc ],
-    ]
-);
+    ]    
+    );
+
+    return $self;
+}
 
 =head1 NAME
 

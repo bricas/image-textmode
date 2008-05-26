@@ -16,36 +16,19 @@ Image::TextMode::IDF - Load, create, manipulate and save IDF image files
 
 =head1 DESCRIPTION
 
-XBin stands for "eXtended BIN" -- an extention to the normal raw-image BIN files.
+IDF stands for iCEDraw Format.
 
-XBin features:
-
-=over 4 
-
-=item * allows for binary images up to 65536 columns wide, and 65536 lines high
-
-=item * can have an alternate set of palette colors either in blink or in non-blink mode
-
-=item * can have different textmode fonts from 1 to 32 scanlines high, consisting of either 256 or 512 different characters
-
-=item * can be compressed
-
-=back
-
-XBin file stucture:
+IDF file stucture:
 
     +------------+
     | Header     |
     +------------+
-    | Palette    |
+    | Image Data |
     +------------+
     | Font       |
     +------------+
-    | Image Data |
+    | Palette    |
     +------------+
-
-Note, the only required element is a header. See the XBin specs for for information.
-http://www.acid.org/info/xbin/xbin.htm
 
 =cut
 
@@ -54,11 +37,9 @@ use base qw( Image::TextMode::Base );
 use strict;
 use warnings;
 
-use Carp;
-
 our $VERSION = '0.01';
 
-__PACKAGE__->mk_classaccessors( qw( id x0 y0 x1 y1 ) );
+__PACKAGE__->mk_accessors( qw( id x0 y0 x1 y1 ) );
 
 =head1 METHODS
 
@@ -80,13 +61,13 @@ sub clear {
     $self->SUPER::clear( @_ );
 }
 
-=head2 read( %options )
+=head2 _parse( %options )
 
-Explicitly reads in an IDF.
+Does the heavy lifting for reading in an IDF file.
 
 =cut
 
-sub parse {
+sub _parse {
     my $self = shift;
     my ( $file, %options ) = @_;
 
@@ -162,7 +143,7 @@ sub as_string {
     $output .= pack( 'A4', $self->id );
     $output .= pack( 'v*', map { $self->$_ } qw( x0 y0 x1 y1 ) );
 
-###
+# TODO: Serialize pixeldata
 
     if ( $self->sauce ) {
         $output .= $self->sauce->as_string;
@@ -170,6 +151,14 @@ sub as_string {
 
     return $output;
 }
+
+=head1 TODO
+
+=over 4
+
+=item * finish write as_string() method to serialize the pixel data.
+
+=back
 
 =head1 AUTHOR
 

@@ -16,7 +16,7 @@ Image::TextMode::ADF - Load, create, manipulate and save ADF image files
 
 =head1 DESCRIPTION
 
-ADF stands for "Artworx Data Format"
+ADF stands for "Artworx Data Format".
 
 ADF file stucture:
 
@@ -42,13 +42,13 @@ use Image::TextMode::Font;
 
 our $VERSION = '0.01';
 
-__PACKAGE__->mk_classaccessors( 'version' );
+__PACKAGE__->mk_accessors( 'version' );
 
-my @color_idx = (0,1,2,3,4,5,20,7,56,57,58,59,60,61,62,63 );
+my @color_idx = ( 0, 1, 2, 3, 4, 5, 20, 7, 56, 57, 58, 59, 60, 61, 62, 63 );
 
 =head1 METHODS
 
-=head2 clear(  )
+=head2 clear( )
 
 Clears any in-memory data.
 
@@ -62,13 +62,13 @@ sub clear {
     $self->SUPER::clear( @_ );
 }
 
-=head2 parse( %options )
+=head2 _parse( %options )
 
-Reads in an ADF.
+Does the heavy lifting for reading in a ADF file.
 
 =cut
 
-sub parse {
+sub _parse {
     my $self = shift;
     my ( $file, %options ) = @_;
 
@@ -129,12 +129,12 @@ sub as_string {
 
     $output .= pack( 'C', $self->version );
 
-    ## broken - need 64 colors, not 16
+    # TODO: write 64 colors, not 16
     $output .= $self->palette->as_string;
-    ##
+    #
     $output .= $self->font->as_string;
 
-    for my $row ( @{ $self->_image } ) {
+    for my $row ( @{ $self->pixeldata } ) {
         $output .= join( '', map { pack( 'aC', @$_ ) } @$row )
     }
 
@@ -144,6 +144,14 @@ sub as_string {
 
     return $output;
 }
+
+=head1 BUGS
+
+=over 4
+
+=item * stringifying the palettes only writes 16 colors. ADF needs 64.
+
+=back
 
 =head1 AUTHOR
 

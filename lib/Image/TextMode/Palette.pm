@@ -3,9 +3,9 @@ package Image::TextMode::Palette;
 use strict;
 use warnings;
 
-use base qw( Class::Data::Accessor );
+use base qw( Class::Accessor::Fast );
 
-__PACKAGE__->mk_classaccessor( colors => [] );
+__PACKAGE__->mk_accessors( 'colors' );
 
 =head1 NAME
 
@@ -34,6 +34,8 @@ Creates a new palette object.
 sub new {
     my $class = shift;
     my $options = ( @_ == 1 && ref $_[ 0 ] eq 'HASH' ) ? $_[ 0 ] : { @_ };
+
+    $options->{ colors } ||= [];
 
     my $self = bless $options, $class;
 

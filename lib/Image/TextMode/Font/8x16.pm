@@ -5,9 +5,11 @@ use warnings;
 
 use base qw( Image::TextMode::Font );
 
-__PACKAGE__->width( 8 );
-__PACKAGE__->height( 16 );
-__PACKAGE__->chars(
+sub new {
+    my $self = shift->SUPER::new( @_ );
+    $self->width( 8 );
+    $self->height( 16 );
+    $self->chars(
     [   [   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
         ],
@@ -777,7 +779,9 @@ __PACKAGE__->chars(
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
         ],
     ]
-);
+    );
+    return $self;
+}
 
 =head1 NAME
 

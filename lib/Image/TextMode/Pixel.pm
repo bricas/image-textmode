@@ -1,6 +1,6 @@
 package Image::TextMode::Pixel;
 
-use base qw( Class::Data::Accessor );
+use base qw( Class::Accessor::Fast );
 
 use strict;
 use warnings;
@@ -11,7 +11,7 @@ use constant ATTR_BLINK => 128;
 use constant ATTR_BG    => 112;
 use constant ATTR_FG    => 15;
 
-__PACKAGE__->mk_classaccessors( qw( char fg bg blink blink_mode ) );
+__PACKAGE__->mk_accessors( qw( char fg bg blink blink_mode ) );
 
 =head1 NAME
 

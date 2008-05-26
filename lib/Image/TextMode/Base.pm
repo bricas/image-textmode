@@ -3,7 +3,7 @@ package Image::TextMode::Base;
 use strict;
 use warnings;
 
-use base qw( Class::Data::Accessor );
+use base qw( Class::Accessor::Fast );
 
 use Image::TextMode::Pixel;
 use Image::TextMode::Palette::VGA;
@@ -12,12 +12,7 @@ use File::SAUCE;
 use IO::File;
 use IO::String;
 
-__PACKAGE__->mk_classaccessors( qw( width height ) );
-__PACKAGE__->mk_classaccessor( _image => [] );
-__PACKAGE__->mk_classaccessor( blink_mode => 0);
-__PACKAGE__->mk_classaccessor( sauce => File::SAUCE->new );
-__PACKAGE__->mk_classaccessor( palette => Image::TextMode::Palette::VGA->new );
-__PACKAGE__->mk_classaccessor( font => Image::TextMode::Font::8x16->new );
+__PACKAGE__->mk_accessors( qw( width height pixeldata blink_mode sauce palette font ) );
 
 =head1 NAME
 
@@ -66,6 +61,8 @@ defaults.
 
 =item * height - The height of the image
 
+=item * pixeldata - The raw x-y pixel data
+
 =item * sauce - The SAUCE metadata
 
 =item * font - A font instance
@@ -78,7 +75,7 @@ defaults.
 
 =head1 METHODS
 
-=head2 new( \%opts )
+=head2 new( \%options )
 
 Creates a new Image::ANSI instance.
 
@@ -87,8 +84,16 @@ Creates a new Image::ANSI instance.
 sub new {
     my $class = shift;
     my $args  = ( @_ == 1 && ref $_[ 0 ] eq 'HASH' ) ? $_[ 0 ] : { @_ };
+
+    # set some basic defaults
+    $args->{ blink_mode } ||= 0;
+    $args->{ sauce      } ||= File::SAUCE->new;
+    $args->{ palette    } ||= Image::TextMode::Palette::VGA->new;
+    $args->{ font       } ||= Image::TextMode::Font::8x16->new;
+
     my $self  = bless $args, $class;
     $self->clear_screen;
+
     return $self;
 }
 
@@ -101,12 +106,13 @@ Clears the image data plus width and height information.
 sub clear_screen {
     my $self = shift;
     $self->$_( undef ) for qw( width height );
-    $self->_image( [] );
+    $self->pixeldata( [] );
 }
 
 =head2 read( \%opts )
 
-The public class method for reading file data. Calls the C<parse()> method.
+The public class method for reading file data. Calls the C<_parse()> method
+that the subclass should provide.
 
 =cut
 
@@ -118,7 +124,7 @@ sub read {
     # attempt to find a sauce record in the file
     $self->sauce->read( handle => $file );
 
-    $self->parse( $file, @_ );
+    $self->_parse( $file, @_ );
 
     if( $self->has_sauce ) {
         my $sauce = $self->sauce;
@@ -134,7 +140,8 @@ sub read {
 
 =head2 write( \%opts )
 
-The public method for writing to a file. Calls the C<as_string()> metod.
+The public method for writing to a file. Calls the C<as_string()> method that
+the subclass should provide.
 
 =cut
 
@@ -155,10 +162,12 @@ in list mode it means raw char and attribute bytes.
 sub getpixel {
     my ( $self, $x, $y ) = @_;
 
-    if (    exists $self->_image->[ $y ]
-        and exists $self->_image->[ $y ]->[ $x ] )
+    my $pixeldata = $self->pixeldata;
+
+    if (    exists $pixeldata->[ $y ]
+        and exists $pixeldata->[ $y ]->[ $x ] )
     {
-        my $data = $self->_image->[ $y ]->[ $x ];
+        my $data = $pixeldata->[ $y ]->[ $x ];
         return wantarray
             ? @$data
             : Image::TextMode::Pixel->new(
@@ -188,7 +197,7 @@ sub putpixel {
         $attr = $pixel->attr;
     }
 
-    $self->_image->[ $y ]->[ $x ] = [ $char, $attr ];
+    $self->pixeldata->[ $y ]->[ $x ] = [ $char, $attr ];
 }
 
 =head2 clear_line( $line )
@@ -201,9 +210,9 @@ sub clear_line {
     my $self = shift;
     my $y    = shift;
 
-    my $line = $self->_image->[ $y ];
+    my $line = $self->pixeldata->[ $y ];
 
-    $self->_image->[ $y ] = [] if defined $line;
+    $self->pixeldata->[ $y ] = [] if defined $line;
 }
 
 =head2 as_ascii( )
@@ -216,7 +225,7 @@ sub as_ascii {
     my ( $self ) = @_;
 
     my $output = '';
-    for my $row ( @{ $self->_image } ) {
+    for my $row ( @{ $self->pixeldata } ) {
         $output
             .= join( '', map { defined $_->[ 0 ] ? $_->[ 0 ] : ' ' } @$row )
             . "\n";
@@ -287,7 +296,7 @@ Finds out the width and height of the image based on the stored data.
 
 sub calculate_dimensions {
     my $self   = shift;
-    my $image  = $self->_image;
+    my $image  = $self->pixeldata;
     my $height = scalar @$image;
     my $max_x  = 0;
     for ( @$image ) {
@@ -445,13 +454,13 @@ sub as_bitmap_thumbnail {
 
 =head1 ABSTRACT METHODS
 
-=head2 parse( $fh, @args )
+=head2 _parse( $fh, @args )
 
 Subclasses should read data from C<$fh>.
 
 =cut
 
-sub parse {
+sub _parse {
     die 'Abstract method!';
 }
 

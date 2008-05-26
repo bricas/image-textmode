@@ -74,6 +74,6 @@ is( $image->as_ascii, "Hi!\n", 'as_ascii' );
 
 {
     $image->clear_line( 0 );
-    is_deeply( $image->_image->[ 0 ], [], 'clear_line' );
+    is_deeply( $image->pixeldata->[ 0 ], [], 'clear_line' );
 }
 
