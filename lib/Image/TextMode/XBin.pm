@@ -85,20 +85,32 @@ my $header_template = 'A4 C S S C C';
 my @header_fields   = qw( id eofchar width height fontsize flags );
 my $eof_char        = chr( 26 );
 
-__PACKAGE__->mk_classaccessors( qw( id eofchar width height fontsize ) );
-__PACKAGE__->mk_classaccessor( flags => 0 );
+__PACKAGE__->mk_accessors( @header_fields );
 
 =head1 METHODS
 
 See L<Image::TextMode> for the base API.
 
-=head2 parse( $file, %options )
+=head2 new( )
+
+Creates a new XBIN image instance.
+
+=cut
+
+sub new {
+    my $class = shift;
+    my $self  = $class->SUPER::new( @_ );
+    $self->flags( 0 );
+    return $self;
+}
+
+=head2 _parse( $file, %options )
 
 Calls L<Image::TextMode::XBin::Parser>'s C<parse> method.
 
 =cut
 
-sub parse {
+sub _parse {
     my $self = shift;
 
     require Image::TextMode::XBin::Parser;

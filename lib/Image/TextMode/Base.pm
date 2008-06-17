@@ -77,7 +77,7 @@ defaults.
 
 =head2 new( \%options )
 
-Creates a new Image::ANSI instance.
+Creates a new image instance.
 
 =cut
 
