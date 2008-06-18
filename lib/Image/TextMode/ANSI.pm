@@ -27,13 +27,6 @@ Image::TextMode::ANSI - Load, create, manipulate and save ANSI files
 This module allows you to load, create and manipulate files made up of
 ANSI escape codes, aka ANSI art.
 
-=head1 INSTALLATION
-
-    perl Makefile.PL
-    make
-    make test
-    make install
-
 =cut
 
 use strict;
@@ -42,10 +35,6 @@ use warnings;
 use base qw( Image::TextMode::Base );
 
 use Image::TextMode::ANSI::Palette;
-
-__PACKAGE__->palette( Image::TextMode::ANSI::Palette->new );
-
-our $VERSION = '0.10';
 
 =head1 METHODS
 
@@ -64,13 +53,21 @@ Creates a new ANSI image. Currently only reads in data.
 
 =cut
 
+sub new {
+    my $class = shift;
+    my $self  = $class->SUPER::new( @_ );
+    $self->palette( Image::TextMode::ANSI::Palette->new );
+    return $self;
+}
+
+
 =head2 read( %options )
 
 Reads in an ANSI.
 
 =cut
 
-sub parse {
+sub _parse {
     my ( $self, $file, %options ) = @_;
 
     for ( qw( Parser::XS Parser ) ) {

@@ -142,7 +142,7 @@ Returns the Tundra data as a string - suitable for saving.
 sub as_string {
     my $self = shift;
 
-    my $output;
+    my $output = '';
 
     if ( $self->sauce ) {
         $output .= $self->sauce->as_string;
