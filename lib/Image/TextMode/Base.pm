@@ -162,10 +162,9 @@ sub getpixel {
         return wantarray
             ? @$data
             : Image::TextMode::Pixel->new(
-            {   char       => $data->[ 0 ],
+                char       => $data->[ 0 ],
                 attr       => $data->[ 1 ],
-                blink_mode => $self->blink_mode
-            }
+                image      => $self
             );
     }
 
@@ -184,8 +183,10 @@ sub putpixel {
     my $char = $pixel;
 
     if ( ref $pixel ) {
-        $char = $pixel->char;
-        $attr = $pixel->attr;
+        my $p = $pixel->clone;
+        $p->image( $self );
+        $char = $p->char;
+        $attr = $p->attr;
     }
 
     $self->pixeldata->[ $y ]->[ $x ] = [ $char, $attr ];

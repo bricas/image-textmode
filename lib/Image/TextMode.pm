@@ -1,7 +1,8 @@
 package Image::TextMode;
 
-use strict;
-use warnings;
+use Moose;
+
+extends 'Image::TextMode::Base';
 
 our $VERSION = '0.01';
 
@@ -21,5 +22,7 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 
 
 =cut
+
+no Moose;
 
 1;

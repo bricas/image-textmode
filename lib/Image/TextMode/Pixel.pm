@@ -1,9 +1,11 @@
 package Image::TextMode::Pixel;
 
-use base qw( Class::Accessor::Fast );
+use Moose;
+use Moose::Util::TypeConstraints;
 
-use strict;
-use warnings;
+with 'MooseX::Clone';
+
+subtype 'Char' => as 'Str' => where { length( $_ ) == 1 };
 
 # Attribute byte constants
 use constant ATTR_BG_NB => 240;
@@ -11,7 +13,27 @@ use constant ATTR_BLINK => 128;
 use constant ATTR_BG    => 112;
 use constant ATTR_FG    => 15;
 
-__PACKAGE__->mk_accessors( qw( char fg bg blink blink_mode ) );
+has 'char' => ( is => 'rw', isa => 'Char' );
+
+has 'fg' => (
+    is      => 'rw',
+    isa     => 'Int',
+    default => 0,
+);
+
+has 'bg' => (
+    is      => 'rw',
+    isa     => 'Int',
+    default => 0,
+);
+
+has 'blink' => (
+    is      => 'rw',
+    isa     => 'Int',
+    default => 0,
+);
+
+has 'image' => ( is => 'rw', isa => 'Maybe[Object]', handles => [ 'blink_mode' ] );
 
 =head1 NAME
 
@@ -19,17 +41,29 @@ Image::TextMode::Pixel - A base class to represent a text mode "pixel"
 
 =head1 SYNOPSIS
 
-    my $pixel = Image::TextMode::Pixel->new( {
-        char => $char,
-        attr => $attr,
-        blink_mode => $mode,
-    } );
+    # create a new pixel from a char + attribute byte pair
+    my $pixel = Image::TextMode::Pixel->new(
+        char  => $char,
+        attr  => $attr,
+        image => $image, # required for blink_mode information
+    );
+    
+    # create a new pixel from a char, blink setting plus
+    # bg and fg palette indexes
+    my $pixel = Image::TextMode::Pixel->new(
+        char  => $char,
+        bg    => $bg,
+        fg    => $fg,
+        blink => $blink,
+        image => $image, # this is only needed if you want to serialize it
+                         # back to an attribute byte
+    );
 
 =head1 DESCRIPTION
 
-Represent a "pixel, i.e. a character plus an attribute byte. Also includes
-a blink_mode setting in order to figure out how to interpret the attribute
-byte data.
+Represents a "pixel; i.e. a character plus an attribute byte. This includes
+a "blink" bit which will only be used if the blink mode setting, which is
+gleamed from the associated image object, is true.
 
 =head1 ACCESSORS
 
@@ -43,56 +77,54 @@ byte data.
 
 =item * blink - The blink bit
 
-=item * blink_mode - Boolean for blink mode
+=item * image - The associated image object
+
+=item * blink_mode - True or false; delegated to the image object
 
 =back
 
 =head1 METHODS
 
-=head2 new( \%opts )
+=head2 new( %args )
 
 Creates a new pixel.
 
 =cut
 
-sub new {
+override 'BUILDARGS' => sub {
     my $class = shift;
-    my $options = ( @_ == 1 && ref $_[ 0 ] eq 'HASH' ) ? $_[ 0 ] : { @_ };
+    my %args = %{ super( $class, @_ ) };
+    my $attr = delete $args{ attr };
 
-    my $attr = delete $options->{ attr };
-    my $self = bless $options, $class;
+    if ( $attr ) {
+        if ( !ref $attr ) {
+            $attr = $class->_attr_to_components( $attr, $args{ image } );
+        }
 
-    $self->attr( $attr ) if defined $attr;
+        %args = ( %args, %$attr );
+    }
 
-    return $self;
-}
+    return \%args;
+};
 
 =head2 attr( [$byte] )
 
 If a byte is passed to this function, it is separated into its fg, bg and
-blink parts. Returns the data otherwise.
+blink parts. Otherwise, it returns an attribute byte generated from existing
+data.
 
 =cut
 
 sub attr {
-    my $self     = shift;
+    my $self = shift;
     my ( $attr ) = @_;
-    my $mode     = $self->blink_mode;
 
-    if ( @_ and ref $attr ) {
+    if ( @_ ) {
+        $attr = $self->_attr_to_components( $attr ) if !ref $attr;
         $self->$_( $attr->{ $_ } ) for keys %$attr;
     }
-    elsif ( @_ ) {
-        $self->fg( $attr & ATTR_FG );
-        if ( defined $mode && $mode ) {
-            $self->bg(    ( $attr & ATTR_BG ) >> 4 );
-            $self->blink( ( $attr & ATTR_BLINK ) >> 7 );
-        }
-        else {
-            $self->bg( ( $attr & ATTR_BG_NB ) >> 4 );
-        }
-    }
     else {
+        my $mode = $self->blink_mode;
         $attr = 0;
         $attr |= $self->fg;
         $attr |= ( $self->bg << 4 );
@@ -102,6 +134,26 @@ sub attr {
     }
 
     return $attr;
+}
+
+sub _attr_to_components {
+    my( $self, $attr, $image ) = @_;
+    my %data;
+
+    my $mode = $image ? $image->blink_mode : $self->blink_mode;
+
+    $data{ fg } = $attr & ATTR_FG;
+
+    if ( defined $mode and $mode ) {
+        $data{ blink } = ( $attr && ATTR_BLINK ) >> 7;
+        $data{ bg } = ( $attr & ATTR_BG ) >> 4;
+    }
+    else {
+        $data{ blink } = 0;
+        $data{ bg } = ( $attr & ATTR_BG_NB ) >> 4;
+    }
+
+    return \%data;
 }
 
 =head1 AUTHOR
@@ -116,5 +168,7 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 
 
 =cut
+
+no Moose;
 
 1;
