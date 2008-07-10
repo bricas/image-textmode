@@ -7,11 +7,10 @@ use_ok( 'Image::TextMode::Font' );
 
 {
     my $f = Image::TextMode::Font->new(
-        {   width         => 8,
-            height        => 8,
-            chars         => [ [ ( 255 ) x 8 ], ],
-            intensity_map => [ 255, ],
-        }
+        width         => 8,
+        height        => 8,
+        chars         => [ [ ( 255 ) x 8 ], ],
+        intensity_map => [ 255, ],
     );
 
     isa_ok( $f, 'Image::TextMode::Font' );

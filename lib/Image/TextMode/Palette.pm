@@ -1,11 +1,8 @@
 package Image::TextMode::Palette;
 
-use strict;
-use warnings;
+use Moose;
 
-use base qw( Class::Accessor::Fast );
-
-__PACKAGE__->mk_accessors( 'colors' );
+has 'colors' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
 
 =head1 NAME
 
@@ -25,22 +22,11 @@ Represents a palette in text mode. That is, an array of RGB triples.
 
 =head1 METHODS
 
-=head2 new( \%opts )
+=head2 new( %args )
 
 Creates a new palette object.
 
 =cut
-
-sub new {
-    my $class = shift;
-    my $options = ( @_ == 1 && ref $_[ 0 ] eq 'HASH' ) ? $_[ 0 ] : { @_ };
-
-    $options->{ colors } ||= [];
-
-    my $self = bless $options, $class;
-
-    return $self;
-}
 
 =head2 new_from_raw_data( $data )
 
@@ -63,7 +49,7 @@ sub new_from_raw_data {
         ];
     }
 
-    return $class->new( { colors => \@palette } );
+    return $class->new( colors => \@palette );
 }
 
 =head2 colours( )
@@ -181,5 +167,7 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 
 
 =cut
+
+no Moose;
 
 1;

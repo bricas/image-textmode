@@ -1,36 +1,42 @@
 package Image::TextMode::Font;
 
-use strict;
-use warnings;
+use Moose;
 
-use base qw( Class::Accessor::Fast );
+has 'width' => ( is => 'rw', isa => 'Int', default => 0 );
 
-__PACKAGE__->mk_accessors( qw( width height chars intensity_map ) );
+has 'height' => ( is => 'rw', isa => 'Int', default => 0 );
 
-my $default_map = [
-    0,  50, 83, 49,  16, 33,  32, 0,   136, 0,  119, 18,
-    32, 18, 35, 33,  99, 16,  16, 33,  48,  66, 4,   17,
-    16, 0,  16, 16,  33, 16,  18, 48,  0,   16, 16,  34,
-    50, 17, 34, 0,   0,  0,   16, 0,   0,   16, 0,   1,
-    67, 16, 19, 17,  32, 65,  66, 32,  66,  48, 0,   0,
-    0,  17, 0,  32,  51, 51,  50, 50,  50,  50, 50,  50,
-    83, 0,  2,  50,  34, 83,  83, 50,  50,  67, 50,  34,
-    16, 66, 65, 66,  34, 32,  35, 16,  32,  0,  16,  1,
-    0,  18, 50, 34,  18, 34,  34, 36,  50,  0,  1,   50,
-    0,  35, 17, 34,  19, 35,  18, 17,  16,  34, 17,  35,
-    17, 36, 18, 0,   0,  0,   16, 18,  50,  66, 34,  18,
-    34, 18, 18, 16,  50, 50,  50, 16,  16,  16, 51,  51,
-    50, 18, 67, 34,  50, 34,  66, 50,  67,  50, 66,  32,
-    50, 16, 99, 17,  18, 0,   34, 50,  49,  99, 16,  16,
-    18, 18, 16, 66,  66, 0,   16, 17,  17,  68, 85,  0,
-    16, 32, 33, 17,  32, 49,  17, 33,  48,  32, 32,  16,
-    0,  16, 16, 0,   16, 16,  0,  17,  16,  1,  48,  33,
-    17, 32, 49, 32,  32, 32,  17, 16,  0,   0,  1,   33,
-    32, 16, 0,  136, 24, 119, 0,  112, 35,  37, 83,  33,
-    34, 35, 18, 16,  17, 50,  50, 17,  33,  34, 17,  51,
-    33, 1,  0,  0,   0,  3,   0,  17,  16,  0,  0,   17,
-    48, 48, 33, 0
-];
+has 'chars' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
+
+has 'intensity_map' => (
+    is      => 'rw',
+    isa     => 'ArrayRef',
+    default => sub {
+        [   0,  50, 83, 49,  16, 33,  32, 0,   136, 0,  119, 18,
+            32, 18, 35, 33,  99, 16,  16, 33,  48,  66, 4,   17,
+            16, 0,  16, 16,  33, 16,  18, 48,  0,   16, 16,  34,
+            50, 17, 34, 0,   0,  0,   16, 0,   0,   16, 0,   1,
+            67, 16, 19, 17,  32, 65,  66, 32,  66,  48, 0,   0,
+            0,  17, 0,  32,  51, 51,  50, 50,  50,  50, 50,  50,
+            83, 0,  2,  50,  34, 83,  83, 50,  50,  67, 50,  34,
+            16, 66, 65, 66,  34, 32,  35, 16,  32,  0,  16,  1,
+            0,  18, 50, 34,  18, 34,  34, 36,  50,  0,  1,   50,
+            0,  35, 17, 34,  19, 35,  18, 17,  16,  34, 17,  35,
+            17, 36, 18, 0,   0,  0,   16, 18,  50,  66, 34,  18,
+            34, 18, 18, 16,  50, 50,  50, 16,  16,  16, 51,  51,
+            50, 18, 67, 34,  50, 34,  66, 50,  67,  50, 66,  32,
+            50, 16, 99, 17,  18, 0,   34, 50,  49,  99, 16,  16,
+            18, 18, 16, 66,  66, 0,   16, 17,  17,  68, 85,  0,
+            16, 32, 33, 17,  32, 49,  17, 33,  48,  32, 32,  16,
+            0,  16, 16, 0,   16, 16,  0,  17,  16,  1,  48,  33,
+            17, 32, 49, 32,  32, 32,  17, 16,  0,   0,  1,   33,
+            32, 16, 0,  136, 24, 119, 0,  112, 35,  37, 83,  33,
+            34, 35, 18, 16,  17, 50,  50, 17,  33,  34, 17,  51,
+            33, 1,  0,  0,   0,  3,   0,  17,  16,  0,  0,   17,
+            48, 48, 33, 0
+        ];
+    }
+);
 
 =head1 NAME
 
@@ -57,25 +63,11 @@ by an array of byte scanlines.
 
 =head1 METHODS
 
-=head2 new( \%opts )
+=head2 new( %args )
 
 Creates a new font object.
 
 =cut
-
-sub new {
-    my $class = shift;
-    my $options = ( @_ == 1 && ref $_[ 0 ] eq 'HASH' ) ? $_[ 0 ] : { @_ };
-
-    $options->{ width  } ||= 0;
-    $options->{ height } ||= 0;
-    $options->{ chars  } ||= [];
-    $options->{ intensity_map } ||= $default_map;
-
-    my $self = bless $options, $class;
-
-    return $self;
-}
 
 =head2 new_from_raw_data( $data, $height )
 
@@ -94,10 +86,9 @@ sub new_from_raw_data {
     }
 
     return $class->new(
-        {   width  => 8,
-            height => $height,
-            chars  => \@chars,
-        }
+        width  => 8,
+        height => $height,
+        chars  => \@chars,
     );
 }
 
@@ -163,7 +154,7 @@ sub as_string {
     return pack( 'C*', map { @$_ } @{ $self->chars } );
 }
 
-=head2 as_gd( \%options )
+=head2 as_gd( %options )
 
 Returns the object as a C<GD::Font>. Options include:
 
@@ -176,8 +167,8 @@ Returns the object as a C<GD::Font>. Options include:
 =cut
 
 sub as_gd {
-    my $self = shift;
-    my $options = shift || {};
+    my $self    = shift;
+    my %options = @_;
     require GD;
     require File::Temp;
 
@@ -185,12 +176,15 @@ sub as_gd {
 
     binmode( $temp );
 
-    my $ninth = $options->{ '9th_bit' };
+    my $ninth = $options{ '9th_bit' };
+    my $chars = $self->chars;
+
     print $temp pack( 'VVVV',
         $self->characters, 0, $self->width + ( $ninth ? 1 : 0 ),
         $self->height );
+
     for my $charval ( 0 .. $self->characters - 1 ) {
-        my $char = $self->chars->[ $charval ];
+        my $char = $chars->[ $charval ];
         for ( @$char ) {
             my @binary = split( //, sprintf( '%08b', $_ ) );
 
@@ -220,5 +214,7 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 
 
 =cut
+
+no Moose;
 
 1;
