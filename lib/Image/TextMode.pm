@@ -3,8 +3,6 @@ package Image::TextMode;
 use strict;
 use warnings;
 
-use base qw( Image::TextMode::Base );
-
 our $VERSION = '0.01';
 
 =head1 NAME

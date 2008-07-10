@@ -1,9 +1,6 @@
 package Image::TextMode::Base;
 
-use strict;
-use warnings;
-
-use base qw( Class::Accessor::Fast );
+use Moose;
 
 use Image::TextMode::Pixel;
 use Image::TextMode::Palette::VGA;
@@ -12,7 +9,19 @@ use File::SAUCE;
 use IO::File;
 use IO::String;
 
-__PACKAGE__->mk_accessors( qw( width height pixeldata blink_mode sauce palette font ) );
+has 'width' => ( is => 'rw', isa => 'Int' );
+
+has 'height' => ( is => 'rw', isa => 'Int' );
+
+has 'pixeldata' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
+
+has 'blink_mode' => ( is => 'rw', isa => 'Bool', default => 0 );
+
+has 'sauce' => ( is => 'rw', isa => 'Object', default => sub { File::SAUCE->new } );
+
+has 'palette' => ( is => 'rw', isa => 'Object', default => sub { Image::TextMode::Palette::VGA->new } );
+
+has 'font' => ( is => 'rw', isa => 'Object', default => sub { Image::TextMode::Font::8x16->new } );
 
 =head1 NAME
 
@@ -78,24 +87,6 @@ defaults.
 =head2 new( \%options )
 
 Creates a new image instance.
-
-=cut
-
-sub new {
-    my $class = shift;
-    my $args  = ( @_ == 1 && ref $_[ 0 ] eq 'HASH' ) ? $_[ 0 ] : { @_ };
-
-    # set some basic defaults
-    $args->{ blink_mode } ||= 0;
-    $args->{ sauce      } ||= File::SAUCE->new;
-    $args->{ palette    } ||= Image::TextMode::Palette::VGA->new;
-    $args->{ font       } ||= Image::TextMode::Font::8x16->new;
-
-    my $self  = bless $args, $class;
-    $self->clear_screen;
-
-    return $self;
-}
 
 =head2 clear_screen( )
 
@@ -486,5 +477,7 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 
 
 =cut
+
+no Moose;
 
 1;

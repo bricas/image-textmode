@@ -14,6 +14,7 @@ requires 'File::SAUCE';
 requires 'GD';
 requires 'IO::File';
 requires 'IO::String';
+requires 'Moose';
 
 test_requires 'Test::More';
 
