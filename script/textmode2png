@@ -4,11 +4,18 @@ use warnings;
 use Image::TextMode::Loader;
 use Image::TextMode::Renderer::GD;
 use Getopt::Long ();
+use Pod::Usage ();
 
 my %options;
-my $result = Getopt::Long::GetOptions( \%options, 'output|o=s', 'thumbnail|t',
-    'inputformat|if=s', 'outputformat|of=s', 'zoom|z=i', 'width|w=i' );
+my $result
+    = Getopt::Long::GetOptions( \%options, 'output|o=s', 'thumbnail|t',
+    'inputformat|if=s', 'outputformat|of=s', 'zoom|z=i', 'width|w=i',
+    'crop|c=i', 'help|h|?' );
 my $file = $ARGV[ 0 ];
+
+if( !$file || $options{ help } ) {
+    Pod::Usage::pod2usage;
+}
 
 die 'no file specified' if !$file;
 die 'file not found'    if !-e $file;
@@ -37,7 +44,10 @@ $output =~ s{[^.]+?$}{gif}
     if $output ne '-' && $image->isa( 'Image::TextMode::Format::ANSIMation' );
 
 my $method = $options{ thumbnail } ? 'thumbnail' : 'fullscale';
-my $render_options = { $options{ zoom } ? ( zoom => $options{ zoom } ) : () };
+my $render_options = {
+    $options{ zoom } ? ( zoom => $options{ zoom } ) : (),
+    $options{ crop } ? ( crop => $options{ crop } ) : ()
+};
 my $renderer = Image::TextMode::Renderer::GD->new;
 
 my $data = $renderer->$method( $image, $render_options );
@@ -50,3 +60,46 @@ else {
     print $fh $data;
     close( $fh );
 }
+
+__END__
+
+=head1 NAME 
+
+textmode2png - Convert text mode files to png
+
+=head1 SYNOPSIS
+
+    % textmode2png [OPTIONS] file.ans
+    
+    Available options:
+    -o, --output            output filename (- for STDOUT) 
+    -if, --inputformat      force a textmode format
+    -of, --outputformat     specify the output format (default: png)
+    -t, --thumbnail         generate a thumbnail
+    -z, --zoom              scale by the amount specified
+    -w, --width             force a specific width when reading the file
+    -c, --crop              crop the output to the specified height
+    -h, -?, --help          this message
+
+=head1 DESCRIPTION
+
+This is a simple command-line tool to help you convert
+ansi files to png images. Use the -t switch to create a
+thumbnail. Use the -f switch to specify a GD font to use.
+Use -p to specify a custom palette class. Omitting the
+filename (or using '-') will force it to convert from
+STDIN.
+
+=head1 AUTHOR
+
+Brian Cassidy E<lt>bricas@cpan.orgE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2008 by Brian Cassidy
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself. 
+
+=cut
+

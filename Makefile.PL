@@ -13,6 +13,7 @@ requires 'Moose' => '0.51';
 requires 'GD'    => '2.30';
 requires 'Module::Pluggable';
 requires 'Getopt::Long';
+requires 'Pod::Usage';
 
 test_requires 'Test::More';
 
