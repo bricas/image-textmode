@@ -1,25 +1,22 @@
-use inc::Module::Install 0.68;
+use inc::Module::Install 0.77;
 
 if ( -e 'MANIFEST.SKIP' ) {
     system( 'pod2text lib/Image/TextMode.pm > README' );
 }
 
-perl_version '5.006';
+perl_version '5.008';
 
 name 'Image-TextMode';
 all_from 'lib/Image/TextMode.pm';
 
-requires 'Class::Data::Accessor';
-requires 'File::SAUCE';
-requires 'GD';
-requires 'IO::File';
-requires 'IO::String';
 requires 'Moose' => '0.51';
-requires 'MooseX::Clone';
+requires 'GD'    => '2.30';
+requires 'Module::Pluggable';
+# add other prereqs
 
 test_requires 'Test::More';
 
 tests 't/*/*.t';
+extra_tests;
 
-auto_install;
 WriteAll;

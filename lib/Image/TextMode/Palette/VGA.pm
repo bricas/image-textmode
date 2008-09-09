@@ -26,6 +26,10 @@ has '+colors' => (
     }
 );
 
+no Moose;
+
+__PACKAGE__->meta->make_immutable;
+
 =head1 NAME
 
 Image::TextMode::Palette::VGA - 16-color VGA palette
@@ -46,7 +50,5 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 
 
 =cut
-
-no Moose;
 
 1;

@@ -27,3 +27,6 @@
 
 # No tarballs!
 \.gz$
+
+# No test input files
+^formats

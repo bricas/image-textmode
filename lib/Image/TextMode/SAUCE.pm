@@ -1,0 +1,338 @@
+package Image::TextMode::SAUCE;
+
+use Moose;
+
+# some SAUCE constants
+use constant SAUCE_ID      => 'SAUCE';
+use constant SAUCE_VERSION => '00';
+use constant SAUCE_FILLER  => ' ' x 22;
+use constant COMNT_ID      => 'COMNT';
+
+=head1 NAME
+
+Image::TextMode::SAUCE - Create, manipulate and save SAUCE metadata
+
+=head1 ACCESSORS
+
+=over 4
+
+=item * sauce_id - identified at the start of the record (default: SAUCE)
+
+=item * version - sauce version (default: 00)
+
+=item * title - title of the work
+
+=item * author - author name
+
+=item * group - group affiliation
+
+=item * date - YYYYMMDD date (default: today's date)
+
+=item * filesize - the size of the file, less sauce info
+
+=item * datatype_id - numeric identifier for the data type
+
+=item * filetype_id - numeric identifier for the file sub-type
+
+=item * tinfo1 - first slot of filetype-specific info
+
+=item * tinfo2 - second slot of filetype-specific info
+
+=item * tinfo3 - third slot of filetype-specific info
+
+=item * tinfo4 - fourth slot of filetype-specific info
+
+=item * comment_count - number of comments stored before the sauce record
+
+=item * flags - datatype specific flags
+
+=item * filler - 22 spaces to fill in the remaining bytes
+
+=item * comment_id - identifier for comments section (default: COMNT)
+
+=item * comments - array ref of comment lines
+
+=item * has_sauce - undef before read; after read: true if file has sauce record
+
+=back
+
+=cut
+
+has 'sauce_id' => ( is => 'rw', isa => 'Str', default => sub { SAUCE_ID } );
+
+has 'version' =>
+    ( is => 'rw', isa => 'Str', default => sub { SAUCE_VERSION } );
+
+has 'title' => ( is => 'rw', isa => 'Str', default => sub { '' } );
+
+has 'author' => ( is => 'rw', isa => 'Str', default => sub { '' } );
+
+has 'group' => ( is => 'rw', isa => 'Str', default => sub { '' } );
+
+has 'date' => (
+    is      => 'rw',
+    isa     => 'Str',
+    default => sub {
+        my @t = ( localtime )[ 5, 4, 3 ];
+        return sprintf '%4d%02d%02d', 1900 + $t[ 0 ], $t[ 1 ] + 1, $t[ 2 ];
+    }
+);
+
+has 'filesize' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+
+has 'filetype_id' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+
+has 'datatype_id' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+
+has 'tinfo1' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+
+has 'tinfo2' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+
+has 'tinfo3' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+
+has 'tinfo4' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+
+has 'comment_count' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+
+has 'flags_id' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+
+has 'filler' => ( is => 'rw', isa => 'Str', default => sub { SAUCE_FILLER } );
+
+has 'comment_id' => ( is => 'rw', isa => 'Str', default => sub { COMNT_ID } );
+
+has 'comments' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
+
+has 'has_sauce' => ( is => 'rw', isa => 'Bool' );
+
+# define datatypes and filetypes as per SAUCE specs
+my @datatypes
+    = qw(None Character Graphics Vector Sound BinaryText XBin Archive Executable);
+my $filetypes = {
+    None => {
+        filetypes => [ 'Undefined' ],
+        flags     => [ 'None' ]
+    },
+    Character => {
+        filetypes =>
+            [ qw( ASCII ANSi ANSiMation RIP PCBoard Avatar HTML Source ) ],
+        flags => [ 'None', 'iCE Color' ],
+        tinfo => [
+            ( { tinfo1 => 'Width', tinfo2 => 'Height' } ) x 3,
+            { tinfo1 => 'Width', tinfo2 => 'Height', tinfo3 => 'Colors' },
+            ( { tinfo1 => 'Width', tinfo2 => 'Height' } ) x 2
+        ]
+    },
+    Graphics => {
+        filetypes => [
+            qw( GIF PCX LBM/IFF TGA FLI FLC BMP GL DL WPG PNG JPG MPG AVI )
+        ],
+        flags => [ 'None' ],
+        tinfo => [
+            (   {   tinfo1 => 'Width',
+                    tinfo2 => 'Height',
+                    tinfo3 => 'Bits Per Pixel'
+                }
+            ) x 14
+        ]
+    },
+    Vector => {
+        filetypes => [ qw( DXF DWG WPG 3DS ) ],
+        flags     => [ 'None' ],
+    },
+    Sound => {
+        filetypes => [
+            qw( MOD 669 STM S3M MTM FAR ULT AMF DMF OKT ROL CMF MIDI SADT VOC WAV SMP8 SMP8S SMP16 SMP16S PATCH8 PATCH16 XM HSC IT )
+        ],
+        flags => [ 'None' ],
+        tinfo => [ ( {} ) x 16, ( { tinfo1 => 'Sampling Rate' } ) x 4 ]
+    },
+    BinaryText => {
+        filetypes => [ qw( Undefined ) ],
+        flags     => [ 'None', 'iCE Color' ],
+    },
+    XBin => {
+        filetypes => [ qw( Undefined ) ],
+        flags     => [ 'None' ],
+        tinfo     => [ { tinfo1 => 'Width', tinfo2 => 'Height' }, ]
+    },
+    Archive => {
+        filetypes => [ qw( ZIP ARJ LZH ARC TAR ZOO RAR UC2 PAK SQZ ) ],
+        flags     => [ 'None' ],
+    },
+    Executable => {
+        filetypes => [ qw( Undefined ) ],
+        flags     => [ 'None' ],
+    }
+};
+
+# vars for use with pack() and unpack()
+my $sauce_template = 'A5 A2 A35 A20 A20 A8 V C C v v v v C C A22';
+my @sauce_fields
+    = qw( sauce_id version title author group date filesize datatype_id filetype_id tinfo1 tinfo2 tinfo3 tinfo4 comment_count flags_id filler );
+my $comnt_template = 'A5 A64';
+my @comnt_fields   = qw( comment_id comments );
+
+=head1 METHODS
+
+=head2 new( %args )
+
+Creates a new SAUCE metadata instance.
+
+=head2 read( $fh )
+
+Read the sauce record from C<$fh>.
+
+=cut
+
+sub read {
+    my ( $self, $fh ) = @_;
+
+    my $buffer;
+    my %info;
+
+    if ( ( stat $fh )[ 7 ] < 128 ) {
+        $self->has_sauce( 0 );
+        return;
+    }
+
+    seek( $fh, -128, 2 );
+    read( $fh, $buffer, 128 );
+
+    if ( substr( $buffer, 0, 5 ) ne SAUCE_ID ) {
+        $self->has_sauce( 0 );
+        return;
+    }
+
+    @info{ @sauce_fields } = unpack( $sauce_template, $buffer );
+
+    # because trailing spaces are stripped....
+    $info{ filler } = SAUCE_FILLER;
+
+    # Do we have any comments?
+    my $comment_count = $info{ comment_count };
+
+    $self->$_( $info{ $_ } ) for keys %info;
+    $self->has_sauce( 1 );
+
+    if ( $comment_count > 0 ) {
+        seek( $fh, -128 - 5 - $comment_count * 64, 2 );
+        read( $fh, $buffer, 5 + $comment_count * 64 );
+
+        if ( substr( $buffer, 0, 5 ) eq COMNT_ID ) {
+            my $template
+                = $comnt_template
+                . ( split( / /, $comnt_template ) )[ 1 ]
+                x ( $comment_count - 1 );
+            my ( $id, @comments ) = unpack( $template, $buffer );
+            $self->comment_id( $id );
+            $self->comments( \@comments );
+        }
+    }
+}
+
+=head2 write( $fh )
+
+Write the sauce record to C<$fh>.
+
+=cut
+
+sub write {
+    my ( $self, $fh ) = @_;
+
+    die 'not implemented';
+}
+
+=head2 datatype( )
+
+The string name of the data represented in datatype_id.
+
+=cut
+
+sub datatype {
+    return $datatypes[ $_[ 0 ]->datatype_id ];
+}
+
+=head2 filetype( )
+
+The string name of the data represented in filetype_id.
+
+=cut
+
+sub filetype {
+    return $filetypes->{ $_[ 0 ]->datatype }->{ filetypes }
+        ->[ $_[ 0 ]->filetype_id ];
+}
+
+=head2 flags( )
+
+The string name of the data represented in flags.
+
+=cut
+
+sub flags {
+    return $filetypes->{ $_[ 0 ]->datatype }->{ flags }
+        ->[ $_[ 0 ]->flags_id ];
+}
+
+=head2 tinfo1_name( )
+
+The string name of the data represented in tinfo1.
+
+=cut
+
+sub tinfo1_name {
+    return $filetypes->{ $_[ 0 ]->datatype }->{ tinfo }
+        ->[ $_[ 0 ]->filetype_id ]->{ tinfo1 };
+}
+
+=head2 tinfo2_name( )
+
+The string name of the data represented in tinfo2.
+
+=cut
+
+sub tinfo2_name {
+    return $filetypes->{ $_[ 0 ]->datatype }->{ tinfo }
+        ->[ $_[ 0 ]->filetype_id ]->{ tinfo2 };
+}
+
+=head2 tinfo3_name( )
+
+The string name of the data represented in tinfo3.
+
+=cut
+
+sub tinfo3_name {
+    return $filetypes->{ $_[ 0 ]->datatype }->{ tinfo }
+        ->[ $_[ 0 ]->filetype_id ]->{ tinfo3 };
+}
+
+=head2 tinfo4_name( )
+
+The string name of the data represented in tinfo4.
+
+=cut
+
+sub tinfo4_name {
+    return $filetypes->{ $_[ 0 ]->datatype }->{ tinfo }
+        ->[ $_[ 0 ]->filetype_id ]->{ tinfo4 };
+}
+
+no Moose;
+
+__PACKAGE__->meta->make_immutable;
+
+=head1 AUTHOR
+
+Brian Cassidy E<lt>bricas@cpan.orgE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2008 by Brian Cassidy
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself. 
+
+=cut
+
+1;

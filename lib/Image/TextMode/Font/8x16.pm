@@ -782,13 +782,17 @@ has '+chars' => (
     }
 );
 
+no Moose;
+
+__PACKAGE__->meta->make_immutable;
+
 =head1 NAME
 
 Image::TextMode::Font::8x16 - 8 x 16 text mode font
 
 =head1 DESCRIPTION
 
-The default 8x16 font.
+An 8x16 font.
 
 =head1 AUTHOR
 
@@ -802,7 +806,5 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 
 
 =cut
-
-no Moose;
 
 1;

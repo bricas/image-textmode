@@ -3,8 +3,6 @@ package Image::TextMode::Pixel;
 use Moose;
 use Moose::Util::TypeConstraints;
 
-with 'MooseX::Clone';
-
 subtype 'Char' => as 'Str' => where { length( $_ ) == 1 };
 
 # Attribute byte constants
@@ -33,37 +31,14 @@ has 'blink' => (
     default => 0,
 );
 
-has 'image' => ( is => 'rw', isa => 'Maybe[Object]', handles => [ 'blink_mode' ] );
-
 =head1 NAME
 
 Image::TextMode::Pixel - A base class to represent a text mode "pixel"
 
-=head1 SYNOPSIS
-
-    # create a new pixel from a char + attribute byte pair
-    my $pixel = Image::TextMode::Pixel->new(
-        char  => $char,
-        attr  => $attr,
-        image => $image, # required for blink_mode information
-    );
-    
-    # create a new pixel from a char, blink setting plus
-    # bg and fg palette indexes
-    my $pixel = Image::TextMode::Pixel->new(
-        char  => $char,
-        bg    => $bg,
-        fg    => $fg,
-        blink => $blink,
-        image => $image, # this is only needed if you want to serialize it
-                         # back to an attribute byte
-    );
-
 =head1 DESCRIPTION
 
-Represents a "pixel; i.e. a character plus an attribute byte. This includes
-a "blink" bit which will only be used if the blink mode setting, which is
-gleamed from the associated image object, is true.
+Represents a "pixel; i.e. a character plus, foreground and background colors and
+an blink mode setting.
 
 =head1 ACCESSORS
 
@@ -77,84 +52,58 @@ gleamed from the associated image object, is true.
 
 =item * blink - The blink bit
 
-=item * image - The associated image object
-
-=item * blink_mode - True or false; delegated to the image object
-
 =back
 
 =head1 METHODS
 
 =head2 new( %args )
 
-Creates a new pixel.
+Creates a new pixel. If you supply an C<attr> argument, then it will be
+broken down into its components (fg, bg, and blink). By default, blink mode
+is off (aka iCEColor is on). Pass a true value for C<blink_mode> to enabled
+it.
+
+=head2 BUILDARGS( %args )
+
+A Moose override to extract the C<attr> key and convert it to components,
+should it exist.
 
 =cut
 
-override 'BUILDARGS' => sub {
-    my $class = shift;
-    my %args = %{ super( $class, @_ ) };
+sub BUILDARGS {
+    my $class   = shift;
+    my $options = {};
+    if ( @_ % 2 != 0 ) {
+        $options = pop;
+    }
+
+    my %args = @_;
     my $attr = delete $args{ attr };
 
     if ( $attr ) {
-        if ( !ref $attr ) {
-            $attr = $class->_attr_to_components( $attr, $args{ image } );
-        }
-
+        $attr = $class->_attr_to_components( $attr, $options );
         %args = ( %args, %$attr );
     }
 
     return \%args;
-};
-
-=head2 attr( [$byte] )
-
-If a byte is passed to this function, it is separated into its fg, bg and
-blink parts. Otherwise, it returns an attribute byte generated from existing
-data.
-
-=cut
-
-sub attr {
-    my $self = shift;
-    my ( $attr ) = @_;
-
-    if ( @_ ) {
-        $attr = $self->_attr_to_components( $attr ) if !ref $attr;
-        $self->$_( $attr->{ $_ } ) for keys %$attr;
-    }
-    else {
-        my $mode = $self->blink_mode;
-        $attr = 0;
-        $attr |= $self->fg;
-        $attr |= ( $self->bg << 4 );
-        if ( defined $mode && $mode ) {
-            $attr |= ( $self->blink << 7 );
-        }
-    }
-
-    return $attr;
 }
 
 sub _attr_to_components {
-    my( $self, $attr, $image ) = @_;
+    my ( $self, $attr, $options ) = @_;
+    $options ||= {};
+    my $blink = $options->{ blink_mode };
     my %data;
 
-    my $mode = $image ? $image->blink_mode : $self->blink_mode;
-
-    $data{ fg } = $attr & ATTR_FG;
-
-    if ( defined $mode and $mode ) {
-        $data{ blink } = ( $attr && ATTR_BLINK ) >> 7;
-        $data{ bg } = ( $attr & ATTR_BG ) >> 4;
-    }
-    else {
-        $data{ blink } = 0;
-        $data{ bg } = ( $attr & ATTR_BG_NB ) >> 4;
-    }
+    $data{ fg }    = $attr & ATTR_FG;
+    $data{ bg }    = ( $attr & ( $blink ? ATTR_BG : ATTR_BG_NB ) ) >> 4;
+    $data{ blink } = ( $attr && ATTR_BLINK ) >> 7 if $blink;
 
     return \%data;
 }
+
+no Moose;
+
+__PACKAGE__->meta->make_immutable;
 
 =head1 AUTHOR
 
@@ -168,7 +117,5 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 
 
 =cut
-
-no Moose;
 
 1;

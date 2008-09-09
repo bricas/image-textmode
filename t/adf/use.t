@@ -1,5 +1,6 @@
+use strict;
+use warnings;
+
 use Test::More tests => 1;
 
-BEGIN {
-    use_ok( 'Image::TextMode::ADF' );
-}
+use_ok( 'Image::TextMode::Format::ADF' );

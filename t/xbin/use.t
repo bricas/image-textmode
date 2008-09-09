@@ -1,6 +1,6 @@
-use Test::More tests => 2;
+use strict;
+use warnings;
 
-BEGIN {
-    use_ok( 'Image::TextMode::XBin' );
-    use_ok( 'Image::TextMode::XBin::Parser' );
-}
+use Test::More tests => 1;
+
+use_ok( 'Image::TextMode::Format::XBin' );
