@@ -46,7 +46,7 @@ sub thumbnail {
         $self->fullscale( $source, $options );
     };
 
-    my ( $width, $height ) = _thubmnail_size( $source, $image_l, $options );
+    my ( $width, $height ) = _thumbnail_size( $source, $image_l, $options );
 
     my $image = GD::Image->new( $width, $height, 1 );
     $image->copyResampled( $image_l, 0, 0, 0, 0, $width, $height,

@@ -12,11 +12,13 @@ all_from 'lib/Image/TextMode.pm';
 requires 'Moose' => '0.51';
 requires 'GD'    => '2.30';
 requires 'Module::Pluggable';
-# add other prereqs
+requires 'Getopt::Long';
 
 test_requires 'Test::More';
 
 tests 't/*/*.t';
 extra_tests;
+
+install_script 'textmode2png';
 
 WriteAll;

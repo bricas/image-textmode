@@ -20,6 +20,11 @@ sub load {
     }
 
     for my $file ( @files ) {
+        my $read_options = {};
+        if( ref $file ) {
+            ( $file, $read_options ) = @$file;
+        }
+
         my( $ext ) = $file =~ m{([^.]+?)$};
         $ext = lc $ext;
         my $format = $exts{ $ext } || $default;
@@ -36,7 +41,7 @@ sub load {
         }
 
         my $image = $format->new;
-        $image->read( $file );
+        $image->read( $file, $read_options );
         push @result, $image;
     }
 
