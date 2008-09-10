@@ -104,17 +104,25 @@ sub clear_screen {
     $self->pixeldata( [] );
 }
 
-=head2 clear_line( $y )
+=head2 clear_line( $y, [ \@range ] )
 
-Clears the data at line C<$y>.
+Clears the data at line C<$y>. Specify a range to clear only a portion of
+line C<$y>.
 
 =cut
 
 sub clear_line {
     my $self = shift;
     my $y    = shift;
+    my $range = shift;
 
-    $self->pixeldata->[ $y ] = [];
+    if( !$range ) {
+        $self->pixeldata->[ $y ] = [];
+    }
+    else {
+        $self->pixeldata->[ $y ]->[ $_ ] = undef for $range->[ 0 ] .. $range->[ 1 ];
+    }
+
     $self->width( $y ) if $y > $self->width;
 }
 

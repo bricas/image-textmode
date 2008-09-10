@@ -207,12 +207,26 @@ sub restore_position {
 
 sub clear_line {
     my $self = shift;
+    my $arg  = shift;
 
-    $self->image->clear_line( shift );
+    if( !$arg ) { # clear to end of line
+        $self->image->clear_line( $self->y, [ $self->x, -1 ] );
+    }
+    elsif( $arg == 1 ) { # clear to start of line
+        $self->image->clear_line( $self->y, [ 0, $self->x ] );
+    }
+    elsif( $arg == 2 ) { #clear whole line
+        $self->image->clear_line( $self->y );
+    }
 }
 
 sub clear_screen {
     my $self = shift;
+    my $arg  = shift;
+
+    # no args - clear to end of screen, including cursor
+    # 1 - clear to start of screen, including cursor
+    # 2 - clear whole screen
 
     $self->image->clear_screen;
 }

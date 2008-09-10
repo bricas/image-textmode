@@ -1,20 +1,26 @@
 use strict;
 use warnings;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 
-use_ok( 'Image::TextMode' );
+use_ok( 'Image::TextMode::Format' );
+use_ok( 'Image::TextMode::Canvas' );
 
 {
-    my $image = Image::TextMode->new;
-    isa_ok( $image, 'Image::TextMode' );
+    my $format = Image::TextMode::Format->new;
+    isa_ok( $format, 'Image::TextMode::Format' );
 
     # some defaults
-    isa_ok( $image->font, 'Image::TextMode::Font::8x16' );
-    isa_ok( $image->palette, 'Image::TextMode::Palette::VGA' );
-    isa_ok( $image->canvas, 'Image::TextMode::Canvas' );
-    isa_ok( $image->sauce, 'Image::TextMode::SAUCE' );
+    isa_ok( $format->font, 'Image::TextMode::Font::8x16' );
+    isa_ok( $format->palette, 'Image::TextMode::Palette::VGA' );
+    isa_ok( $format->sauce, 'Image::TextMode::SAUCE' );
+}
 
-    is( $image->width, 0, 'default width' );
-    is( $image->height, 0, 'default height' );
+{
+    my $canvas = Image::TextMode::Canvas->new;
+    isa_ok( $canvas, 'Image::TextMode::Canvas' );
+
+    # some defaults
+    is( $canvas->width, 0, 'default width' );
+    is( $canvas->height, 0, 'default height' );
 }
