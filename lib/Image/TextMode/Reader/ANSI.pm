@@ -282,7 +282,7 @@ Image::TextMode::Reader::ANSI - Reads ANSI files
 
 =over 4
 
-=item * tabstop - number of space to equal a tab (default: 8)
+=item * tabstop - every Nth character will be a tab stop location (default: 8)
 
 =item * save_x - saved x position (default: 0)
 
