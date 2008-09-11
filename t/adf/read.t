@@ -7,22 +7,29 @@ use_ok( 'Image::TextMode::Format::ADF' );
 
 {
     my $file = 'test1.adf';
-    my $adf = Image::TextMode::Format::ADF->new;
+    my $adf  = Image::TextMode::Format::ADF->new;
     $adf->read( "t/adf/data/${file}" );
 
     isa_ok( $adf, 'Image::TextMode::Format::ADF' );
     is( $adf->width,  80, "${ file } width()" );
-    is( $adf->height, 1, "${ file } height()" );
+    is( $adf->height, 1,  "${ file } height()" );
 
     my $font = $adf->font;
     isa_ok( $font, 'Image::TextMode::Font' );
+
     # modified 't' char
-    is_deeply( $font->chars->[ ord( 't' ) ], [ 255, 0, 16, 48, 48, 252, 48, 48, 48, 48, 54, 28, 0, 0, 0, 0 ], 'font: modified t' );
+    is_deeply(
+        $font->chars->[ ord( 't' ) ],
+        [ 255, 0, 16, 48, 48, 252, 48, 48, 48, 48, 54, 28, 0, 0, 0, 0 ],
+        'font: modified t'
+    );
 
     my $pal = $adf->palette;
     isa_ok( $pal, 'Image::TextMode::Palette' );
+
     # modified 'brown' color
-    is_deeply( $pal->colors->[ 6 ], [ 252, 252, 252 ], 'pal: modified brown' );
+    is_deeply( $pal->colors->[ 6 ], [ 252, 252, 252 ],
+        'pal: modified brown' );
 
     is_deeply(
         $adf->pixeldata,
@@ -33,7 +40,7 @@ use_ok( 'Image::TextMode::Format::ADF' );
                 ( { char => ' ', attr => 0 } ) x 76,
             ]
         ],
-        "${ file } frame->pixeldata"
+        "${ file } pixeldata"
     );
 
 }
