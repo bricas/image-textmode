@@ -26,7 +26,7 @@ sub write {
 
     $self->_write( $image, $fh, $options );
 
-    $image->sauce->write( $fh );
+    $image->sauce->write( $fh ) if $image->has_sauce;
 }
 
 sub _get_fh {
