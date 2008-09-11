@@ -15,7 +15,7 @@ use_ok( 'Image::TextMode::Canvas' );
     is_deeply( $image->pixeldata, [ [ $pixel ] ], 'putpixel() ok' );
     is_deeply( $image->getpixel( 0, 0 ), $pixel, 'getpixel() ok' );
 
-    is( $image->width, 1, 'width() ok' );
+    is( $image->width,  1, 'width() ok' );
     is( $image->height, 1, 'height() ok' );
 }
 
