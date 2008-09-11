@@ -1,4 +1,4 @@
-use Test::More tests => 17;
+use Test::More tests => 21;
 
 use strict;
 use warnings;
@@ -14,6 +14,9 @@ for my $file ( @files ) {
     isa_ok( $ansi, 'Image::TextMode::Format::ANSIMation' );
     is( $ansi->width,  4, "${ file } width()" );
     is( $ansi->height, 1, "${ file } height()" );
+
+    isa_ok( $ansi->font, 'Image::TextMode::Font::8x16' );
+    isa_ok( $ansi->palette, 'Image::TextMode::Palette::ANSI' );
 
     my @frames = @{ $ansi->frames };
     is( scalar @frames, 2, "${ file } frames()" );
