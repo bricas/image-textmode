@@ -126,6 +126,25 @@ sub clear_line {
     $self->width( $y ) if $y > $self->width;
 }
 
+=head2 as_ascii( )
+
+Returns only the character data stored in the canvas.
+
+=cut
+
+sub as_ascii {
+    my ( $self ) = @_;
+
+    my $output = '';
+    for my $row ( @{ $self->pixeldata } ) {
+        $output .= join( '',
+            map { defined $_->{ char } ? $_->{ char } : ' ' } @$row )
+            . "\n";
+    }
+
+    return $output;
+}
+
 no Moose;
 
 __PACKAGE__->meta->make_immutable;

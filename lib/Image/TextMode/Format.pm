@@ -106,25 +106,6 @@ sub write {
     $self->writer->write( $self, @rest );
 }
 
-=head2 as_ascii( )
-
-Returns only the character data stored in the canvas.
-
-=cut
-
-sub as_ascii {
-    my ( $self ) = @_;
-
-    my $output = '';
-    for my $row ( @{ $self->canvas->pixeldata } ) {
-        $output .= join( '',
-            map { defined $_->{ char } ? $_->{ char } : ' ' } @$row )
-            . "\n";
-    }
-
-    return $output;
-}
-
 =head1 PROXIED METHODS
 
 The following methods are proxies to C<sauce>.

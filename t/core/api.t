@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use_ok( 'Image::TextMode::Canvas' );
 
@@ -17,5 +17,7 @@ use_ok( 'Image::TextMode::Canvas' );
 
     is( $image->width,  1, 'width() ok' );
     is( $image->height, 1, 'height() ok' );
+
+    is( $image->as_ascii, "X\n", 'as_ascii() ok' );
 }
 
