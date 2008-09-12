@@ -13,8 +13,6 @@ my $result
     'help|h|?' );
 my $file = $ARGV[ 0 ];
 
-use Data::Dumper; die Dumper \%options;
-
 if( !$file || $options{ help } ) {
     Pod::Usage::pod2usage;
 }
