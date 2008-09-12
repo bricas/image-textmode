@@ -1,4 +1,4 @@
-use Test::More tests => 21;
+use Test::More tests => 23;
 
 use strict;
 use warnings;
@@ -12,8 +12,10 @@ for my $file ( @files ) {
     $ansi->read( "t/ansimation/data/${ file }" );
 
     isa_ok( $ansi, 'Image::TextMode::Format::ANSIMation' );
-    is( $ansi->width,  4, "${ file } width()" );
-    is( $ansi->height, 1, "${ file } height()" );
+    my( $w, $h ) = ( $ansi->width, $ansi->height );
+    is( $w,  4, "${ file } width()" );
+    is( $h, 1, "${ file } height()" );
+    is_deeply( [ $ansi->dimensions ], [ $w, $h ], "${ file } dimensions()" );
 
     isa_ok( $ansi->font, 'Image::TextMode::Font::8x16' );
     isa_ok( $ansi->palette, 'Image::TextMode::Palette::ANSI' );
