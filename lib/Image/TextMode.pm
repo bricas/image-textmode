@@ -34,8 +34,6 @@ image such as an ANSI file.
 
 =item * provide write() subs for most formats
 
-=item * write() for SAUCE
-
 =item * better guessing techniques in the loader
 
 =back

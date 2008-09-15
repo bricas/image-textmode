@@ -239,7 +239,30 @@ Write the sauce record to C<$fh>.
 sub write {
     my ( $self, $fh ) = @_;
 
-    die 'not implemented';
+    seek( $fh, 0, 2 );
+    print $fh chr( 26 );
+
+    # comments...
+    my $comments = scalar @{ $self->comments };
+    if ( $comments ) {
+        print $fh pack(
+            $comnt_template
+                . (
+                ( split( / /, $comnt_template ) )[ 1 ] x ( $comments - 1 )
+                ),
+            $self->comment_id,
+            @{ $self->comments }
+        );
+    }
+
+    # SAUCE...
+    my @template = split( / /, $sauce_template );
+    for ( 0 .. $#sauce_fields ) {
+        my $field = $sauce_fields[ $_ ];
+        my $value = ( $field ne 'comments' ) ? $self->$field : $comments;
+        print $fh pack( $template[ $_ ], $value );
+    }
+
 }
 
 =head2 datatype( )
