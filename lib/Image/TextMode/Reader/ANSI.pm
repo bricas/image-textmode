@@ -131,11 +131,14 @@ sub _read {
 
 sub set_position {
     my $self = shift;
-    my $y    = shift || 1;
-    my $x    = shift || 1;
+    my $y    = ( shift || 1 ) - 1;
+    my $x    = ( shift || 1 ) - 1;
 
-    $self->x( $x - 1 );
-    $self->y( $y - 1 );
+    $y = 0 if $y < 0;
+    $x = 0 if $x < 0;
+
+    $self->x( $x );
+    $self->y( $y );
 }
 
 sub set_attributes {
@@ -165,9 +168,10 @@ sub set_attributes {
 
 sub move_up {
     my $self = shift;
-    my $y = shift || 1;
+    my $y = $self->y - ( shift || 1 );
+    $y = 0 if $y < 0;
 
-    $self->y( $self->y - $y );
+    $self->y( $y );
 }
 
 sub move_down {
@@ -186,9 +190,11 @@ sub move_right {
 
 sub move_left {
     my $self = shift;
-    my $x = shift || 1;
+    my $x = $self->x - ( shift || 1 );
 
-    $self->x( $self->x - $x );
+    $x = 0 if $x < 0;
+
+    $self->x( $x );
 }
 
 sub save_position {
