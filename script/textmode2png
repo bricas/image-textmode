@@ -6,24 +6,39 @@ use warnings;
 use Image::TextMode::Loader;
 use Image::TextMode::Renderer::GD;
 use Getopt::Long ();
-use Pod::Usage ();
+use Pod::Usage   ();
 
 my %options;
-my $result
-    = Getopt::Long::GetOptions( \%options, 'output|o=s', 'thumbnail|t',
-    'inputformat|if=s', 'outputformat|of=s', 'readopt=s%', 'renderopt=s%',
-    'help|h|?' );
+my $result = Getopt::Long::GetOptions(
+    \%options,           'output|o=s',
+    'thumbnail|t',       'inputformat|if=s',
+    'outputformat|of=s', 'font=s',
+    'pal=s',             'readopt=s%',
+    'renderopt=s%',      'help|h|?'
+);
 my @files = @ARGV;
 
-if( !@files || $options{ help } ) {
+if ( !@files || $options{ help } ) {
     Pod::Usage::pod2usage;
 }
 
-my $read_options = $options{ readopts };
+my $read_options   = $options{ readopts };
 my $render_options = $options{ renderopt };
-my $method = $options{ thumbnail } ? 'thumbnail' : 'fullscale';
+my $method         = $options{ thumbnail } ? 'thumbnail' : 'fullscale';
 my $force_filename = ( @files > 1 or !$options{ output } ) ? 1 : 0;
-my $renderer = Image::TextMode::Renderer::GD->new;
+my $renderer       = Image::TextMode::Renderer::GD->new;
+
+my ( $font, $pal ) = @options{ qw( font pal ) };
+if ( $font ) {
+    my $class = "Image::TextMode::Font::${font}";
+    eval "use $class;";
+    $font = $class->new;
+}
+if ( $pal ) {
+    my $class = "Image::TextMode::Palette::${pal}";
+    eval "use $class;";
+    $pal = $class->new;
+}
 
 for my $file ( @files ) {
     die 'file not found'    if !-e $file;
@@ -42,14 +57,19 @@ for my $file ( @files ) {
     }
 
     my $output = $options{ output };
-    if( $force_filename ) {
-        $output = $file
-        . ( $options{ thumbnail } ? '.t' : '' ) . '.'
-        . ( $options{ outputformat } || 'png' );
+    if ( $force_filename ) {
+        $output
+            = $file
+            . ( $options{ thumbnail } ? '.t' : '' ) . '.'
+            . ( $options{ outputformat } || 'png' );
     }
 
     $output =~ s{[^.]+?$}{gif}
-        if $output ne '-' && $image->isa( 'Image::TextMode::Format::ANSIMation' );
+        if $output ne '-'
+            && $image->isa( 'Image::TextMode::Format::ANSIMation' );
+
+    $image->font( $font )   if $font;
+    $image->palette( $pal ) if $pal;
 
     my $data = $renderer->$method( $image, $render_options );
 
@@ -79,6 +99,8 @@ textmode2png - Convert text mode files to png
     -if, --inputformat      force a textmode format
     -of, --outputformat     specify the output format (default: png)
     -t, --thumbnail         generate a thumbnail
+    --font                  specify a particular font (e.g. 8x8)
+    --pal                   specify a particular palette (e.g. ANSI)
     --readopt key=val       set read options
     --renderopt key=val     set rendering options
     -h, -?, --help          this message
