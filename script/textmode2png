@@ -13,50 +13,54 @@ my $result
     = Getopt::Long::GetOptions( \%options, 'output|o=s', 'thumbnail|t',
     'inputformat|if=s', 'outputformat|of=s', 'readopt=s%', 'renderopt=s%',
     'help|h|?' );
-my $file = $ARGV[ 0 ];
+my @files = @ARGV;
 
-if( !$file || $options{ help } ) {
+if( !@files || $options{ help } ) {
     Pod::Usage::pod2usage;
 }
 
-die 'no file specified' if !$file;
-die 'file not found'    if !-e $file;
-die 'file not readable' if !-r $file;
-
 my $read_options = $options{ readopts };
-my $image;
-if ( my $format = $options{ inputformat } ) {
-    my $package = "Image\::TextMode\::Format\::${format}";
-    eval "use $package;";
-
-    $image = $package->new;
-    $image->read( $file, $read_options );
-}
-else {
-    $image = Image::TextMode::Loader->load( [ $file, $read_options ] );
-}
-
-my $output = $options{ output }
-    || $file
-    . ( $options{ thumbnail } ? '.t' : '' ) . '.'
-    . ( $options{ outputformat } || 'png' );
-
-$output =~ s{[^.]+?$}{gif}
-    if $output ne '-' && $image->isa( 'Image::TextMode::Format::ANSIMation' );
-
-my $method = $options{ thumbnail } ? 'thumbnail' : 'fullscale';
 my $render_options = $options{ renderopt };
+my $method = $options{ thumbnail } ? 'thumbnail' : 'fullscale';
+my $force_filename = ( @files > 1 or !$options{ output } ) ? 1 : 0;
 my $renderer = Image::TextMode::Renderer::GD->new;
 
-my $data = $renderer->$method( $image, $render_options );
+for my $file ( @files ) {
+    die 'file not found'    if !-e $file;
+    die 'file not readable' if !-r $file;
 
-if ( $output eq '-' ) {
-    print $data;
-}
-else {
-    open( my $fh, '>', $output ) or die "cannot write file ($output): $!";
-    print $fh $data;
-    close( $fh );
+    my $image;
+    if ( my $format = $options{ inputformat } ) {
+        my $package = "Image\::TextMode\::Format\::${format}";
+        eval "use $package;";
+
+        $image = $package->new;
+        $image->read( $file, $read_options );
+    }
+    else {
+        $image = Image::TextMode::Loader->load( [ $file, $read_options ] );
+    }
+
+    my $output = $options{ output };
+    if( $force_filename ) {
+        $output = $file
+        . ( $options{ thumbnail } ? '.t' : '' ) . '.'
+        . ( $options{ outputformat } || 'png' );
+    }
+
+    $output =~ s{[^.]+?$}{gif}
+        if $output ne '-' && $image->isa( 'Image::TextMode::Format::ANSIMation' );
+
+    my $data = $renderer->$method( $image, $render_options );
+
+    if ( $output eq '-' ) {
+        print $data;
+    }
+    else {
+        open( my $fh, '>', $output ) or die "cannot write file ($output): $!";
+        print $fh $data;
+        close( $fh );
+    }
 }
 
 __END__
@@ -67,10 +71,11 @@ textmode2png - Convert text mode files to png
 
 =head1 SYNOPSIS
 
-    % textmode2png [OPTIONS] file.ans
+    % textmode2png [OPTIONS] file.ext [file2.ext, ...]
     
     Available options:
-    -o, --output            output filename (- for STDOUT) 
+    -o, --output            output filename (- for STDOUT); ignored when
+                            more than one file is specified)
     -if, --inputformat      force a textmode format
     -of, --outputformat     specify the output format (default: png)
     -t, --thumbnail         generate a thumbnail
@@ -80,12 +85,9 @@ textmode2png - Convert text mode files to png
 
 =head1 DESCRIPTION
 
-This is a simple command-line tool to help you convert
-ansi files to png images. Use the -t switch to create a
-thumbnail. Use the -f switch to specify a GD font to use.
-Use -p to specify a custom palette class. Omitting the
-filename (or using '-') will force it to convert from
-STDIN.
+This is a simple command-line tool to help you convert text mode
+(ansi, bin, etc) files to png images. Use the -t switch to create a
+thumbnail.
 
 =head1 AUTHOR
 
