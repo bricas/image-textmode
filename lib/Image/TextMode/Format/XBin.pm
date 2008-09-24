@@ -2,6 +2,13 @@ package Image::TextMode::Format::XBin;
 
 use Moose;
 
+# Flag byte constants
+use constant FLAG_PALETTE          => 1;
+use constant FLAG_FONT             => 2;
+use constant FLAG_COMPRESSED       => 4;
+use constant FLAG_NON_BLINK        => 8;
+use constant FLAG_FIVETWELVE_CHARS => 16;
+
 extends 'Image::TextMode::Format', 'Image::TextMode::Canvas';
 
 has 'header' => (
@@ -14,6 +21,26 @@ has 'header' => (
         };
     }
 );
+
+sub has_palette {
+    shift->header->{ flags } & FLAG_PALETTE;
+}
+
+sub has_font {
+    shift->header->{ flags } & FLAG_FONT;
+}
+
+sub is_compressed {
+    shift->header->{ flags } & FLAG_COMPRESSED;
+}
+
+sub is_non_blink {
+    shift->header->{ flags } & FLAG_NON_BLINK;
+}
+
+sub has_fivetwelve_chars {
+    shift->header->{ flags } & FLAG_FIVETWELVE_CHARS;
+}
 
 sub extensions { return 'xb', 'xbin' };
 
@@ -71,6 +98,26 @@ http://www.acid.org/info/xbin/xbin.htm
 =head2 new( %args )
 
 Creates a XBin instance.
+
+=head2 has_palette( )
+
+Retrieves palette status from the flag byte in the header.
+
+=head2 has_font( )
+
+Retrieves font status from the flag byte in the header.
+
+=head2 is_compressed( )
+
+Retrieves compressed status from the flag byte in the header.
+
+=head2 is_non_blink( )
+
+Retrieves non-blink status from the flag byte in the header.
+
+=head2 has_fivetwelve_chars( )
+
+Retrieves 512 character font status from the flag byte in the header.
 
 =head2 extensions( )
 

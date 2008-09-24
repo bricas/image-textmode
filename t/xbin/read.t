@@ -1,4 +1,4 @@
-use Test::More tests => 9;
+use Test::More tests => 14;
 
 use strict;
 use warnings;
@@ -13,6 +13,13 @@ use_ok( 'Image::TextMode::Format::XBin' );
     isa_ok( $xbin, 'Image::TextMode::Format::XBin' );
     is( $xbin->width,  80, "${ file } width()" );
     is( $xbin->height, 1,  "${ file } height()" );
+
+    # flag info
+    ok( !$xbin->is_compressed, "${ file } is_compressed()" );
+    ok( $xbin->has_palette, "${ file } has_palete()" );
+    ok( $xbin->has_font, "${ file } has_font()" );
+    ok( $xbin->is_non_blink, "${ file } is_non_blink()" );
+    ok( !$xbin->has_fivetwelve_chars, "${ file } has_fivetwelve_chars()" );
 
     my $font = $xbin->font;
     isa_ok( $font, 'Image::TextMode::Font' );
