@@ -1,4 +1,4 @@
-use Test::More tests => 8;
+use Test::More tests => 11;
 
 use strict;
 use warnings;
@@ -24,6 +24,7 @@ $image->height( 1 );
 my $renderer = Image::TextMode::Renderer::GD->new;
 isa_ok( $renderer, 'Image::TextMode::Renderer::GD' );
 
+# fullscale tests
 my @tests = (
     [ {}, 'default' ],
     [ { blink_mode => 1 }, 'blink' ],
@@ -45,3 +46,9 @@ sub _render {
 
 }
 
+# thumbnail test
+my $generated
+    = $renderer->thumbnail( $image, { format => 'object' } );
+isa_ok( $generated, 'GD::Image' );
+is( $generated->width, 4, 'thumbnail() - width' );
+is( $generated->height, 2, 'thumbnail() - height' );

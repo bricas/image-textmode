@@ -54,6 +54,7 @@ sub thumbnail {
 
     my $output = $options->{ format } || 'png';
 
+    return $image if $options->{ format } eq 'object';
     return $image->$output;
 }
 
