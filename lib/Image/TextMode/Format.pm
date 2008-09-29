@@ -35,14 +35,24 @@ Image::TextMode::Format - A base class for text mode file formats
 has 'reader' => (
     is      => 'ro',
     isa     => 'Image::TextMode::Reader',
-    default => sub { shift->_xs_or_not( 'Reader' ) }
+    lazy_build => 1,
 );
 
 has 'writer' => (
     is      => 'ro',
     isa     => 'Image::TextMode::Writer',
-    default => sub { shift->_xs_or_not( 'Writer' ) }
+    lazy_build => 1,
 );
+
+sub _build_reader {
+    my( $self ) = @_;
+    return $self->_xs_or_not( 'Reader' );
+}
+
+sub _build_writer {
+    my( $self ) = @_;
+    return $self->_xs_or_not( 'Writer' );
+}
 
 sub _xs_or_not {
     my ( $class, $type ) = @_;
