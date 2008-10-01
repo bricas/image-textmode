@@ -3,7 +3,7 @@ package Image::TextMode::Pixel;
 use Moose;
 use Moose::Util::TypeConstraints;
 
-subtype 'Char' => as 'Str' => where { length( $_ ) == 1 };
+subtype 'Image::TextMode::Pixel::Char' => as 'Str' => where { length( $_ ) == 1 };
 
 # Attribute byte constants
 use constant ATTR_BG_NB => 240;
@@ -11,7 +11,7 @@ use constant ATTR_BLINK => 128;
 use constant ATTR_BG    => 112;
 use constant ATTR_FG    => 15;
 
-has 'char' => ( is => 'rw', isa => 'Char' );
+has 'char' => ( is => 'rw', isa => 'Image::TextMode::Pixel::Char' );
 
 has 'fg' => (
     is      => 'rw',
