@@ -17,7 +17,7 @@ requires 'Pod::Usage';
 
 test_requires 'Test::More';
 
-tests 't/*/*.t';
+tests_recursive;
 extra_tests;
 
 install_script 'textmode2png';

@@ -4,17 +4,25 @@ use Moose;
 
 extends 'Image::TextMode::Writer';
 
+# generates a 64 color palette
+my $default_pal = [ map {
+    my @d = split( //, sprintf( '%06b', $_ ) );
+    {   [ oct( "0b$d[ 3 ]$d[ 0 ]" ) * 63,
+          oct( "0b$d[ 4 ]$d[ 1 ]" ) * 63,
+          oct( "0b$d[ 5 ]$d[ 2 ]" ) * 63,
+        ]
+    }
+} 0 .. 63 ];
+
 sub _write {
     my ( $self, $image, $fh, $options ) = @_;
 
-    print $fh pack( 'C', $self->header->{version} );
+    print $fh pack( 'C', $image->header->{version} );
 
-    # TODO: write 64 colors, not 16
-    print $fh _pack_pal( $self->palette );
-   
-    print $fh _pack_font( $self->font );
+    print $fh _pack_pal( $image->palette );
+    print $fh _pack_font( $image->font );
 
-    for my $row ( @{ $self->pixeldata } ) {
+    for my $row ( @{ $image->pixeldata } ) {
         print $fh join( '', map { pack( 'aC', @{ $_ }{ 'char', 'attr' } ) } @$row )
     }
 }
@@ -26,7 +34,17 @@ sub _pack_font {
 
 sub _pack_pal {
     my $pal = shift;
-    return pack( 'C*', map { @$_ } @{ $pal->colors } );
+
+    my @full_pal = @$default_pal;
+    my @pal_map = qw( 0 1 2 3 4 5 20 7 56 57 58 59 60 61 62 63 );
+
+    # insert our colors into the appropriate slots in the 64-color array
+    for( 0..15 ) {
+        my @p = map { $_ >> 2 } @{$pal->colors->[ $_ ]};
+        $full_pal[ $pal_map[ $_ ] ] = \@p;
+    }
+
+    return pack( 'C*', map { @$_ } @full_pal );
 }
 
 no Moose;
