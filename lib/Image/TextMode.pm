@@ -32,7 +32,7 @@ image such as an ANSI file.
 
 =item * better documentation
 
-=item * provide write() subs for most formats
+=item * provide write() subs for ANSI, ANSIMation, IDF, Tundra and XBin
 
 =item * better guessing techniques in the loader
 
