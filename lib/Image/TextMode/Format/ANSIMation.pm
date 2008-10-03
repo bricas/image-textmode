@@ -16,7 +16,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Image::TextMode::ANSIMation - read and write ANSIMation files
+Image::TextMode::Format::ANSIMation - read and write ANSIMation files
 
 =head1 METHODS
 

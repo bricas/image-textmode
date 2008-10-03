@@ -16,7 +16,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Image::TextMode::ANSI - read and write ANSI files
+Image::TextMode::Format::ANSI - read and write ANSI files
 
 =head1 METHODS
 

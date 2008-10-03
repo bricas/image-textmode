@@ -50,7 +50,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Image::TextMode::XBin - read and write XBin files
+Image::TextMode::Format::XBin - read and write XBin files
 
 =head1 DESCRIPTION
 

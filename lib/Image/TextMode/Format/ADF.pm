@@ -15,7 +15,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Image::TextMode::ADF - read and write ADF files
+Image::TextMode::Format::ADF - read and write ADF files
 
 =head1 DESCRIPTION
 

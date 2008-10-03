@@ -19,7 +19,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Image::TextMode::IDF - read and write IDF files
+Image::TextMode::Format::IDF - read and write IDF files
 
 =head1 ACCESSORS
 

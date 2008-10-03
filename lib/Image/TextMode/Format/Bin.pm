@@ -12,7 +12,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Image::TextMode::Bin - read and write Bin files
+Image::TextMode::Format::Bin - read and write Bin files
 
 =head1 METHODS
 

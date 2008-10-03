@@ -20,7 +20,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Image::TextMode::Tundra - read and write Tundra files
+Image::TextMode::Format::Tundra - read and write Tundra files
 
 =head1 ACCESSORS
 
