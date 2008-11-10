@@ -52,11 +52,16 @@ sub load {
 
 Image::TextMode::Loader - Load text mode images by best-guess
 
+=head1 SYNOPSIS
+
+    my $img = Image::TextMode::Loader->load( $filename );
+
 =head1 METHODS
 
 =head2 load( @files )
 
-Attempts to load C<@files> based on some filetype guessing.
+Attempts to load C<@files> based on some filetype guessing. Returns the first
+result in scalar context.
 
 =head1 AUTHOR
 
