@@ -4,10 +4,30 @@ use Moose;
 
 extends 'Image::TextMode::Writer';
 
+my $header_template = 'A4 v v v v';
+
 sub _write {
     my ( $self, $image, $fh, $options ) = @_;
 
-    die 'Not Implemented';
+    my( $max_x, $max_y ) = map { $_ - 1 } $image->dimensions;
+
+    print $fh pack( $header_template, ' 1.4', 0, 0, $max_x, $max_y);
+
+    # Don't bother with RLE compression for now
+    for my $y ( 0..$max_y ) {
+        for my $x ( 0..$max_x ) {
+            my $pixel = $image->getpixel( $x, $y );
+            print $fh pack( 'aC', $pixel->{ char }, $pixel->{ attr } );
+        }
+    }
+
+    for my $char ( @{ $image->font->chars } ) {
+        print $fh pack( 'C*', @$char );
+    }
+
+    for my $color ( @{ $image->palette->colors } ) {
+        print $fh pack( 'C*', map { $_ >> 2 } @$color );
+    }
 }
 
 no Moose;

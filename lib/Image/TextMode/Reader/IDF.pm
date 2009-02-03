@@ -18,6 +18,7 @@ sub _read {
 
     $image->header( \%header );
 
+    # font and palette data are stored at the bottom of the file
     seek( $fh, -48 - 4096, 2 );
     if ( $image->has_sauce ) {
         seek( $fh, -128, 1 );

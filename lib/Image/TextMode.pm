@@ -3,7 +3,7 @@ package Image::TextMode;
 use strict;
 use warnings;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 NAME
 
@@ -32,7 +32,7 @@ image such as an ANSI file.
 
 =item * better documentation
 
-=item * provide write() subs for ANSI, ANSIMation, IDF, Tundra and XBin
+=item * provide write() subs for ANSI, ANSIMation, Tundra and XBin
 
 =item * better guessing techniques in the loader
 
