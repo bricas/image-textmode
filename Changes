@@ -4,6 +4,7 @@ Revision history for Perl extension Image::TextMode.
     - implement write() for IDF format
     - implement write() for Tundra format
     - implement write() for XBin format
+    - implement write() for ANSI format
 
 0.02  Wed Jan 14 2009
     - pod fixes
