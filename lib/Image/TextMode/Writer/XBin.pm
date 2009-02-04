@@ -4,10 +4,32 @@ use Moose;
 
 extends 'Image::TextMode::Writer';
 
+my $header_template = 'A4 C S S C C';
+
 sub _write {
     my ( $self, $image, $fh, $options ) = @_;
+    my( $width, $height ) = $image->dimensions;
 
-    die 'Not Implemented';
+    my $fontsize = $image->font->height;
+    my $flags = 3; # has palette and font, everything else is false
+    $flags |= 16 if scalar @{ $image->font->chars } == 512; # check for large font
+    print $fh pack( $header_template, 'XBIN', 26, $width, $height, $fontsize, $flags);
+
+    for my $color ( @{ $image->palette->colors } ) {
+        print $fh pack( 'C*', map { $_ >> 2 } @$color );
+    }
+
+    for my $char ( @{ $image->font->chars } ) {
+        print $fh pack( 'C*', @$char );
+    }
+
+    # No compression for now
+    for my $y ( 0..$height - 1 ) {
+        for my $x ( 0..$width - 1 ) {
+            my $pixel = $image->getpixel( $x, $y );
+            print $fh pack( 'aC', $pixel->{ char }, $pixel->{ attr } );
+        }
+    }
 }
 
 no Moose;

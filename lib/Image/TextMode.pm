@@ -32,7 +32,9 @@ image such as an ANSI file.
 
 =item * better documentation
 
-=item * provide write() subs for ANSI, ANSIMation and XBin
+=item * provide write() subs for ANSI and ANSIMation
+
+=item * flesh out and optimize write() methods
 
 =item * better guessing techniques in the loader
 
