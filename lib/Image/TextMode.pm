@@ -32,8 +32,6 @@ image such as an ANSI file.
 
 =item * better documentation
 
-=item * provide write() subs for ANSIMation
-
 =item * flesh out and optimize write() methods
 
 =item * better guessing techniques in the loader

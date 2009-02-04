@@ -81,7 +81,7 @@ sub dimensions {
     return $self->width, $self->height;
 }
 
-=head1 PROXIES METHODS
+=head1 PROXIED METHODS
 
 The following methods are proxies to the last element in C<frames>.
 

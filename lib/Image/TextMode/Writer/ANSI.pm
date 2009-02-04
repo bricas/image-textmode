@@ -12,7 +12,7 @@ sub _write {
     print $fh "\x1b[2J";
 
     for my $y ( 0..$height - 1 ) {
-        for my $x ( 0..$width - 1 ) {
+        for my $x ( 0..79 ) {
             my $pixel = $image->getpixel( $x, $y ) || { char => ' ', attr => 7 };
             print $fh "\x1b[0;", _gen_args( $pixel->{ attr } ), 'm', $pixel->{ char }; 
         }
