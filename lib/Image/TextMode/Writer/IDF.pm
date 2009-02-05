@@ -11,7 +11,7 @@ sub _write {
 
     my( $max_x, $max_y ) = map { $_ - 1 } $image->dimensions;
 
-    print $fh pack( $header_template, ' 1.4', 0, 0, $max_x, $max_y);
+    print $fh pack( $header_template, "\x041.4", 0, 0, $max_x, $max_y);
 
     # Don't bother with RLE compression for now
     for my $y ( 0..$max_y ) {
