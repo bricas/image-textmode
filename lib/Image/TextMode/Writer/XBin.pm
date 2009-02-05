@@ -11,7 +11,7 @@ sub _write {
     my( $width, $height ) = $image->dimensions;
 
     my $fontsize = $image->font->height;
-    my $flags = 3; # has palette and font, everything else is false
+    my $flags = 11; # has palette and font, is non-blink, everything else is false
     $flags |= 16 if scalar @{ $image->font->chars } == 512; # check for large font
     print $fh pack( $header_template, 'XBIN', 26, $width, $height, $fontsize, $flags);
 
