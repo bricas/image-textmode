@@ -4,7 +4,7 @@ use Moose;
 
 extends 'Image::TextMode::Writer';
 
-my $header_template = 'A4 C S S C C';
+my $header_template = 'A4 C v v C C';
 
 sub _write {
     my ( $self, $image, $fh, $options ) = @_;

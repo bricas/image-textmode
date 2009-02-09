@@ -21,7 +21,7 @@ use constant FULL_COMPRESSION      => 192;
 use constant COMPRESSION_TYPE    => 192;
 use constant COMPRESSION_COUNTER => 63;
 
-my $header_template = 'A4 C S S C C';
+my $header_template = 'A4 C v v C C';
 my $eof_char        = chr( 26 );
 my @header_fields   = qw( id eofchar width height fontsize flags );
 
