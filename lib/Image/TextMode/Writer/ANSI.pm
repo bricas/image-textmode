@@ -12,11 +12,16 @@ sub _write {
     print $fh "\x1b[2J";
 
     for my $y ( 0..$height - 1 ) {
-        for my $x ( 0..79 ) {
+        my $max_x = $image->max_x( $y );
+        for my $x ( 0..$max_x ) {
             my $pixel = $image->getpixel( $x, $y ) || { char => ' ', attr => 7 };
             print $fh "\x1b[0;", _gen_args( $pixel->{ attr } ), 'm', $pixel->{ char }; 
         }
+        print $fh "\n" unless $max_x == 79;
     }
+
+    # clear attrs
+    print $fh "\x1b[0m";
 }
 
 sub _gen_args {

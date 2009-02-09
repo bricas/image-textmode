@@ -1,5 +1,9 @@
 Revision history for Perl extension Image::TextMode.
 
+0.05  XXX
+    - tidy up ANSI write() to only write the columns needed
+    - fix up sauce read on files less than 128 bytes
+
 0.04  Mon Feb 09 2009
     - fix XBin write()
     - convert "use constant" to "my $var"

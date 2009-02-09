@@ -145,6 +145,24 @@ sub as_ascii {
     return $output;
 }
 
+=head2 max_x( $line )
+
+Finds the last defined pixel on a given line. Useful for optimizing writes
+in formats where width matters.
+
+=cut
+
+sub max_x {
+    my( $self, $y ) = @_;
+
+    my $x;
+    for( 0..@{ $self->pixeldata->[ $y ] } - 1 ) {
+        $x = $_ if defined $self->pixeldata->[ $y ]->[ $_ ];
+    }
+
+    return $x;
+}
+
 no Moose;
 
 __PACKAGE__->meta->make_immutable;

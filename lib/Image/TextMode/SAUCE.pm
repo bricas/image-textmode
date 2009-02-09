@@ -190,13 +190,11 @@ sub read {
     my $buffer;
     my %info;
 
+    seek( $fh, 0, 2 );
+    return if tell $fh < 128;
+
     seek( $fh, -128, 2 );
     my $size = read( $fh, $buffer, 128 );
-
-    if ( $size < 128 ) {
-        $self->has_sauce( 0 );
-        return;
-    }
 
     if ( substr( $buffer, 0, 5 ) ne $SAUCE_ID ) {
         $self->has_sauce( 0 );
