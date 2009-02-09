@@ -3,11 +3,11 @@ package Image::TextMode::Format::XBin;
 use Moose;
 
 # Flag byte constants
-use constant FLAG_PALETTE          => 1;
-use constant FLAG_FONT             => 2;
-use constant FLAG_COMPRESSED       => 4;
-use constant FLAG_NON_BLINK        => 8;
-use constant FLAG_FIVETWELVE_CHARS => 16;
+my $FLAG_PALETTE          = 1;
+my $FLAG_FONT             = 2;
+my $FLAG_COMPRESSED       = 4;
+my $FLAG_NON_BLINK        = 8;
+my $FLAG_FIVETWELVE_CHARS = 16;
 
 extends 'Image::TextMode::Format', 'Image::TextMode::Canvas';
 
@@ -23,23 +23,23 @@ has 'header' => (
 );
 
 sub has_palette {
-    shift->header->{ flags } & FLAG_PALETTE;
+    shift->header->{ flags } & $FLAG_PALETTE;
 }
 
 sub has_font {
-    shift->header->{ flags } & FLAG_FONT;
+    shift->header->{ flags } & $FLAG_FONT;
 }
 
 sub is_compressed {
-    shift->header->{ flags } & FLAG_COMPRESSED;
+    shift->header->{ flags } & $FLAG_COMPRESSED;
 }
 
 sub is_non_blink {
-    shift->header->{ flags } & FLAG_NON_BLINK;
+    shift->header->{ flags } & $FLAG_NON_BLINK;
 }
 
 sub has_fivetwelve_chars {
-    shift->header->{ flags } & FLAG_FIVETWELVE_CHARS;
+    shift->header->{ flags } & $FLAG_FIVETWELVE_CHARS;
 }
 
 sub extensions { return 'xb', 'xbin' };

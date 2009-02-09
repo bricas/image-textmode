@@ -5,10 +5,10 @@ use Moose;
 extends 'Image::TextMode::Reader';
 
 # State definitions
-use constant S_TXT      => 0;
-use constant S_CHK_B    => 1;
-use constant S_WAIT_LTR => 2;
-use constant S_END      => 3;
+my $S_TXT      = 0;
+my $S_CHK_B    = 1;
+my $S_WAIT_LTR = 2;
+my $S_END      = 3;
 
 has 'tabstop' => ( is => 'rw', isa => 'Int', default => sub { 8 } );
 
@@ -22,7 +22,7 @@ has 'y' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
 
 has 'attr' => ( is => 'rw', isa => 'Int', default => sub { 7 } );
 
-has 'state' => ( is => 'rw', isa => 'Int', default => sub { S_TXT } );
+has 'state' => ( is => 'rw', isa => 'Int', default => sub { $S_TXT } );
 
 has 'image' => ( is => 'rw', isa => 'Object' );
 
@@ -45,12 +45,12 @@ sub _read {
     my ( $argbuf, $ch );
     while ( read( $fh, $ch, 1 ) ) {
         my $state = $self->state;
-        if ( $state == S_TXT ) {
+        if ( $state == $S_TXT ) {
             if ( $ch eq "\x1a" ) {
-                $self->state( S_END );
+                $self->state( $S_END );
             }
             elsif ( $ch eq "\x1b" ) {
-                $self->state( S_CHK_B );
+                $self->state( $S_CHK_B );
             }
             elsif ( $ch eq "\n" ) {
                 $self->new_line;
@@ -66,17 +66,17 @@ sub _read {
                 $self->store( $ch );
             }
         }
-        elsif ( $state == S_CHK_B ) {
+        elsif ( $state == $S_CHK_B ) {
             if ( $ch ne '[' ) {
                 $self->store( chr( 27 ) );
                 $self->store( $ch );
-                $self->state( S_TXT );
+                $self->state( $S_TXT );
             }
             else {
-                $self->state( S_WAIT_LTR );
+                $self->state( $S_WAIT_LTR );
             }
         }
-        elsif ( $state == S_WAIT_LTR ) {
+        elsif ( $state == $S_WAIT_LTR ) {
             if ( $ch =~ /[a-zA-Z]/ ) {
                 my @args = split( /;/, $argbuf );
 
@@ -112,17 +112,17 @@ sub _read {
                 }
 
                 $argbuf = '';
-                $self->state( S_TXT );
+                $self->state( $S_TXT );
             }
             else {
                 $argbuf .= $ch;
             }
         }
-        elsif ( $state == S_END ) {
+        elsif ( $state == $S_END ) {
             last;
         }
         else {
-            $self->state( S_TXT );
+            $self->state( $S_TXT );
         }
     }
 
@@ -300,7 +300,7 @@ Image::TextMode::Reader::ANSI - Reads ANSI files
 
 =item * attr - current attribute info (default: 7, gray on black)
 
-=item * state - state of the parser (default: S_TXT)
+=item * state - state of the parser (default: C<$S_TXT>)
 
 =item * image - the image we're parsing into
 

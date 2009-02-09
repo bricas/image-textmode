@@ -6,10 +6,10 @@ use Moose::Util::TypeConstraints;
 subtype 'Image::TextMode::Pixel::Char' => as 'Str' => where { length( $_ ) == 1 };
 
 # Attribute byte constants
-use constant ATTR_BG_NB => 240;
-use constant ATTR_BLINK => 128;
-use constant ATTR_BG    => 112;
-use constant ATTR_FG    => 15;
+my $ATTR_BG_NB = 240;
+my $ATTR_BLINK = 128;
+my $ATTR_BG    = 112;
+my $ATTR_FG    = 15;
 
 has 'char' => ( is => 'rw', isa => 'Image::TextMode::Pixel::Char' );
 
@@ -94,9 +94,9 @@ sub _attr_to_components {
     my $blink = $options->{ blink_mode };
     my %data;
 
-    $data{ fg }    = $attr & ATTR_FG;
-    $data{ bg }    = ( $attr & ( $blink ? ATTR_BG : ATTR_BG_NB ) ) >> 4;
-    $data{ blink } = ( $attr && ATTR_BLINK ) >> 7 if $blink;
+    $data{ fg }    = $attr & $ATTR_FG;
+    $data{ bg }    = ( $attr & ( $blink ? $ATTR_BG : $ATTR_BG_NB ) ) >> 4;
+    $data{ blink } = ( $attr && $ATTR_BLINK ) >> 7 if $blink;
 
     return \%data;
 }

@@ -1,7 +1,8 @@
 Revision history for Perl extension Image::TextMode.
 
 0.04  Mon Feb 09 2009
-    - Fix XBin write()
+    - fix XBin write()
+    - convert "use constant" to "my $var"
 
 0.03  Thu Feb 05 2009
     - implement write() for IDF format

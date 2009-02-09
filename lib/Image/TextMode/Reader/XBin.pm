@@ -5,21 +5,21 @@ use Moose;
 extends 'Image::TextMode::Reader';
 
 # Header byte constants
-use constant PALETTE          => 1;
-use constant FONT             => 2;
-use constant COMPRESSED       => 4;
-use constant NON_BLINK        => 8;
-use constant FIVETWELVE_CHARS => 16;
+my $PALETTE          = 1;
+my $FONT             = 2;
+my $COMPRESSED       = 4;
+my $NON_BLINK        = 8;
+my $FIVETWELVE_CHARS = 16;
 
 # Compression type constants
-use constant NO_COMPRESSION        => 0;
-use constant CHARACTER_COMPRESSION => 64;
-use constant ATTRIBUTE_COMPRESSION => 128;
-use constant FULL_COMPRESSION      => 192;
+my $NO_COMPRESSION        = 0;
+my $CHARACTER_COMPRESSION = 64;
+my $ATTRIBUTE_COMPRESSION = 128;
+my $FULL_COMPRESSION      = 192;
 
 # Compression byte constants
-use constant COMPRESSION_TYPE    => 192;
-use constant COMPRESSION_COUNTER => 63;
+my $COMPRESSION_TYPE    = 192;
+my $COMPRESSION_COUNTER = 63;
 
 my $header_template = 'A4 C v v C C';
 my $eof_char        = chr( 26 );
@@ -38,22 +38,22 @@ sub _read {
     # parse header data
     _read_header( $image, $headerdata );
 
-    if ( $image->header->{ flags } & PALETTE ) {
+    if ( $image->header->{ flags } & $PALETTE ) {
         my $paldata;
         read( $fh, $paldata, 48 );
         _parse_palette( $image, $paldata );
     }
 
-    if ( $image->header->{ flags } & FONT ) {
+    if ( $image->header->{ flags } & $FONT ) {
         my $fontsize = $image->header->{ fontsize };
         my $chars    = $fontsize
-            * ( $image->header->{ flags } & FIVETWELVE_CHARS ? 512 : 256 );
+            * ( $image->header->{ flags } & $FIVETWELVE_CHARS ? 512 : 256 );
         my $fontdata;
         read( $fh, $fontdata, $chars );
         _parse_font( $image, $fontdata );
     }
 
-    if ( $image->header->{ flags } & COMPRESSED ) {
+    if ( $image->header->{ flags } & $COMPRESSED ) {
         _parse_compressed( $image, $fh );
     }
     else {
@@ -124,24 +124,24 @@ sub _parse_compressed {
         $info = unpack( 'C', $info );
         last if $info == 26;
 
-        my $type    = $info & COMPRESSION_TYPE;
-        my $counter = ( $info & COMPRESSION_COUNTER ) + 1;
+        my $type    = $info & $COMPRESSION_TYPE;
+        my $counter = ( $info & $COMPRESSION_COUNTER ) + 1;
 
         my ( $char, $attr );
         while ( $counter-- ) {
-            if ( $type == NO_COMPRESSION ) {
+            if ( $type == $NO_COMPRESSION ) {
                 read( $fh, $char, 1 );
                 read( $fh, $attr, 1 );
             }
-            elsif ( $type == CHARACTER_COMPRESSION ) {
+            elsif ( $type == $CHARACTER_COMPRESSION ) {
                 read( $fh, $char, 1 ) if !defined $char;
                 read( $fh, $attr, 1 );
             }
-            elsif ( $type == ATTRIBUTE_COMPRESSION ) {
+            elsif ( $type == $ATTRIBUTE_COMPRESSION ) {
                 read( $fh, $attr, 1 ) if !defined $attr;
                 read( $fh, $char, 1 );
             }
-            else {    # FULL_COMPRESSION
+            else {    # $FULL_COMPRESSION
                 read( $fh, $char, 1 ) if !defined $char;
                 read( $fh, $attr, 1 ) if !defined $attr;
             }

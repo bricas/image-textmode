@@ -3,10 +3,10 @@ package Image::TextMode::SAUCE;
 use Moose;
 
 # some SAUCE constants
-use constant SAUCE_ID      => 'SAUCE';
-use constant SAUCE_VERSION => '00';
-use constant SAUCE_FILLER  => ' ' x 22;
-use constant COMNT_ID      => 'COMNT';
+my $SAUCE_ID      = 'SAUCE';
+my $SAUCE_VERSION = '00';
+my $SAUCE_FILLER  = ' ' x 22;
+my $COMNT_ID      = 'COMNT';
 
 =head1 NAME
 
@@ -58,10 +58,10 @@ Image::TextMode::SAUCE - Create, manipulate and save SAUCE metadata
 
 =cut
 
-has 'sauce_id' => ( is => 'rw', isa => 'Str', default => sub { SAUCE_ID } );
+has 'sauce_id' => ( is => 'rw', isa => 'Str', default => sub { $SAUCE_ID } );
 
 has 'version' =>
-    ( is => 'rw', isa => 'Str', default => sub { SAUCE_VERSION } );
+    ( is => 'rw', isa => 'Str', default => sub { $SAUCE_VERSION } );
 
 has 'title' => ( is => 'rw', isa => 'Str', default => sub { '' } );
 
@@ -96,9 +96,9 @@ has 'comment_count' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
 
 has 'flags_id' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
 
-has 'filler' => ( is => 'rw', isa => 'Str', default => sub { SAUCE_FILLER } );
+has 'filler' => ( is => 'rw', isa => 'Str', default => sub { $SAUCE_FILLER } );
 
-has 'comment_id' => ( is => 'rw', isa => 'Str', default => sub { COMNT_ID } );
+has 'comment_id' => ( is => 'rw', isa => 'Str', default => sub { $COMNT_ID } );
 
 has 'comments' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
 
@@ -198,7 +198,7 @@ sub read {
         return;
     }
 
-    if ( substr( $buffer, 0, 5 ) ne SAUCE_ID ) {
+    if ( substr( $buffer, 0, 5 ) ne $SAUCE_ID ) {
         $self->has_sauce( 0 );
         return;
     }
@@ -206,7 +206,7 @@ sub read {
     @info{ @sauce_fields } = unpack( $sauce_template, $buffer );
 
     # because trailing spaces are stripped....
-    $info{ filler } = SAUCE_FILLER;
+    $info{ filler } = $SAUCE_FILLER;
 
     # Do we have any comments?
     my $comment_count = $info{ comment_count };
@@ -218,7 +218,7 @@ sub read {
         seek( $fh, -128 - 5 - $comment_count * 64, 2 );
         read( $fh, $buffer, 5 + $comment_count * 64 );
 
-        if ( substr( $buffer, 0, 5 ) eq COMNT_ID ) {
+        if ( substr( $buffer, 0, 5 ) eq $COMNT_ID ) {
             my $template
                 = $comnt_template
                 . ( split( / /, $comnt_template ) )[ 1 ]
