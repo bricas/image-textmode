@@ -23,9 +23,5 @@ use_ok( 'Image::TextMode::Format::ANSIMation' );
 
     is_deeply( $ansi2->font, $ansi->font, 'roundtrip write()' );
     is_deeply( $ansi2->palette, $ansi->palette, 'roundtrip write()' );
-
-    TODO: {
-        local $TODO = 'frames (aka pixel data) are not yet roundtrip exact';
-        is_deeply( $ansi2->frames, $ansi->frames, 'roundtrip write()' );
-    }
+    is_deeply( $ansi2->frames, $ansi->frames, 'roundtrip write()' );
 }

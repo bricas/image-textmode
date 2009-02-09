@@ -1,7 +1,8 @@
 Revision history for Perl extension Image::TextMode.
 
 0.05  XXX
-    - tidy up ANSI write() to only write the columns needed
+    - tidy up ANSI and ANSIMation write() to only write the columns needed
+    - add basic RLE encoding to ANSI and ANSIMation write()
     - fix up sauce read on files less than 128 bytes
 
 0.04  Mon Feb 09 2009

@@ -11,11 +11,23 @@ sub _write {
     # clear screen
     print $fh "\x1b[2J";
 
+    my $prevattr = '';
     for my $y ( 0..$height - 1 ) {
         my $max_x = $image->max_x( $y );
+
+        unless( defined $max_x ) {
+            print $fh "\n";
+            next;
+        }
+
         for my $x ( 0..$max_x ) {
             my $pixel = $image->getpixel( $x, $y ) || { char => ' ', attr => 7 };
-            print $fh "\x1b[0;", _gen_args( $pixel->{ attr } ), 'm', $pixel->{ char }; 
+            my $attr = _gen_args( $pixel->{ attr } );
+            if( $attr ne $prevattr ) {
+                print $fh "\x1b[0;", _gen_args( $pixel->{ attr } ), 'm';
+                $prevattr = $attr;
+            }
+            print $fh $pixel->{ char }; 
         }
         print $fh "\n" unless $max_x == 79;
     }

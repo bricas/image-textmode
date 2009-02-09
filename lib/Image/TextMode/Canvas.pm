@@ -148,16 +148,19 @@ sub as_ascii {
 =head2 max_x( $line )
 
 Finds the last defined pixel on a given line. Useful for optimizing writes
-in formats where width matters.
+in formats where width matters. Returns undef for a missing line.
 
 =cut
 
 sub max_x {
     my( $self, $y ) = @_;
+    my $line = $self->pixeldata->[ $y ];
+
+    return unless $line;
 
     my $x;
-    for( 0..@{ $self->pixeldata->[ $y ] } - 1 ) {
-        $x = $_ if defined $self->pixeldata->[ $y ]->[ $_ ];
+    for( 0..@$line - 1 ) {
+        $x = $_ if defined $line->[ $_ ];
     }
 
     return $x;
