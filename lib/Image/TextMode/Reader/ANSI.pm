@@ -42,6 +42,9 @@ sub _read {
 
     seek( $fh, 0, 0 );
 
+    # make sure we reset the state of the parser
+    $self->state( $S_TXT );
+
     my ( $argbuf, $ch );
     while ( read( $fh, $ch, 1 ) ) {
         my $state = $self->state;
