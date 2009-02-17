@@ -71,13 +71,14 @@ should it exist.
 =cut
 
 sub BUILDARGS {
-    my $class   = shift;
+    my( $class, @rest ) = @_;
+
     my $options = {};
-    if ( @_ % 2 != 0 ) {
-        $options = pop;
+    if ( @rest % 2 != 0 ) {
+        $options = pop @rest;
     }
 
-    my %args = @_;
+    my %args = @rest;
     my $attr = delete $args{ attr };
 
     if ( $attr ) {

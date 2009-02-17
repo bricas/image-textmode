@@ -6,26 +6,26 @@ use Image::TextMode::Canvas;
 extends 'Image::TextMode::Reader::ANSI';
 
 sub _read {
-    my( $self, $animation ) = ( shift, shift );
+    my( $self, $animation, @args ) = @_;
     $animation->add_frame( Image::TextMode::Canvas->new );
-    $self->SUPER::_read( $animation, @_ );
+    $self->SUPER::_read( $animation, @args );
 }
 
 sub set_position {
-	my $self = shift;
+	my( $self, @args ) = @_;
 
-	if( ( $_[ 0 ] || 1 ) == 1 && ( $_[ 1 ] || 1 ) == 1 ) {
+	if( ( $args[ 0 ] || 1 ) == 1 && ( $args[ 1 ] || 1 ) == 1 ) {
 		$self->next_frame;
 	}
 
-	$self->SUPER::set_position( @_ );
+	$self->SUPER::set_position( @args );
 }
 
 sub next_frame {
 	my $self  = shift;
     my $animation = $self->image;
 
-	return unless $animation->frames->[ -1 ]->height > 0;
+	return unless $animation->frames->[ -1 ]->height;
 
 	$animation->add_frame( Image::TextMode::Canvas->new );
 }
@@ -37,6 +37,12 @@ __PACKAGE__->meta->make_immutable;
 =head1 NAME
 
 Image::TextMode::Reader::ANSIMation - Reads ANSI Animation files
+
+=head1 DESCRIPTION
+
+Provides reading capabilities for the ANSIMation format. This module
+extends the ANSI reader, and simply creates a new frame for every
+C<set_position(0,0)> command executed.
 
 =head1 METHODS
 

@@ -82,6 +82,10 @@ __PACKAGE__->meta->make_immutable;
 
 Image::TextMode::Reader::ADF - Reads ADF files
 
+=head1 DESCRIPTION
+
+Provides reading capabilities for the ADF format.
+
 =head1 AUTHOR
 
 Brian Cassidy E<lt>bricas@cpan.orgE<gt>

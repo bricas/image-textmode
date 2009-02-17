@@ -8,6 +8,11 @@ use Image::TextMode::Pixel;
 
 Image::TextMode::Canvas - A canvas of text mode pixels
 
+=head1 DESCRIPTION
+
+This module represents the graphical portion of an image, i.e. a grid
+of pixels.
+
 =head1 ACCESSORS
 
 =over 4

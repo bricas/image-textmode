@@ -18,6 +18,11 @@ __PACKAGE__->meta->make_immutable;
 
 Image::TextMode::Format::ANSI - read and write ANSI files
 
+=head1 DESCRIPTION
+
+ANSI is a text-based image format that uses escape sequences to give the
+parser a particular command.
+
 =head1 METHODS
 
 =head2 new( %args )

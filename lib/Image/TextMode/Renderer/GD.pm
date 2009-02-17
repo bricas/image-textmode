@@ -3,6 +3,7 @@ package Image::TextMode::Renderer::GD;
 use Moose;
 use GD;
 use Image::TextMode::Palette::ANSI;
+use Carp 'croak';
 
 =head1 NAME
 
@@ -42,7 +43,7 @@ sub thumbnail {
     }
 
     my $image_l = do {
-        local $options->{ format } = 'object';
+        local $options->{ format } = 'object'; ## no critic (Variables::ProhibitLocalVar)
         $self->fullscale( $source, $options );
     };
 
@@ -231,7 +232,7 @@ sub _font_to_gd {
     for my $charval ( 0 .. $font_size ) {
         my $char = $chars->[ $charval ];
         for ( @$char ) {
-            my @binary = split( //, sprintf( '%08b', $_ ) );
+            my @binary = split( //s, sprintf( '%08b', $_ ) );
 
             if ( $ninth ) {
                 push @binary,
@@ -242,7 +243,7 @@ sub _font_to_gd {
             print $temp pack( 'C*', @binary );
         }
     }
-    close $temp;
+    close $temp or croak "Unable to close temp file: $!";
 
     return GD::Font->load( $temp->filename );
 }

@@ -9,7 +9,7 @@ sub _write {
 
     for my $row ( @{ $image->pixeldata } ) {
         print $fh
-            join( '', map { pack( 'aC', @{ $_ }{ 'char', 'attr' } ) } @$row );
+            join( '', map { pack( 'aC', @{ $_ }{ qw( char attr ) } ) } @$row );
     }
 }
 
@@ -20,6 +20,10 @@ __PACKAGE__->meta->make_immutable;
 =head1 NAME
 
 Image::TextMode::Writer::Bin - Writes Bin files
+
+=head1 DESCRIPTION
+
+Provides writing capabilities for the Bin format.
 
 =head1 AUTHOR
 

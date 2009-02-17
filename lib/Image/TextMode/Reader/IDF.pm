@@ -103,6 +103,10 @@ __PACKAGE__->meta->make_immutable;
 
 Image::TextMode::Reader::IDF - Reads IDF files
 
+=head1 DESCRIPTION
+
+Provides reading capabilities for the IDF format.
+
 =head1 AUTHOR
 
 Brian Cassidy E<lt>bricas@cpan.orgE<gt>

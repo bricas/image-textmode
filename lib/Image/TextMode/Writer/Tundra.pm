@@ -40,6 +40,11 @@ __PACKAGE__->meta->make_immutable;
 
 Image::TextMode::Writer::Tundra - Writes Tundra files
 
+=head1 DESCRIPTION
+
+Provides writing capabilities for the Tundra format. It currently does not
+support any RLE compression.
+
 =head1 AUTHOR
 
 Brian Cassidy E<lt>bricas@cpan.orgE<gt>

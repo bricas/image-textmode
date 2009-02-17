@@ -1,6 +1,7 @@
 package Image::TextMode::Writer::IDF;
 
 use Moose;
+use charnames ':full';
 
 extends 'Image::TextMode::Writer';
 
@@ -11,7 +12,7 @@ sub _write {
 
     my( $max_x, $max_y ) = map { $_ - 1 } $image->dimensions;
 
-    print $fh pack( $header_template, "\x041.4", 0, 0, $max_x, $max_y);
+    print $fh pack( $header_template, "\N{END OF TRANSMISSION}1.4", 0, 0, $max_x, $max_y);
 
     # Don't bother with RLE compression for now
     for my $y ( 0..$max_y ) {
@@ -37,6 +38,11 @@ __PACKAGE__->meta->make_immutable;
 =head1 NAME
 
 Image::TextMode::Writer::IDF - Writes IDF files
+
+=head1 DESCRIPTION
+
+Provides writing capabilities for the IDF format. It currently does not
+support any RLE compression.
 
 =head1 AUTHOR
 

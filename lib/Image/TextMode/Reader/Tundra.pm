@@ -99,6 +99,10 @@ __PACKAGE__->meta->make_immutable;
 
 Image::TextMode::Reader::Tundra - Reads Tundra files
 
+=head1 DESCRIPTION
+
+Provides reading capabilities for the Tundra format.
+
 =head1 AUTHOR
 
 Brian Cassidy E<lt>bricas@cpan.orgE<gt>

@@ -6,6 +6,8 @@ use warnings;
 use Module::Pluggable::Object;
 use Image::TextMode::SAUCE;
 
+use Carp 'croak';
+
 sub load {
     my ( $self, @files ) = @_;
     my @result;
@@ -25,16 +27,16 @@ sub load {
             ( $file, $read_options ) = @$file;
         }
 
-        my( $ext ) = $file =~ m{([^.]+?)$};
+        my( $ext ) = $file =~ m{([^.]+?)$}s;
         $ext = lc $ext;
         my $format = $exts{ $ext } || $default;
 
         # if we get ANSI, we need to see if it's ansimation or not from the SAUCE data.
         if( $format eq $default ) {
             my $sauce = Image::TextMode::SAUCE->new;
-            open( my $fh, $file );
+            open( my $fh, '<', $file ) or croak "Unable to read SAUCE data for '$file': $!";
             $sauce->read( $fh );
-            close( $fh );
+            close( $fh ) or croak "Unable to close '$file': $!";
             if( $sauce->has_sauce && $sauce->filetype eq 'ANSiMation' ) {
                 $format = 'Image::TextMode::Format::ANSIMation';
             }
@@ -55,6 +57,11 @@ Image::TextMode::Loader - Load text mode images by best-guess
 =head1 SYNOPSIS
 
     my $img = Image::TextMode::Loader->load( $filename );
+
+=head1 DESCRIPTION
+
+This module allows you to load a set of images without having to explicitly
+specify the format before-hand.
 
 =head1 METHODS
 

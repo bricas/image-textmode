@@ -1,5 +1,8 @@
 Revision history for Perl extension Image::TextMode.
 
+0.06  XXX
+    - conform to Perl::Critic policies
+
 0.05  Fri Feb 13 2009
     - tidy up ANSI and ANSIMation write() to only write the columns needed
     - add basic RLE encoding to ANSI and ANSIMation write()

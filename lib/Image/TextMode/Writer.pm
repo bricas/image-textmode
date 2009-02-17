@@ -1,10 +1,15 @@
 package Image::TextMode::Writer;
 
 use Moose;
+use Carp 'croak';
 
 =head1 NAME
 
 Image::TextMode::Writer - A base class for file writers
+
+=head1 DESCRIPTION
+
+This module provides some of the basic functionality for all writer classes.
 
 =head1 METHODS
 
@@ -19,7 +24,7 @@ method.
 
 =cut
 
-sub write {
+sub write { ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     my ( $self, $image, $fh, $options ) = @_;
     $options ||= {};
     $fh = _get_fh( $fh );
@@ -35,7 +40,7 @@ sub _get_fh {
     my $fh = $file;
     if ( !ref $fh ) {
         undef $fh;
-        open $fh, '>', $file;
+        open $fh, '>', $file or croak "Unable to open '$file': $!"; ## no critic (InputOutput::RequireBriefOpen)
     }
 
     binmode( $fh );

@@ -1,6 +1,7 @@
 package Image::TextMode::Writer::ANSI;
 
 use Moose;
+use charnames ':full';
 
 extends 'Image::TextMode::Writer';
 
@@ -9,7 +10,7 @@ sub _write {
     my( $width, $height ) = $image->dimensions;
 
     # clear screen
-    print $fh "\x1b[2J";
+    print $fh "\N{ESCAPE}[2J";
 
     my $prevattr = '';
     for my $y ( 0..$height - 1 ) {
@@ -24,7 +25,7 @@ sub _write {
             my $pixel = $image->getpixel( $x, $y ) || { char => ' ', attr => 7 };
             my $attr = _gen_args( $pixel->{ attr } );
             if( $attr ne $prevattr ) {
-                print $fh "\x1b[0;", _gen_args( $pixel->{ attr } ), 'm';
+                print $fh "\N{ESCAPE}[0;", _gen_args( $pixel->{ attr } ), 'm';
                 $prevattr = $attr;
             }
             print $fh $pixel->{ char }; 
@@ -33,7 +34,7 @@ sub _write {
     }
 
     # clear attrs
-    print $fh "\x1b[0m";
+    print $fh "\N{ESCAPE}[0m";
 }
 
 sub _gen_args {
@@ -42,7 +43,7 @@ sub _gen_args {
     my $bg = 40 + ( ( $attr & 112 ) >> 4 );
     my $bl = ( $attr & 128 ) ? 5 : '';
     my $in = ( $attr & 8 ) ? 1 : '';
-    return join ( ';', grep { length } ( $bl, $in, $fg, $bg ) ); 
+    return join ( q{;}, grep { length } ( $bl, $in, $fg, $bg ) ); 
 }
 
 no Moose;
@@ -52,6 +53,10 @@ __PACKAGE__->meta->make_immutable;
 =head1 NAME
 
 Image::TextMode::Writer::ANSI - Writes ANSI files
+
+=head1 DESCRIPTION
+
+Provides writing capabilities for the ANSI format.
 
 =head1 AUTHOR
 

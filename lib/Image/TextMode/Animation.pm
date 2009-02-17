@@ -1,12 +1,11 @@
 package Image::TextMode::Animation;
 
 use Moose;
-require Class::MOP;
+use Symbol ();
 
 BEGIN {
     for my $sub ( qw( getpixel getpixel_obj putpixel clear_screen clear_line ) ) {
-        no strict 'refs';
-        *{ __PACKAGE__ . "\::$sub" } = sub {
+        *{ Symbol::qualify_to_ref( __PACKAGE__ . "\::$sub" ) } = sub {
             shift->frames->[ -1 ]->$sub( @_ );
         }
     }
@@ -15,6 +14,11 @@ BEGIN {
 =head1 NAME
 
 Image::TextMode::Animation - A base class for text mode animation file formats
+
+=head1 DESCRIPTION
+
+This class should be used for any format that requires a sequence of frames
+for display.
 
 =head1 ACCESSORS
 

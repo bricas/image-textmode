@@ -2,9 +2,15 @@ package Image::TextMode::Reader;
 
 use Moose;
 
+use Carp 'croak';
+
 =head1 NAME
 
 Image::TextMode::Reader - A base class for file readers
+
+=head1 DESCRIPTION
+
+This module provides some of the basic functionality for all reader classes.
 
 =head1 METHODS
 
@@ -19,7 +25,7 @@ method.
 
 =cut
 
-sub read {
+sub read { ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     my ( $self, $image, $fh, $options ) = @_;
     $options ||= {};
     $fh = _get_fh( $fh );
@@ -41,7 +47,7 @@ sub _get_fh {
     my $fh = $file;
     if ( !ref $fh ) {
         undef $fh;
-        open $fh, $file;
+        open $fh, '<', $file or croak "Unable to open '$file': $!"; ## no critic (InputOutput::RequireBriefOpen)
     }
 
     binmode( $fh );

@@ -12,6 +12,11 @@ my $COMNT_ID      = 'COMNT';
 
 Image::TextMode::SAUCE - Create, manipulate and save SAUCE metadata
 
+=head1 DESCRIPTION
+
+This module reads and writes SAUCE metadata. SAUCE metadata is a 128-byte
+record stored after an EOF char at the end of a given file.
+
 =head1 ACCESSORS
 
 =over 4
@@ -184,7 +189,7 @@ Read the sauce record from C<$fh>.
 
 =cut
 
-sub read {
+sub read { ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     my ( $self, $fh ) = @_;
 
     my $buffer;
@@ -219,7 +224,7 @@ sub read {
         if ( substr( $buffer, 0, 5 ) eq $COMNT_ID ) {
             my $template
                 = $comnt_template
-                . ( split( / /, $comnt_template ) )[ 1 ]
+                . ( split( / /s, $comnt_template ) )[ 1 ]
                 x ( $comment_count - 1 );
             my ( $id, @comments ) = unpack( $template, $buffer );
             $self->comment_id( $id );
@@ -234,7 +239,7 @@ Write the sauce record to C<$fh>.
 
 =cut
 
-sub write {
+sub write { ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     my ( $self, $fh ) = @_;
 
     seek( $fh, 0, 2 );
@@ -246,7 +251,7 @@ sub write {
         print $fh pack(
             $comnt_template
                 . (
-                ( split( / /, $comnt_template ) )[ 1 ] x ( $comments - 1 )
+                ( split( / /s, $comnt_template ) )[ 1 ] x ( $comments - 1 )
                 ),
             $self->comment_id,
             @{ $self->comments }
@@ -254,7 +259,7 @@ sub write {
     }
 
     # SAUCE...
-    my @template = split( / /, $sauce_template );
+    my @template = split( / /s, $sauce_template );
     for ( 0 .. $#sauce_fields ) {
         my $field = $sauce_fields[ $_ ];
         my $value = ( $field ne 'comments' ) ? $self->$field : $comments;

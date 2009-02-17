@@ -12,6 +12,12 @@ use Image::TextMode::Canvas;
 
 Image::TextMode::Format - A base class for text mode file formats
 
+=head1 DESCRIPTION
+
+This is a base class for all textmode formats. It provides the basic
+structure for reading and writing, plus provides some defaults for
+common attributes (e.g. font and palette).
+
 =head1 ACCESSORS
 
 =over 4
@@ -56,14 +62,14 @@ sub _build_writer {
 
 sub _xs_or_not {
     my ( $class, $type ) = @_;
-    ( my $result = ( ref $class || $class ) ) =~ s{\bFormat\b}{$type};
+    ( my $name = ( ref $class || $class ) ) =~ s{\bFormat\b}{$type}s;
 
-    my $xs = $result . '::XS';
-    eval { Class::MOP::load_class( $xs ); };
-    return $xs->new if !$@;
+    my $xs = $name. '::XS';
+    my $result = eval { Class::MOP::load_class( $xs ); };
+    if( $result && !$@ ) { return $xs->new; }
 
-    Class::MOP::load_class( $result );
-    return $result->new;
+    Class::MOP::load_class( $name );
+    return $name->new;
 }
 
 has 'font' => (
@@ -100,7 +106,7 @@ Proxies to the reader's C<read()> method.
 
 =cut
 
-sub read {
+sub read { ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     my ( $self, @rest ) = @_;
     $self->reader->read( $self, @rest );
 }
@@ -111,7 +117,7 @@ Proxies to the writer's C<write()> method.
 
 =cut
 
-sub write {
+sub write { ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     my ( $self, @rest ) = @_;
     $self->writer->write( $self, @rest );
 }

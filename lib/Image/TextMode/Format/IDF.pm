@@ -21,6 +21,10 @@ __PACKAGE__->meta->make_immutable;
 
 Image::TextMode::Format::IDF - read and write IDF files
 
+=head1 DESCRIPTION
+
+The IDF format.
+
 =head1 ACCESSORS
 
 =over 4

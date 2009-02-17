@@ -5,9 +5,10 @@ use Moose;
 extends 'Image::TextMode::Writer';
 
 # generates a 64 color palette
+## no critic (BuiltinFunctions::ProhibitComplexMappings)
 my $default_pal = [
     map {
-        my @d = split( //, sprintf( '%06b', $_ ) );
+        my @d = split( //s, sprintf( '%06b', $_ ) );
         {
             [   oct( "0b$d[ 3 ]$d[ 0 ]" ) * 63,
                 oct( "0b$d[ 4 ]$d[ 1 ]" ) * 63,
@@ -16,6 +17,7 @@ my $default_pal = [
         }
         } 0 .. 63
 ];
+## use critic
 
 sub _write {
     my ( $self, $image, $fh, $options ) = @_;
@@ -27,7 +29,7 @@ sub _write {
 
     for my $row ( @{ $image->pixeldata } ) {
         print $fh
-            join( '', map { pack( 'aC', @{ $_ }{ 'char', 'attr' } ) } @$row );
+            join( '', map { pack( 'aC', @{ $_ }{ qw( char attr ) } ) } @$row );
     }
 }
 
@@ -58,6 +60,10 @@ __PACKAGE__->meta->make_immutable;
 =head1 NAME
 
 Image::TextMode::Writer::ADF - Writes ADF files
+
+=head1 DESCRIPTION
+
+Provides writing capabilities for the ADF format.
 
 =head1 AUTHOR
 

@@ -1,6 +1,7 @@
 package Image::TextMode::Reader::ANSI;
 
 use Moose;
+use charnames ':full';
 
 extends 'Image::TextMode::Reader';
 
@@ -49,10 +50,10 @@ sub _read {
     while ( read( $fh, $ch, 1 ) ) {
         my $state = $self->state;
         if ( $state == $S_TXT ) {
-            if ( $ch eq "\x1a" ) {
+            if ( $ch eq "\N{SUBSTITUTE}" ) {
                 $self->state( $S_END );
             }
-            elsif ( $ch eq "\x1b" ) {
+            elsif ( $ch eq "\N{ESCAPE}" ) {
                 $self->state( $S_CHK_B );
             }
             elsif ( $ch eq "\n" ) {
@@ -80,8 +81,8 @@ sub _read {
             }
         }
         elsif ( $state == $S_WAIT_LTR ) {
-            if ( $ch =~ /[a-zA-Z]/ ) {
-                my @args = split( /;/, $argbuf );
+            if ( $ch =~ /[a-zA-Z]/s ) {
+                my @args = split( /;/s, $argbuf );
 
                 if ( $ch eq 'm' ) {
                     $self->set_attributes( @args );
@@ -133,9 +134,9 @@ sub _read {
 }
 
 sub set_position {
-    my $self = shift;
-    my $y    = ( shift || 1 ) - 1;
-    my $x    = ( shift || 1 ) - 1;
+    my( $self, $y, $x ) = @_;
+    $y = ( $y || 1 ) - 1;
+    $x = ( $x || 1 ) - 1;
 
     $y = 0 if $y < 0;
     $x = 0 if $x < 0;
@@ -145,8 +146,7 @@ sub set_position {
 }
 
 sub set_attributes {
-    my $self = shift;
-    my @args = @_;
+    my( $self, @args ) = @_;
 
     foreach ( @args ) {
         if ( $_ == 0 ) {
@@ -286,6 +286,10 @@ __PACKAGE__->meta->make_immutable;
 =head1 NAME
 
 Image::TextMode::Reader::ANSI - Reads ANSI files
+
+=head1 DESCRIPTION
+
+Provides reading capabilities for the ANSI format.
 
 =head1 ACCESSORS
 

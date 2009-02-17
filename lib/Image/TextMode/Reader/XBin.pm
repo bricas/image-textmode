@@ -1,6 +1,7 @@
 package Image::TextMode::Reader::XBin;
 
 use Moose;
+use Carp 'croak';
 
 extends 'Image::TextMode::Reader';
 
@@ -32,8 +33,8 @@ sub _read {
     my $headerlength = read( $fh, $headerdata, 11 );
 
     # does it start with the right data?
-    die 'Not an XBin file.'
-        unless $headerlength == 11 and $headerdata =~ /^XBIN$eof_char/;
+    croak 'Not an XBin file.'
+        unless $headerlength == 11 and $headerdata =~ m{^XBIN$eof_char}s;
 
     # parse header data
     _read_header( $image, $headerdata );
@@ -194,6 +195,10 @@ __PACKAGE__->meta->make_immutable;
 =head1 NAME
 
 Image::TextMode::Reader::XBin - Reads XBin files
+
+=head1 DESCRIPTION
+
+Provides reading capabilities for the XBin format.
 
 =head1 AUTHOR
 

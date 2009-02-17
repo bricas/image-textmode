@@ -18,6 +18,13 @@ __PACKAGE__->meta->make_immutable;
 
 Image::TextMode::Format::ANSIMation - read and write ANSIMation files
 
+=head1 DESCRIPTION
+
+ANSIMation is an pseudo-format whereby the ANSI is displayed at a slow
+enough rate so that it appears to animate the image. This module simulates
+this by assuming a C<position(0,0)> command is the start of a new "frame" in
+the sequence.
+
 =head1 METHODS
 
 =head2 new( %args )

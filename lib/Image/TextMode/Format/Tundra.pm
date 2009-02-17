@@ -22,6 +22,10 @@ __PACKAGE__->meta->make_immutable;
 
 Image::TextMode::Format::Tundra - read and write Tundra files
 
+=head1 DESCRIPTION
+
+The Tundra format.
+
 =head1 ACCESSORS
 
 =over 4

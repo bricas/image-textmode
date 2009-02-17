@@ -7,6 +7,7 @@ use Image::TextMode::Loader;
 use Image::TextMode::Renderer::GD;
 use Getopt::Long ();
 use Pod::Usage   ();
+use Carp 'croak';
 
 my %options;
 my $result = Getopt::Long::GetOptions(
@@ -25,29 +26,43 @@ if ( !@files || $options{ help } ) {
 my $read_options   = $options{ readopts };
 my $render_options = $options{ renderopt };
 my $method         = $options{ thumbnail } ? 'thumbnail' : 'fullscale';
-my $force_filename = ( @files > 1 or !$options{ output } ) ? 1 : 0;
+my $force_filename = ( @files > 1 || !$options{ output } ) ? 1 : 0;
 my $renderer       = Image::TextMode::Renderer::GD->new;
 
 my ( $font, $pal ) = @options{ qw( font pal ) };
 if ( $font ) {
     my $class = "Image::TextMode::Font::${font}";
-    eval "use $class;";
+    my $return = eval "use $class;";
+
+    if( !$return && $@ ) {
+        croak "Unable to load font '$font'";
+    }
+
     $font = $class->new;
 }
 if ( $pal ) {
     my $class = "Image::TextMode::Palette::${pal}";
-    eval "use $class;";
+    my $return = eval "use $class;";
+
+    if( !$return && $@ ) {
+        croak "Unable to load palette '$pal'";
+    }
+
     $pal = $class->new;
 }
 
 for my $file ( @files ) {
-    die 'file not found'    if !-e $file;
-    die 'file not readable' if !-r $file;
+    croak "file not found: '$file'"    if !-e $file;
+    croak "file not readable: '$file'" if !-r $file;
 
     my $image;
     if ( my $format = $options{ inputformat } ) {
         my $package = "Image\::TextMode\::Format\::${format}";
-        eval "use $package;";
+        my $return = eval "use $package;";
+
+        if( !$return && $@ ) {
+            croak "Unable to load format '$format'";
+        }
 
         $image = $package->new;
         $image->read( $file, $read_options );
@@ -60,12 +75,12 @@ for my $file ( @files ) {
     if ( $force_filename ) {
         $output
             = $file
-            . ( $options{ thumbnail } ? '.t' : '' ) . '.'
+            . ( $options{ thumbnail } ? q{.t} : '' ) . q{.}
             . ( $options{ outputformat } || 'png' );
     }
 
-    $output =~ s{[^.]+?$}{gif}
-        if $output ne '-'
+    $output =~ s{[^.]+?$}{gif}s
+        if $output ne q{-}
             && $image->isa( 'Image::TextMode::Format::ANSIMation' );
 
     $image->font( $font )   if $font;
@@ -73,13 +88,13 @@ for my $file ( @files ) {
 
     my $data = $renderer->$method( $image, $render_options );
 
-    if ( $output eq '-' ) {
+    if ( $output eq q{-} ) {
         print $data;
     }
     else {
-        open( my $fh, '>', $output ) or die "cannot write file ($output): $!";
+        open( my $fh, '>', $output ) or croak "Unable to open file '$output': $!";
         print $fh $data;
-        close( $fh );
+        close( $fh ) or croak "Unable to close file '$output': $!";
     }
 }
 

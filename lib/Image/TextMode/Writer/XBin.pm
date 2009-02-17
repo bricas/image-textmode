@@ -40,6 +40,11 @@ __PACKAGE__->meta->make_immutable;
 
 Image::TextMode::Writer::XBin - Writes XBin files
 
+=head1 DESCRIPTION
+
+Provides writing capabilities for the XBin format. It currently only
+supports uncompressed XBin files.
+
 =head1 AUTHOR
 
 Brian Cassidy E<lt>bricas@cpan.orgE<gt>

@@ -14,6 +14,13 @@ __PACKAGE__->meta->make_immutable;
 
 Image::TextMode::Format::Bin - read and write Bin files
 
+=head1 DESCRIPTION
+
+The Bin format is essentially a raw VGA video dump. It is a sequence of
+character and attribute byte pairs. It holds no width information, so any
+images over 80 columns will have to be described in an alternate way (i.e.
+via SAUCE metadata).
+
 =head1 METHODS
 
 =head2 new( %args )
