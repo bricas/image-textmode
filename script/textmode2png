@@ -89,10 +89,12 @@ for my $file ( @files ) {
     my $data = $renderer->$method( $image, $render_options );
 
     if ( $output eq q{-} ) {
+        binmode STDOUT;
         print $data;
     }
     else {
         open( my $fh, '>', $output ) or croak "Unable to open file '$output': $!";
+        binmode( $fh );
         print $fh $data;
         close( $fh ) or croak "Unable to close file '$output': $!";
     }
