@@ -6,7 +6,7 @@ use Image::TextMode::Palette::ANSI;
 use Carp 'croak';
 
 =head1 NAME
-
+tr
 Image::TextMode::Renderer::GD - A GD-based renderer for text mode images
 
 =head1 DESCRIPTION
@@ -109,7 +109,7 @@ following options to change the output:
 
 =item * blink_mode - disables the 8th bit of an attribute byte to be used with the background color (aka iCEColor) (default: false)
 
-=item * true_color - set this to true to enable true color image output (default: false)
+=item * truecolor - set this to true to enable true color image output (default: false)
 
 =item * 9th_bit - compatibility option to enable a ninth column in the font (default: false)
 
