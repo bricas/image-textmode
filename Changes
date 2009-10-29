@@ -1,6 +1,6 @@
 Revision history for Perl extension Image::TextMode.
 
-0.06  XXX
+0.06  Thu Oct 29 2009
     - conform to Perl::Critic policies
     - add binmode for output from textmode2png script
     - fix undef warning when no output format is specified for thumbnail()
