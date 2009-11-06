@@ -30,7 +30,7 @@ sub _write {
             }
             print $fh $pixel->{ char }; 
         }
-        print $fh "\n" unless $max_x == $width - 1;
+        print $fh "\n" unless $max_x == 79;
     }
 
     # clear attrs
