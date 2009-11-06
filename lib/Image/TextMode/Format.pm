@@ -6,7 +6,6 @@ require Class::MOP;
 use Image::TextMode::Font::8x16;
 use Image::TextMode::Palette::VGA;
 use Image::TextMode::SAUCE;
-use Image::TextMode::Canvas;
 
 =head1 NAME
 
