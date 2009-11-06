@@ -23,7 +23,7 @@ if ( !@files || $options{ help } ) {
     Pod::Usage::pod2usage;
 }
 
-my $read_options   = $options{ readopts };
+my $read_options   = $options{ readopt };
 my $render_options = $options{ renderopt };
 my $method         = $options{ thumbnail } ? 'thumbnail' : 'fullscale';
 my $force_filename = ( @files > 1 || !$options{ output } ) ? 1 : 0;
