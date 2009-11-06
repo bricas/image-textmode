@@ -189,15 +189,15 @@ sub ansiscale {
     my $height = $self->height * $factor;
 
     $width  = int( $width + 1 ) if int( $width ) != $width;
-    $height = int( $height + 1 ) if  int( $height ) != $height;
+    $height = int( $height + 1 ) if int( $height ) != $height;
 
     my $oldpixels = $self->pixeldata;
     my $newpixels = [];
 
     my $inv_ratio = ( 1 / $factor );
 
-    for my $y ( 0..$height ) {
-        for my $x ( 0..$width ) {
+    for my $y ( 0..$height - 1 ) {
+        for my $x ( 0..$width - 1 ) {
             my $px = int( $x * $inv_ratio );
             my $py = int( $y * $inv_ratio );
 

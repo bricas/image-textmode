@@ -1,5 +1,9 @@
 Revision history for Perl extension Image::TextMode.
 
+0.07  XXX
+    - Add basic nearest neighbor textmode scaling 
+    - Fix ANSI writing for ansis over 80-cols
+
 0.06  Thu Oct 29 2009
     - conform to Perl::Critic policies
     - add binmode for output from textmode2png script
