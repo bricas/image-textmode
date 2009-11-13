@@ -49,7 +49,7 @@ record stored after an EOF char at the end of a given file.
 
 =item * comment_count - number of comments stored before the sauce record
 
-=item * flags - datatype specific flags
+=item * flags_id - datatype specific flags
 
 =item * filler - 22 spaces to fill in the remaining bytes
 
@@ -291,7 +291,7 @@ sub filetype {
 
 =head2 flags( )
 
-The string name of the data represented in flags.
+The string name of the data represented in flags_id.
 
 =cut
 
