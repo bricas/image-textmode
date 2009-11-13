@@ -142,9 +142,10 @@ sub as_ascii {
 
     my $output = '';
     for my $row ( @{ $self->pixeldata } ) {
-        $output .= join( '',
-            map { defined $_->{ char } ? $_->{ char } : ' ' } @$row )
-            . "\n";
+        for my $col ( @$row ) {
+           $output .= defined $col->{ char } ? $col->{ char } : ' '; 
+        }
+        $output .= "\n";
     }
 
     return $output;
