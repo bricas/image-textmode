@@ -6,7 +6,7 @@ use Image::TextMode::Palette::ANSI;
 use Carp 'croak';
 
 =head1 NAME
-tr
+
 Image::TextMode::Renderer::GD - A GD-based renderer for text mode images
 
 =head1 DESCRIPTION
