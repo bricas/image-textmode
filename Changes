@@ -1,6 +1,6 @@
 Revision history for Perl extension Image::TextMode.
 
-0.07  XXX
+0.07  Fri Jan 01 2010
     - fix readopt option in textmode2png script
     - Add basic nearest neighbor textmode scaling 
     - fix pod typo in SAUCE.pm and Renderer/GD.pm
