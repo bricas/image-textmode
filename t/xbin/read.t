@@ -7,7 +7,7 @@ use_ok( 'Image::TextMode::Format::XBin' );
 
 {
     my $file = 'test1.xb';
-    my $xbin  = Image::TextMode::Format::XBin->new;
+    my $xbin = Image::TextMode::Format::XBin->new;
     $xbin->read( "t/xbin/data/${file}" );
 
     isa_ok( $xbin, 'Image::TextMode::Format::XBin' );
@@ -15,10 +15,10 @@ use_ok( 'Image::TextMode::Format::XBin' );
     is( $xbin->height, 1,  "${ file } height()" );
 
     # flag info
-    ok( !$xbin->is_compressed, "${ file } is_compressed()" );
-    ok( $xbin->has_palette, "${ file } has_palete()" );
-    ok( $xbin->has_font, "${ file } has_font()" );
-    ok( $xbin->is_non_blink, "${ file } is_non_blink()" );
+    ok( !$xbin->is_compressed,        "${ file } is_compressed()" );
+    ok( $xbin->has_palette,           "${ file } has_palete()" );
+    ok( $xbin->has_font,              "${ file } has_font()" );
+    ok( $xbin->is_non_blink,          "${ file } is_non_blink()" );
     ok( !$xbin->has_fivetwelve_chars, "${ file } has_fivetwelve_chars()" );
 
     my $font = $xbin->font;

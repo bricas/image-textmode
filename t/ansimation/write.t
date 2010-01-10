@@ -7,7 +7,7 @@ use_ok( 'Image::TextMode::Format::ANSIMation' );
 
 {
     my $file = 'ansimation1.ans';
-    my $ansi  = Image::TextMode::Format::ANSIMation->new;
+    my $ansi = Image::TextMode::Format::ANSIMation->new;
     $ansi->read( "t/ansimation/data/${file}" );
 
     isa_ok( $ansi, 'Image::TextMode::Format::ANSIMation' );
@@ -21,7 +21,7 @@ use_ok( 'Image::TextMode::Format::ANSIMation' );
     $ansi2->read( $fh );
     close( $fh );
 
-    is_deeply( $ansi2->font, $ansi->font, 'roundtrip write()' );
+    is_deeply( $ansi2->font,    $ansi->font,    'roundtrip write()' );
     is_deeply( $ansi2->palette, $ansi->palette, 'roundtrip write()' );
-    is_deeply( $ansi2->frames, $ansi->frames, 'roundtrip write()' );
+    is_deeply( $ansi2->frames,  $ansi->frames,  'roundtrip write()' );
 }

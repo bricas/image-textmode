@@ -15,7 +15,7 @@ for my $file ( @files ) {
     is( $ansi->width,  4, "${ file } width()" );
     is( $ansi->height, 1, "${ file } height()" );
 
-    isa_ok( $ansi->font, 'Image::TextMode::Font::8x16' );
+    isa_ok( $ansi->font,    'Image::TextMode::Font::8x16' );
     isa_ok( $ansi->palette, 'Image::TextMode::Palette::ANSI' );
 
     if ( $ansi->has_sauce ) {

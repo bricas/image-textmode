@@ -6,8 +6,8 @@ use Test::More tests => 6;
 use_ok( 'Image::TextMode::Format::Tundra' );
 
 {
-    my $file = 'test1.tnd';
-    my $tundra  = Image::TextMode::Format::Tundra->new;
+    my $file   = 'test1.tnd';
+    my $tundra = Image::TextMode::Format::Tundra->new;
     $tundra->read( "t/tundra/data/${file}" );
 
     isa_ok( $tundra, 'Image::TextMode::Format::Tundra' );
@@ -22,11 +22,12 @@ use_ok( 'Image::TextMode::Format::Tundra' );
     close( $fh );
 
     is_deeply( $tundra2->header, $tundra->header, 'roundtrip write()' );
-    is_deeply( $tundra2->font, $tundra->font, 'roundtrip write()' );
+    is_deeply( $tundra2->font,   $tundra->font,   'roundtrip write()' );
 
-    TODO: {
+TODO: {
         local $TODO = 'palette and pixel data is not yet roundtrip exact';
         is_deeply( $tundra2->palette, $tundra->palette, 'roundtrip write()' );
-        is_deeply( $tundra2->pixeldata, $tundra->pixeldata, 'roundtrip write()' );
+        is_deeply( $tundra2->pixeldata, $tundra->pixeldata,
+            'roundtrip write()' );
     }
 }

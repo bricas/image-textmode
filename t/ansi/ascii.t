@@ -9,25 +9,17 @@ my @tests = (
     {   file     => 'ascii.txt',
         width    => 4,
         height   => 1,
-        expected => [
-            [ qw( t e s t ) ]
-        ],
+        expected => [ [ qw( t e s t ) ] ],
     },
     {   file     => 'ascii-2lines.txt',
         width    => 5,
         height   => 2,
-        expected => [
-            [ qw( t e s t 2 ) ],
-            [ qw( t e s t 2 ) ],
-        ],
+        expected => [ [ qw( t e s t 2 ) ], [ qw( t e s t 2 ) ], ],
     },
     {   file     => 'ascii-81cols.txt',
         width    => 80,
         height   => 2,
-        expected => [
-            [ ( qw( 1 2 3 4 5 6 7 8 9 0 ) ) x 8 ],
-            [ 1 ],
-        ],
+        expected => [ [ ( qw( 1 2 3 4 5 6 7 8 9 0 ) ) x 8 ], [ 1 ], ],
     },
 
 );

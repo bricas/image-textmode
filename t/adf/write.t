@@ -21,9 +21,9 @@ use_ok( 'Image::TextMode::Format::ADF' );
     $adf2->read( $fh );
     close( $fh );
 
-    is_deeply( $adf2->header, $adf->header, 'roundtrip write()' );
-    is_deeply( $adf2->font, $adf->font, 'roundtrip write()' );
-    is_deeply( $adf2->palette, $adf->palette, 'roundtrip write()' );
+    is_deeply( $adf2->header,    $adf->header,    'roundtrip write()' );
+    is_deeply( $adf2->font,      $adf->font,      'roundtrip write()' );
+    is_deeply( $adf2->palette,   $adf->palette,   'roundtrip write()' );
     is_deeply( $adf2->pixeldata, $adf->pixeldata, 'roundtrip write()' );
 }
 

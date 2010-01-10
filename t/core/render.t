@@ -47,8 +47,7 @@ sub _render {
 }
 
 # thumbnail test
-my $generated
-    = $renderer->thumbnail( $image, { format => 'object' } );
+my $generated = $renderer->thumbnail( $image, { format => 'object' } );
 isa_ok( $generated, 'GD::Image' );
-is( $generated->width, 4, 'thumbnail() - width' );
+is( $generated->width,  4, 'thumbnail() - width' );
 is( $generated->height, 2, 'thumbnail() - height' );

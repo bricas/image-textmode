@@ -6,10 +6,10 @@ use Test::More tests => 3;
 use_ok( 'Image::TextMode::Format::Bin' );
 
 {
-    my $file = 'test1.bin';
+    my $file  = 'test1.bin';
     my $input = slurp( "t/bin/data/${file}" );
 
-    my $bin  = Image::TextMode::Format::Bin->new;
+    my $bin = Image::TextMode::Format::Bin->new;
     $bin->read( "t/bin/data/${file}" );
 
     isa_ok( $bin, 'Image::TextMode::Format::Bin' );
@@ -23,7 +23,7 @@ use_ok( 'Image::TextMode::Format::Bin' );
 }
 
 sub slurp {
-    my( $file ) = @_;
+    my ( $file ) = @_;
     open( my $fh, $file );
     binmode( $fh );
     my $content = do { local $/; <$fh>; };
