@@ -4,10 +4,12 @@ use Moose;
 use Symbol ();
 
 BEGIN {
-    for my $sub ( qw( getpixel getpixel_obj putpixel clear_screen clear_line ) ) {
+    for my $sub (
+        qw( getpixel getpixel_obj putpixel clear_screen clear_line ) )
+    {
         *{ Symbol::qualify_to_ref( __PACKAGE__ . "\::$sub" ) } = sub {
             shift->frames->[ -1 ]->$sub( @_ );
-        }
+            }
     }
 }
 
@@ -57,7 +59,7 @@ Returns the largest frame width.
 
 sub width {
     my $self = shift;
-    my @widths = sort { $b <=> $a }map { $_->width } @{ $self->frames };
+    my @widths = sort { $b <=> $a } map { $_->width } @{ $self->frames };
     return $widths[ 0 ];
 }
 
@@ -69,7 +71,7 @@ Returns the largest frame height.
 
 sub height {
     my $self = shift;
-    my @heights = sort { $b <=> $a }map { $_->height } @{ $self->frames };
+    my @heights = sort { $b <=> $a } map { $_->height } @{ $self->frames };
     return $heights[ 0 ];
 }
 
@@ -78,7 +80,6 @@ sub height {
 Returns the a list containing the values of C<width> and C<height>.
 
 =cut
-
 
 sub dimensions {
     my $self = shift;

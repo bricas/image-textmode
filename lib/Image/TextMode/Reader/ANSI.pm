@@ -134,7 +134,7 @@ sub _read {
 }
 
 sub set_position {
-    my( $self, $y, $x ) = @_;
+    my ( $self, $y, $x ) = @_;
     $y = ( $y || 1 ) - 1;
     $x = ( $x || 1 ) - 1;
 
@@ -146,7 +146,7 @@ sub set_position {
 }
 
 sub set_attributes {
-    my( $self, @args ) = @_;
+    my ( $self, @args ) = @_;
 
     foreach ( @args ) {
         if ( $_ == 0 ) {
@@ -218,13 +218,13 @@ sub clear_line {
     my $self = shift;
     my $arg  = shift;
 
-    if( !$arg ) { # clear to end of line
+    if ( !$arg ) {    # clear to end of line
         $self->image->clear_line( $self->y, [ $self->x, -1 ] );
     }
-    elsif( $arg == 1 ) { # clear to start of line
+    elsif ( $arg == 1 ) {    # clear to start of line
         $self->image->clear_line( $self->y, [ 0, $self->x ] );
     }
-    elsif( $arg == 2 ) { #clear whole line
+    elsif ( $arg == 2 ) {    #clear whole line
         $self->image->clear_line( $self->y );
     }
 }

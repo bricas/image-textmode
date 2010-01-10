@@ -9,7 +9,26 @@ use Carp 'croak';
 
 Image::TextMode::Renderer::GD - A GD-based renderer for text mode images
 
+=head1 SYNOPSIS
+
+    use Image::TextMode::Format::ANSI;
+    use Image::TextMode::Renderer::GD;
+    
+    my $ansi = Image::TextMode::Format::ANSI->new;
+    $ansi->read( $file );
+    
+    my $renderer = Image::TextMode::Renderer::GD->new;
+    
+    # render fullscale version
+    print $renderer->fullscale( $ansi );
+    
+    # render thumnail version
+    print $renderer->thumbnail( $ansi );
+
 =head1 DESCRIPTION
+
+This module allows you to render your text mode image though the GD
+graphics library.
 
 =head1 METHODS
 
@@ -38,12 +57,12 @@ sub thumbnail {
 
     $options = { %{ $source->render_options }, $options ? %$options : () };
 
-    if( $source->can('frames') ) {
+    if ( $source->can( 'frames' ) ) {
         return $self->_render_animated_thumbnail( $source, $options );
     }
 
     my $image_l = do {
-        local $options->{ format } = 'object'; ## no critic (Variables::ProhibitLocalVar)
+        local $options->{ format } = 'object';    ## no critic (Variables::ProhibitLocalVar)
         $self->fullscale( $source, $options );
     };
 
@@ -65,27 +84,29 @@ sub _render_animated_thumbnail {
     $options->{ format } = 'object';
     $self->_prepare_options( $source, $options );
     my $frame = $self->_render_frame( $frames[ 0 ], $options );
-    my( $width, $height ) = _thumbnail_size( $source, $frame, $options );
+    my ( $width, $height ) = _thumbnail_size( $source, $frame, $options );
     my $master = GD::Image->new( $width, $height, 1 );
 
-    $master->copyResampled( $frame, 0, 0, 0, 0, $width, $height, $frame->getBounds );
+    $master->copyResampled( $frame, 0, 0, 0, 0, $width, $height,
+        $frame->getBounds );
     my $output = $master->gifanimbegin( 0 );
     $output .= $master->gifanimadd( 1, 0, 0, 15, 1 );
 
     shift @frames;
     for my $canvas ( @frames ) {
         $frame = $self->_render_frame( $canvas, $options );
-        $master->copyResampled( $frame, 0, 0, 0, 0, $width, $height, $frame->getBounds );
+        $master->copyResampled( $frame, 0, 0, 0, 0, $width, $height,
+            $frame->getBounds );
         $output .= $master->gifanimadd( 1, 0, 0, 15, 1 );
     }
 
     $output .= $master->gifanimend;
- 
-    return $output;   
+
+    return $output;
 }
 
 sub _thumbnail_size {
-    my( $source, $image, $options ) = @_;
+    my ( $source, $image, $options ) = @_;
 
     my ( $width, $height ) = $source->dimensions;
     $height = $image->height / int( $image->width / $width + 0.5 );
@@ -95,7 +116,7 @@ sub _thumbnail_size {
         $height *= $zoom;
     }
 
-    return( $width, $height );
+    return ( $width, $height );
 }
 
 =head2 fullscale( $source, \%options )
@@ -128,14 +149,14 @@ sub fullscale {
 
     $self->_prepare_options( $source, $options );
 
-    if( $source->can('frames') ) {
+    if ( $source->can( 'frames' ) ) {
         $options->{ format } = 'object';
         my $master = GD::Image->new( @{ $options->{ full_dimensions } } );
         my $output = $master->gifanimbegin( 0 );
         for my $canvas ( @{ $source->frames } ) {
             my $obj = $self->_render_frame( $canvas, $options );
 
-            $output.= $obj->gifanimadd( 1, 0, 0, 15, 1 );
+            $output .= $obj->gifanimadd( 1, 0, 0, 15, 1 );
         }
         $output .= $master->gifanimend;
         return $output;
@@ -145,22 +166,25 @@ sub fullscale {
 }
 
 sub _prepare_options {
-    my( $self, $source, $options ) = @_;
+    my ( $self, $source, $options ) = @_;
 
     my $font = _font_to_gd( $source->font,
         { '9th_bit' => delete $options->{ '9th_bit' } } );
 
     $options->{ truecolor } ||= 0;
     $options->{ font } = $font;
-    $options->{ palette } = $options->{ ced } ? Image::TextMode::Palette::ANSI->new : $source->palette;
+    $options->{ palette }
+        = $options->{ ced }
+        ? Image::TextMode::Palette::ANSI->new
+        : $source->palette;
     $options->{ format } ||= 'png';
 
     my ( $width, $height ) = $source->dimensions;
     $height = $options->{ crop } if $options->{ crop };
-    $options->{ full_dimensions } = [ $width * $font->width, $height * $font->height ];
+    $options->{ full_dimensions }
+        = [ $width * $font->width, $height * $font->height ];
 
 }
-
 
 sub _render_frame {
     my ( $self, $canvas, $options ) = @_;
@@ -168,15 +192,13 @@ sub _render_frame {
     my ( $width, $height ) = $canvas->dimensions;
     $height = $options->{ crop } if $options->{ crop };
 
-    my $font = $options->{ font };
-    my $ftwidth = $font->width;
+    my $font     = $options->{ font };
+    my $ftwidth  = $font->width;
     my $ftheight = $font->height;
-    my $ced = $options->{ ced };
+    my $ced      = $options->{ ced };
 
-    my $image = GD::Image->new(
-        @{ $options->{ full_dimensions } },
-        $options->{ truecolor }
-    );
+    my $image = GD::Image->new( @{ $options->{ full_dimensions } },
+        $options->{ truecolor } );
 
     my $colors = _fill_gd_palette( $options->{ palette }, $image );
 

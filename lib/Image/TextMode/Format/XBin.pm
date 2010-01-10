@@ -42,7 +42,7 @@ sub has_fivetwelve_chars {
     shift->header->{ flags } & $FLAG_FIVETWELVE_CHARS;
 }
 
-sub extensions { return 'xb', 'xbin' };
+sub extensions { return 'xb', 'xbin' }
 
 no Moose;
 

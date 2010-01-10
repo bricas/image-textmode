@@ -101,9 +101,11 @@ has 'comment_count' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
 
 has 'flags_id' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
 
-has 'filler' => ( is => 'rw', isa => 'Str', default => sub { $SAUCE_FILLER } );
+has 'filler' =>
+    ( is => 'rw', isa => 'Str', default => sub { $SAUCE_FILLER } );
 
-has 'comment_id' => ( is => 'rw', isa => 'Str', default => sub { $COMNT_ID } );
+has 'comment_id' =>
+    ( is => 'rw', isa => 'Str', default => sub { $COMNT_ID } );
 
 has 'comments' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
 
@@ -189,7 +191,7 @@ Read the sauce record from C<$fh>.
 
 =cut
 
-sub read { ## no critic (Subroutines::ProhibitBuiltinHomonyms)
+sub read {    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     my ( $self, $fh ) = @_;
 
     my $buffer;
@@ -239,7 +241,7 @@ Write the sauce record to C<$fh>.
 
 =cut
 
-sub write { ## no critic (Subroutines::ProhibitBuiltinHomonyms)
+sub write {    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     my ( $self, $fh ) = @_;
 
     seek( $fh, 0, 2 );

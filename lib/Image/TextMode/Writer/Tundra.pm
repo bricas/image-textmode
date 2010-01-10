@@ -7,29 +7,30 @@ extends 'Image::TextMode::Writer';
 sub _write {
     my ( $self, $image, $fh, $options ) = @_;
 
-    print $fh pack( 'C', 24 );
+    print $fh pack( 'C',  24 );
     print $fh pack( 'A8', 'TUNDRA24' );
 
     my $pal = $image->palette;
-    
-    for my $y ( 0..$image->height - 1 ) {
-        for my $x ( 0..79 ) {
+
+    for my $y ( 0 .. $image->height - 1 ) {
+        for my $x ( 0 .. 79 ) {
             my $pixel = $image->getpixel( $x, $y );
 
-            if( !defined $pixel ) {
+            if ( !defined $pixel ) {
                 $pixel = { char => ' ', fg => 0, bg => 0 };
             }
 
             my $fg = _assemble_pal( $pal->colors->[ $pixel->{ fg } ] );
             my $bg = _assemble_pal( $pal->colors->[ $pixel->{ bg } ] );
-            print $fh chr( 6 ), $pixel->{char}, pack( 'N*', $fg, $bg );
+            print $fh chr( 6 ), $pixel->{ char }, pack( 'N*', $fg, $bg );
         }
     }
 }
 
 sub _assemble_pal {
-    my( $color ) = shift;
-    return ( $color->[ 0 ] << 16 ) | ( $color->[ 1 ] << 8 ) | ( $color->[ 2 ] );
+    my ( $color ) = shift;
+    return ( $color->[ 0 ] << 16 ) | ( $color->[ 1 ] << 8 )
+        | ( $color->[ 2 ] );
 }
 
 no Moose;

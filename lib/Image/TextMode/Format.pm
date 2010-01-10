@@ -38,24 +38,24 @@ common attributes (e.g. font and palette).
 =cut
 
 has 'reader' => (
-    is      => 'ro',
-    isa     => 'Image::TextMode::Reader',
+    is         => 'ro',
+    isa        => 'Image::TextMode::Reader',
     lazy_build => 1,
 );
 
 has 'writer' => (
-    is      => 'ro',
-    isa     => 'Image::TextMode::Writer',
+    is         => 'ro',
+    isa        => 'Image::TextMode::Writer',
     lazy_build => 1,
 );
 
 sub _build_reader {
-    my( $self ) = @_;
+    my ( $self ) = @_;
     return $self->_xs_or_not( 'Reader' );
 }
 
 sub _build_writer {
-    my( $self ) = @_;
+    my ( $self ) = @_;
     return $self->_xs_or_not( 'Writer' );
 }
 
@@ -63,9 +63,9 @@ sub _xs_or_not {
     my ( $class, $type ) = @_;
     ( my $name = ( ref $class || $class ) ) =~ s{\bFormat\b}{$type}s;
 
-    my $xs = $name. '::XS';
+    my $xs = $name . '::XS';
     my $result = eval { Class::MOP::load_class( $xs ); };
-    if( $result && !$@ ) { return $xs->new; }
+    if ( $result && !$@ ) { return $xs->new; }
 
     Class::MOP::load_class( $name );
     return $name->new;
@@ -105,7 +105,7 @@ Proxies to the reader's C<read()> method.
 
 =cut
 
-sub read { ## no critic (Subroutines::ProhibitBuiltinHomonyms)
+sub read {    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     my ( $self, @rest ) = @_;
     $self->reader->read( $self, @rest );
 }
@@ -116,7 +116,7 @@ Proxies to the writer's C<write()> method.
 
 =cut
 
-sub write { ## no critic (Subroutines::ProhibitBuiltinHomonyms)
+sub write {    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     my ( $self, @rest ) = @_;
     $self->writer->write( $self, @rest );
 }

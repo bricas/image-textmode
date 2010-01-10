@@ -117,15 +117,16 @@ line C<$y>.
 =cut
 
 sub clear_line {
-    my $self = shift;
-    my $y    = shift;
+    my $self  = shift;
+    my $y     = shift;
     my $range = shift;
 
-    if( !$range ) {
+    if ( !$range ) {
         $self->pixeldata->[ $y ] = [];
     }
     else {
-        $self->pixeldata->[ $y ]->[ $_ ] = undef for $range->[ 0 ] .. $range->[ 1 ];
+        $self->pixeldata->[ $y ]->[ $_ ] = undef
+            for $range->[ 0 ] .. $range->[ 1 ];
     }
 
     $self->width( $y ) if $y > $self->width;
@@ -143,7 +144,7 @@ sub as_ascii {
     my $output = '';
     for my $row ( @{ $self->pixeldata } ) {
         for my $col ( @$row ) {
-           $output .= defined $col->{ char } ? $col->{ char } : ' '; 
+            $output .= defined $col->{ char } ? $col->{ char } : ' ';
         }
         $output .= "\n";
     }
@@ -159,13 +160,13 @@ in formats where width matters. Returns undef for a missing line.
 =cut
 
 sub max_x {
-    my( $self, $y ) = @_;
+    my ( $self, $y ) = @_;
     my $line = $self->pixeldata->[ $y ];
 
     return unless $line;
 
     my $x;
-    for( 0..@$line - 1 ) {
+    for ( 0 .. @$line - 1 ) {
         $x = $_ if defined $line->[ $_ ];
     }
 
@@ -183,13 +184,13 @@ image.
 =cut
 
 sub ansiscale {
-    my( $self, $factor ) = @_;
+    my ( $self, $factor ) = @_;
 
-    my $new    = (ref $self)->new;
+    my $new    = ( ref $self )->new;
     my $width  = $self->width * $factor;
     my $height = $self->height * $factor;
 
-    $width  = int( $width + 1 ) if int( $width ) != $width;
+    $width  = int( $width + 1 )  if int( $width ) != $width;
     $height = int( $height + 1 ) if int( $height ) != $height;
 
     my $oldpixels = $self->pixeldata;
@@ -197,14 +198,14 @@ sub ansiscale {
 
     my $inv_ratio = ( 1 / $factor );
 
-    for my $y ( 0..$height - 1 ) {
-        for my $x ( 0..$width - 1 ) {
+    for my $y ( 0 .. $height - 1 ) {
+        for my $x ( 0 .. $width - 1 ) {
             my $px = int( $x * $inv_ratio );
             my $py = int( $y * $inv_ratio );
 
             $newpixels->[ $y ]->[ $x ] = $oldpixels->[ $py ]->[ $px ];
-        }        
-    } 
+        }
+    }
 
     $new->width( $width );
     $new->height( $height );

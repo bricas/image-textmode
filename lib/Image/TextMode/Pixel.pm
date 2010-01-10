@@ -3,7 +3,8 @@ package Image::TextMode::Pixel;
 use Moose;
 use Moose::Util::TypeConstraints;
 
-subtype 'Image::TextMode::Pixel::Char' => as 'Str' => where { length( $_ ) == 1 };
+subtype 'Image::TextMode::Pixel::Char' => as 'Str' =>
+    where { length( $_ ) == 1 };
 
 # Attribute byte constants
 my $ATTR_BG_NB = 240;
@@ -71,7 +72,7 @@ should it exist.
 =cut
 
 sub BUILDARGS {
-    my( $class, @rest ) = @_;
+    my ( $class, @rest ) = @_;
 
     my $options = {};
     if ( @rest % 2 != 0 ) {

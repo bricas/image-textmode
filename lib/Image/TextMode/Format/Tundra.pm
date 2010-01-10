@@ -12,7 +12,7 @@ has 'header' => (
 
 has '+render_options' => ( default => sub { { truecolor => 1 } } );
 
-sub extensions { return 'tnd' };
+sub extensions { return 'tnd' }
 
 no Moose;
 

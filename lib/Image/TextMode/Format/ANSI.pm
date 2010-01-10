@@ -8,7 +8,7 @@ use Image::TextMode::Palette::ANSI;
 
 has '+palette' => ( default => sub { Image::TextMode::Palette::ANSI->new } );
 
-sub extensions { return 'ans', 'cia', 'ice' };
+sub extensions { return 'ans', 'cia', 'ice' }
 
 no Moose;
 

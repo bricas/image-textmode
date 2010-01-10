@@ -6,28 +6,28 @@ use Image::TextMode::Canvas;
 extends 'Image::TextMode::Reader::ANSI';
 
 sub _read {
-    my( $self, $animation, @args ) = @_;
+    my ( $self, $animation, @args ) = @_;
     $animation->add_frame( Image::TextMode::Canvas->new );
     $self->SUPER::_read( $animation, @args );
 }
 
 sub set_position {
-	my( $self, @args ) = @_;
+    my ( $self, @args ) = @_;
 
-	if( ( $args[ 0 ] || 1 ) == 1 && ( $args[ 1 ] || 1 ) == 1 ) {
-		$self->next_frame;
-	}
+    if ( ( $args[ 0 ] || 1 ) == 1 && ( $args[ 1 ] || 1 ) == 1 ) {
+        $self->next_frame;
+    }
 
-	$self->SUPER::set_position( @args );
+    $self->SUPER::set_position( @args );
 }
 
 sub next_frame {
-	my $self  = shift;
+    my $self      = shift;
     my $animation = $self->image;
 
-	return unless $animation->frames->[ -1 ]->height;
+    return unless $animation->frames->[ -1 ]->height;
 
-	$animation->add_frame( Image::TextMode::Canvas->new );
+    $animation->add_frame( Image::TextMode::Canvas->new );
 }
 
 no Moose;

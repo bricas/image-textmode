@@ -1,4 +1,4 @@
-package Image::TextMode::Font::8x16; ## no critic (Modules::RequireFilenameMatchesPackage)
+package Image::TextMode::Font::8x16;    ## no critic (Modules::RequireFilenameMatchesPackage)
 
 use Moose;
 

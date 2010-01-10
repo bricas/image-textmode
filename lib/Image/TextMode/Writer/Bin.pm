@@ -9,7 +9,8 @@ sub _write {
 
     for my $row ( @{ $image->pixeldata } ) {
         print $fh
-            join( '', map { pack( 'aC', @{ $_ }{ qw( char attr ) } ) } @$row );
+            join( '',
+            map { pack( 'aC', @{ $_ }{ qw( char attr ) } ) } @$row );
     }
 }
 

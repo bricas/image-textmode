@@ -8,12 +8,15 @@ my $header_template = 'A4 C v v C C';
 
 sub _write {
     my ( $self, $image, $fh, $options ) = @_;
-    my( $width, $height ) = $image->dimensions;
+    my ( $width, $height ) = $image->dimensions;
 
     my $fontsize = $image->font->height;
-    my $flags = 11; # has palette and font, is non-blink, everything else is false
-    $flags |= 16 if scalar @{ $image->font->chars } == 512; # check for large font
-    print $fh pack( $header_template, 'XBIN', 26, $width, $height, $fontsize, $flags);
+    my $flags
+        = 11;   # has palette and font, is non-blink, everything else is false
+    $flags |= 16
+        if scalar @{ $image->font->chars } == 512;    # check for large font
+    print $fh pack( $header_template,
+        'XBIN', 26, $width, $height, $fontsize, $flags );
 
     for my $color ( @{ $image->palette->colors } ) {
         print $fh pack( 'C*', map { $_ >> 2 } @$color );
@@ -24,8 +27,8 @@ sub _write {
     }
 
     # No compression for now
-    for my $y ( 0..$height - 1 ) {
-        for my $x ( 0..$width - 1 ) {
+    for my $y ( 0 .. $height - 1 ) {
+        for my $x ( 0 .. $width - 1 ) {
             my $pixel = $image->getpixel( $x, $y );
             print $fh pack( 'aC', $pixel->{ char }, $pixel->{ attr } );
         }

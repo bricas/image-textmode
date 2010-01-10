@@ -10,13 +10,15 @@ my $header_template = 'A4 v v v v';
 sub _write {
     my ( $self, $image, $fh, $options ) = @_;
 
-    my( $max_x, $max_y ) = map { $_ - 1 } $image->dimensions;
+    my ( $max_x, $max_y ) = map { $_ - 1 } $image->dimensions;
 
-    print $fh pack( $header_template, "\N{END OF TRANSMISSION}1.4", 0, 0, $max_x, $max_y);
+    print $fh pack( $header_template,
+        "\N{END OF TRANSMISSION}1.4",
+        0, 0, $max_x, $max_y );
 
     # Don't bother with RLE compression for now
-    for my $y ( 0..$max_y ) {
-        for my $x ( 0..$max_x ) {
+    for my $y ( 0 .. $max_y ) {
+        for my $x ( 0 .. $max_x ) {
             my $pixel = $image->getpixel( $x, $y );
             print $fh pack( 'aC', $pixel->{ char }, $pixel->{ attr } );
         }

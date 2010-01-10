@@ -12,9 +12,12 @@ sub load {
     my ( $self, @files ) = @_;
     my @result;
 
-    my $base = 'Image::TextMode::Format';
+    my $base    = 'Image::TextMode::Format';
     my $default = 'Image::TextMode::Format::ANSI';
-    my $finder = Module::Pluggable::Object->new( search_path => [ $base ], require => 1 );
+    my $finder  = Module::Pluggable::Object->new(
+        search_path => [ $base ],
+        require     => 1
+    );
 
     my %exts;
     for my $format ( $finder->plugins ) {
@@ -23,21 +26,22 @@ sub load {
 
     for my $file ( @files ) {
         my $read_options = {};
-        if( ref $file ) {
+        if ( ref $file ) {
             ( $file, $read_options ) = @$file;
         }
 
-        my( $ext ) = $file =~ m{([^.]+?)$}s;
+        my ( $ext ) = $file =~ m{([^.]+?)$}s;
         $ext = lc $ext;
         my $format = $exts{ $ext } || $default;
 
-        # if we get ANSI, we need to see if it's ansimation or not from the SAUCE data.
-        if( $format eq $default ) {
+# if we get ANSI, we need to see if it's ansimation or not from the SAUCE data.
+        if ( $format eq $default ) {
             my $sauce = Image::TextMode::SAUCE->new;
-            open( my $fh, '<', $file ) or croak "Unable to read SAUCE data for '$file': $!";
+            open( my $fh, '<', $file )
+                or croak "Unable to read SAUCE data for '$file': $!";
             $sauce->read( $fh );
             close( $fh ) or croak "Unable to close '$file': $!";
-            if( $sauce->has_sauce && $sauce->filetype eq 'ANSiMation' ) {
+            if ( $sauce->has_sauce && $sauce->filetype eq 'ANSiMation' ) {
                 $format = 'Image::TextMode::Format::ANSIMation';
             }
         }

@@ -24,7 +24,7 @@ method.
 
 =cut
 
-sub write { ## no critic (Subroutines::ProhibitBuiltinHomonyms)
+sub write {    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     my ( $self, $image, $fh, $options ) = @_;
     $options ||= {};
     $fh = _get_fh( $fh );
@@ -40,7 +40,8 @@ sub _get_fh {
     my $fh = $file;
     if ( !ref $fh ) {
         undef $fh;
-        open $fh, '>', $file or croak "Unable to open '$file': $!"; ## no critic (InputOutput::RequireBriefOpen)
+        open $fh, '>', $file    ## no critic (InputOutput::RequireBriefOpen)
+            or croak "Unable to open '$file': $!";
     }
 
     binmode( $fh );

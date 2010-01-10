@@ -8,7 +8,7 @@ use Image::TextMode::Palette::ANSI;
 
 has '+palette' => ( default => sub { Image::TextMode::Palette::ANSI->new } );
 
-sub extensions { return };
+sub extensions { return }
 
 no Moose;
 

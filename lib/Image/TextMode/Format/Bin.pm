@@ -4,7 +4,7 @@ use Moose;
 
 extends 'Image::TextMode::Format', 'Image::TextMode::Canvas';
 
-sub extensions { return 'bin' };
+sub extensions { return 'bin' }
 
 no Moose;
 
