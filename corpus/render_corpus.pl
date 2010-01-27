@@ -52,9 +52,10 @@ my @corpus = (
         class  => 'IDF',
         output => 'idf',
     },
-    {   input  => 'RA-ROUTE.ANS',
-        class  => 'ANSI',
-        output => 'ans_80x50',
+    {   input      => 'RA-ROUTE.ANS',
+        class      => 'ANSI',
+        output     => 'ans_80x50',
+        renderopts => { '_font' => '8x8' },
     },
     {   input  => 'US-NCPL1.ADF',
         class  => 'ADF',
@@ -67,6 +68,11 @@ my @corpus = (
 );
 
 my $renderer = Image::TextMode::Renderer::GD->new;
+
+if( @ARGV ) {
+    my $regex = join( '|', @ARGV );
+    @corpus = grep { $_->{ input } =~ m{^($regex)$} } @corpus;
+}
 
 for my $work ( @corpus ) {
     my $class = 'Image::TextMode::Format::' . $work->{ class };
