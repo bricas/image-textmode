@@ -31,5 +31,5 @@
 \.gz$
 
 # No test input files or etc files
-^formats
+^corpus
 ^etc

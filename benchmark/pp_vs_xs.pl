@@ -12,7 +12,6 @@ use Benchmark;
 my( $file ) = @ARGV;
 
 my $a_pp = Image::TextMode::Format::ANSI->new;
-
 my $a_xs = Image::TextMode::Format::ANSI->new;
 
 my $pp = Image::TextMode::Reader::ANSI->new;
@@ -28,5 +27,3 @@ my $r = Benchmark::timethese(-10, {
 close( $fh );
 
 Benchmark::cmpthese( $r );
-
-
