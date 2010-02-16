@@ -1,5 +1,10 @@
 Revision history for Perl extension Image::TextMode.
 
+0.08  To be released
+    - documentation cleanup for Renderer/GD.pm and textmode2png script
+    - convert read/render options specified as "true" and "false" strings
+      to boolean values
+
 0.07  Fri Jan 01 2010
     - fix readopt option in textmode2png script
     - Add basic nearest neighbor textmode scaling 

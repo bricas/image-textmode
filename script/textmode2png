@@ -23,8 +23,8 @@ if ( !@files || $options{ help } ) {
     Pod::Usage::pod2usage;
 }
 
-my $read_options   = $options{ readopt };
-my $render_options = $options{ renderopt };
+my $read_options   = _clean_opts( $options{ readopt } );
+my $render_options = _clean_opts( $options{ renderopt } );
 my $method         = $options{ thumbnail } ? 'thumbnail' : 'fullscale';
 my $force_filename = ( @files > 1 || !$options{ output } ) ? 1 : 0;
 my $renderer       = Image::TextMode::Renderer::GD->new;
@@ -98,6 +98,17 @@ for my $file ( @files ) {
         print $fh $data;
         close( $fh ) or croak "Unable to close file '$output': $!";
     }
+}
+
+sub _clean_opts {
+    my $opts = shift;
+
+    for my $k ( keys %$opts ) {
+        $opts->{ $k } = 1 if $opts->{ $k } =~ m{^true$}i;
+        $opts->{ $k } = 0 if $opts->{ $k } =~ m{^false$}i;
+    }
+
+    return $opts;
 }
 
 __END__
