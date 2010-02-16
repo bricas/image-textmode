@@ -122,6 +122,18 @@ textmode2png - Convert text mode files to png
     --renderopt key=val     set rendering options
     -h, -?, --help          this message
 
+    Read options:
+    width       force image with to this many columns
+
+    Render options:
+    crop        limit the display to this many rows (default: no limit)
+    blink_mode  disable the 8th bit of an attribute byte to be used with the
+                background color (aka iCEColor) (default: false)
+    truecolor   enable true color image output (default: false)
+    9th_bit     enable a ninth column in the font (default: false)
+    ced         CED mode (black text on gray background) (default: false)
+    format      set the output format (default: png)
+
 =head1 DESCRIPTION
 
 This is a simple command-line tool to help you convert text mode

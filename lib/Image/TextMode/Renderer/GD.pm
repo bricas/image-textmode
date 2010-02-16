@@ -126,7 +126,7 @@ following options to change the output:
 
 =over 4
 
-=item * crop - limit the display to this may characters (default: n/a)
+=item * crop - limit the display to this many rows (default: no limit)
 
 =item * blink_mode - disables the 8th bit of an attribute byte to be used with the background color (aka iCEColor) (default: false)
 
