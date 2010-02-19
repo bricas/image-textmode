@@ -4,6 +4,8 @@ Revision history for Perl extension Image::TextMode.
     - documentation cleanup for Renderer/GD.pm and textmode2png script
     - convert read/render options specified as "true" and "false" strings
       to boolean values
+    - avoid undef warnings in Loader when working with files with SAUCE
+      metadata, but no filetype
 
 0.07  Fri Jan 01 2010
     - fix readopt option in textmode2png script
