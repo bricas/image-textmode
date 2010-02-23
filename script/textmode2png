@@ -104,8 +104,8 @@ sub _clean_opts {
     my $opts = shift;
 
     for my $k ( keys %$opts ) {
-        $opts->{ $k } = 1 if $opts->{ $k } =~ m{^true$}i;
-        $opts->{ $k } = 0 if $opts->{ $k } =~ m{^false$}i;
+        $opts->{ $k } = 1 if lc $opts->{ $k } eq 'true';
+        $opts->{ $k } = 0 if lc $opts->{ $k } eq 'false';
     }
 
     return $opts;
