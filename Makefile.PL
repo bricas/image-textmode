@@ -1,4 +1,4 @@
-use inc::Module::Install 0.91;
+use inc::Module::Install 0.94;
 
 if ( -e 'MANIFEST.SKIP' ) {
     system( 'pod2text lib/Image/TextMode.pm > README' );
@@ -18,7 +18,6 @@ requires 'Pod::Usage';
 test_requires 'Test::More';
 
 tests_recursive;
-extra_tests;
 
 install_script 'textmode2png';
 
