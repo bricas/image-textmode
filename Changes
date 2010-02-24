@@ -7,6 +7,7 @@ Revision history for Perl extension Image::TextMode.
     - avoid undef warnings in Loader when working with files with SAUCE
       metadata, but no filetype
     - avoid autovivification in as_ascii method
+    - add IMAGE_TEXTMODE_NOXS ENV variable to ignore XS extensions
 
 0.07  Fri Jan 01 2010
     - fix readopt option in textmode2png script

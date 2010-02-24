@@ -3,6 +3,8 @@ use Test::More tests => 21;
 use strict;
 use warnings;
 
+$ENV{ IMAGE_TEXTMODE_NOXS } = 1;
+
 use_ok( 'Image::TextMode::Format::ANSI' );
 
 my @files = qw( test1.ans test2.ans test3.ans );

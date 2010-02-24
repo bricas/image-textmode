@@ -3,6 +3,8 @@ use warnings;
 
 use Test::More tests => 5;
 
+$ENV{ IMAGE_TEXTMODE_NOXS } = 1;
+
 use_ok( 'Image::TextMode::Format::ANSI' );
 
 {

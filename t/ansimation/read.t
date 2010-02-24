@@ -3,6 +3,8 @@ use Test::More tests => 23;
 use strict;
 use warnings;
 
+$ENV{ IMAGE_TEXTMODE_NOXS } = 1;
+
 use_ok( 'Image::TextMode::Format::ANSIMation' );
 
 my @files = qw( ansimation1.ans ansimation2.ans );
