@@ -277,7 +277,7 @@ The string name of the data represented in datatype_id.
 =cut
 
 sub datatype {
-    return $datatypes[ $_[ 0 ]->datatype_id ];
+    return $datatypes[ $_[ 0 ]->datatype_id || 0 ];
 }
 
 =head2 filetype( )
@@ -288,7 +288,7 @@ The string name of the data represented in filetype_id.
 
 sub filetype {
     return $filetypes->{ $_[ 0 ]->datatype }->{ filetypes }
-        ->[ $_[ 0 ]->filetype_id ];
+        ->[ $_[ 0 ]->filetype_id || 0 ];
 }
 
 =head2 flags( )

@@ -41,7 +41,7 @@ sub load {
                 or croak "Unable to read SAUCE data for '$file': $!";
             $sauce->read( $fh );
             close( $fh ) or croak "Unable to close '$file': $!";
-            if ( $sauce->has_sauce && $sauce->filetype && $sauce->filetype eq 'ANSiMation' ) {
+            if ( $sauce->has_sauce && $sauce->datatype && $sauce->filetype && $sauce->filetype eq 'ANSiMation' ) {
                 $format = 'Image::TextMode::Format::ANSIMation';
             }
         }
