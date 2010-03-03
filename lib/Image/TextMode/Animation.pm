@@ -86,6 +86,17 @@ sub dimensions {
     return $self->width, $self->height;
 }
 
+=head2 as_ascii( )
+
+Returns all of the text from all of the frames.
+
+=cut
+
+sub as_ascii {
+    my $self = shift;
+    return join( "\n", map { $_->as_ascii } @{ $self->frames } );
+}
+
 =head1 PROXIED METHODS
 
 The following methods are proxies to the last element in C<frames>.

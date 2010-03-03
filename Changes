@@ -1,5 +1,9 @@
 Revision history for Perl extension Image::TextMode.
 
+0.09  To be released
+    - clean whitespace from argument buffer
+    - add as_ascii() method to animations
+
 0.08  Tue Feb 23 2010
     - documentation cleanup for Renderer/GD.pm and textmode2png script
     - convert read/render options specified as "true" and "false" strings

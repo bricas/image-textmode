@@ -82,6 +82,7 @@ sub _read {
         }
         elsif ( $state == $S_WAIT_LTR ) {
             if ( $ch =~ /[a-zA-Z]/s ) {
+                $argbuf =~ s{\s}{}sg; # eliminate whitespace from args
                 my @args = split( /;/s, $argbuf );
 
                 if ( $ch eq 'm' ) {
