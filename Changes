@@ -1,7 +1,7 @@
 Revision history for Perl extension Image::TextMode.
 
 0.09  To be released
-    - clean whitespace from argument buffer
+    - clean whitespace from argument buffer in ANSI reader
     - add as_ascii() method to animations
     - attempt to handle undef datatypes and filetypes in general
     - handle invalid datatypes in Loader to match invalid filetypes
