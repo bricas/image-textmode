@@ -1,4 +1,4 @@
-use inc::Module::Install 0.94;
+use inc::Module::Install 0.95;
 
 if ( -e 'MANIFEST.SKIP' ) {
     system( 'pod2text lib/Image/TextMode.pm > README' );
