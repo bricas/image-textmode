@@ -21,4 +21,6 @@ tests_recursive;
 
 install_script 'textmode2png';
 
+repository 'http://github.com/bricas/image-textmode';
+
 WriteAll;
