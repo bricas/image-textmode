@@ -80,6 +80,10 @@ my @corpus = (
         class  => 'Tundra',
         output => 'tnd',
     },
+    {   input  => 'SCREEN4.PCB',
+        class  => 'PCBoard',
+        output => 'pcb',
+    },
 );
 
 my $renderer = Image::TextMode::Renderer::GD->new;
