@@ -1,0 +1,42 @@
+package Image::TextMode::Format::AVATAR;
+
+use Moose;
+
+extends 'Image::TextMode::Format', 'Image::TextMode::Canvas';
+
+sub extensions { return 'avt' }
+
+no Moose;
+
+__PACKAGE__->meta->make_immutable;
+
+=head1 NAME
+
+Image::TextMode::Format::AVATAR - read and write AVATAR files
+
+=head1 DESCRIPTION
+
+=head1 METHODS
+
+=head2 new( %args )
+
+Creates a AVATAR instance.
+
+=head2 extensions( )
+
+Returns 'avt'.
+
+=head1 AUTHOR
+
+Brian Cassidy E<lt>bricas@cpan.orgE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2008-2010 by Brian Cassidy
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself. 
+
+=cut
+
+1;
