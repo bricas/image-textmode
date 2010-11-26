@@ -1,0 +1,159 @@
+ANSI/2 (.AN2) - EXTENDED ANSI CODES                                     [7.1]
+
+NOTE:  This specification is under beta development and is subject to
+       change.  This document is merely for informational purposes only
+       at this point until the specification is more clearly defined 
+       and implimented.
+
+The ANSI/2 system has been created out of a need for a better graphics
+standard which does not suffer from the slow display rates of RIP and 
+VGA bitmapped graphics.  ANSI/2 is a happy medium that offers artists
+the ability to control the VGA font and palette to create more versatile
+graphics while maintaining the low overhead and high speed of ANSI.
+The following is an outline of the ANSI extensions and what their 
+purposes are:
+
+ESC[V           = ANSI/2 Version Request.  The terminal should respond with
+                  the string, "ANSI/2x"; X is a one-byte character
+                  representing a revision number.  Version 1 would return
+                  an open smiley face after the "ANSI/2".
+
+ESC[x;rgbP      = The 'P' command indicates a single palette register change
+                  using the following information:
+                     x - BYTE; palette register ranging from 0 (black) to 63 
+                         (bright white). Keep in mind that you are altering
+                         the registers and not the colors  For example, the
+                         bright white (textcolor 15) register is 63, bright
+                         yellow (textcolor 14) is register 62.  See the end
+                         of this document for a complete list of textcolor
+                         and register equivolents.
+                     r - BYTE; red value ranging from 0 to 63.
+                     g - BYTE; green value ranging from 0 to 63.
+                     b - BYTE; blue value ranging from 0 to 63.
+                     P - Palette Command; must follow the rgb data to be 
+                         recognized as the extension to change the palette 
+                         register.
+
+ESC[Q;rgb...    = Mass Palette Change.  'Q' Preceeds a 192 byte record
+                  which indicates to the terminal to change the ENTIRE
+                  palette at once.  There are no seperators between the
+                  rgb pairs, and just like above, the rgb data is BYTE 
+                  information.  The terminal should expect EXACTLY 192
+                  bytes after the ESC[Q sequence.  Finally, no palette
+                  registers should be changed until after the entire
+                  192 byte record is received.
+
+ESC[T;...       = Font Change.  'T' preceeds a 4096 byte record which
+                  corresponds to standard VGA font data.  ANSI/2 is assuming
+                  normal VGA mode (80x25) with each character being made up
+                  of 16 scanlines.  4096 bytes comes from 256 characters x
+                  16 scanlines per character = 4096 bytes.  There is
+                  terminating character for this sequence; and, exactly 
+                  4096 bytes should be sent with this command.
+
+ESC[t;ch;ln;... = Limited Font Change.  The command character is 't' (case
+                  sensitive) which indicates that part of a font record will
+                  follow.  Once again, ANSI/2 is assuming normal VGA text
+                  text mode (80x25) with each character being 16 bytes long.
+                  There is no terminating character for this sequence.
+                     ch - BYTE (0-255); This is the character to begin with.
+                     ln - BYTE (0-255); This is the length or number of 
+                          characters to modify.  The terminal should expect
+                          16 (bytes per character) * LN (# of characters).
+                     
+                     * For instance, if you wanted to modify JUST the capital
+                       letters ("A" thru "Z"), the ANSI/2 code would look
+                       like this:  ESC[t;A;(^Z);...
+                         (A)  is the byte representation of character 65
+                         (^Z) which is a non-printable character, is the 
+                              byte representation for character 26.
+
+                     ** Additional Note:  Char(26) represents the end of a
+                        file; and, if a the BBS reads to EOF and not to
+                        the file length, it could cause problems.  This will
+                        be rectified in ArtWorx by NOT writing ^Z (chr 26) or 
+                        ESC (chr 27) in any of these sequences.  Users will 
+                        be able to modify less than 26 and more than 27 
+                        characters with the 't' sequence.  Furthermore, any 
+                        future editor of ANSI/2 should realize the problems 
+                        with writing these codes to a normal text file and 
+                        avoid them.
+
+ESC[Z           = Full Reset Command.  This sequence restores the default 
+                  palette and VGA font.  The easiest and fastest way to 
+                  accomplish this is to switch the screen mode to 40 column 
+                  mode and then back to 80 column mode.  All video card 
+                  (even TTL) supports this call; and, there shouldn't be any 
+                  flicker on the screen since it is only changing between two 
+                  text modes.
+
+                  In C++, the RESET source code would look like this:
+                     void reset_textscreen(void) {
+                        textmode(C40);
+                        textmode(C80);
+                     }
+
+ESC[z;fpi       = Selective Reset Command.  This sequence resets or toggles
+                  three settings selectively.  F, P, and I are all BYTES
+                  ranging from 0 (off) to 1 (on).
+                     f - FONT      (0) = Do not reset the font
+                                   (1) = Reset/Load the default font
+                     p - PALETTE   (0) = Do not reset the palette
+                                   (1) = Reset/Load the default palette
+                     i - iCEColor  (0) = Turn iCEColor OFF
+                                   (1) = Turn iCEColor ON
+
+When a terminal and/or BBS detects the ANSI/2 emulation, there are a few 
+defaults which need to be setup.
+
+  (a) iCEColor = ON.  This eliminates blinking and allows bright background
+                      colors.  This seems *SO* much more useful than
+                      blinking characters that it simply makes sense to have
+                      it turned on.
+  
+  (b) Chr_Width()     This ASM routine modifies the width of the VGA
+                      VGA character set so that only 8 bits are used instead
+                      of the standard 9.  This SHOULD BE (but does not have
+                      to be) togglable from the terminal and/or BBS because
+                      on SOME VGA card, it messes up.  If this is NOT
+                      setup, blank lines will appear on the right side of
+                      characters that are supposed to match up.  It's not
+                      a major problem and this routine is NOT vital to the
+                      operation of ANSI/2; however, when it's not on, the
+                      display looks rather goofey.
+
+Definition of BYTE Data for ANSI/2
+
+   Since ANSI is intended to be a purely text format, binary data cannot be 
+included because ^Z (char #26) marks the end of file (EOF).  In a binary
+file, this does not matter; however, in a text file (which is what all BBS
+software treat user-configurable screen), this is a very big deal.  As such,
+BYTE data must be represented in a text-readable format and not include any
+control characters such as ^Z.  For this reason, the following BYTE data
+specification has been implimented to remove any problems with the mixing 
+of binary data and text data.
+
+   For binary data, the assumption is made that the data sent will be between
+character #128 and #255.  Unfortunately, this only covers half of the
+possible range; therefore, any character preceeded by character #1 should
+have 128 subtracted from it's ASCII value.  For instance, if a string like
+the following was sent in ANSI/2 emulation for binary data:
+
+   Á Èþ
+
+It would be translated into the following values:
+
+   Á = 65      = 32    È = 200     = 0    = 1    þ = 254
+
+In other words, 
+
+   Á Èþ = 65, 32, 200, 0, 1, 254
+
+in binary ANSI/2 data.
+
+While this is certainly not readable by humanly standards, it is the most
+compact means of sending binary data through a text-only file.  This should NOT
+pose any major coding problems and it will definitely solve the problems that
+binary data causes in text files.  This convention applies to all ANSI/2
+requirements for binary data.
+
