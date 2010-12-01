@@ -239,7 +239,7 @@ sub _render_frame {
 sub _font_to_gd {
     my ( $font, $options ) = @_;
     my $ninth = $options->{ '9th_bit' };
-    my $name = ( split( m{\::}, ref $font ) )[ -1 ];
+    my $name = ( split( /\::/s, ref $font ) )[ -1 ];
 
     if (my $fn = eval {
             File::ShareDir::dist_file( 'Image-TextMode',

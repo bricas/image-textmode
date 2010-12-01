@@ -7,7 +7,7 @@ extends 'Image::TextMode::Writer';
 sub _write {
     my ( $self, $image, $fh, $options ) = @_;
 
-    die 'Not yet written';
+    Moose->throw_error( 'Not yet written' );
 }
 
 no Moose;

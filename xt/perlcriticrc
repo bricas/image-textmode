@@ -8,7 +8,7 @@ script_sections = NAME | DESCRIPTION | SYNOPSIS | AUTHOR | COPYRIGHT AND LICENSE
 min_value = 100000
  
 [Variables::ProhibitPunctuationVars]
-allow = $@ $!
+allow = $@ $! $/
 
 [Subroutines::RequireArgUnpacking]
 short_subroutine_statements = 2
@@ -16,12 +16,14 @@ short_subroutine_statements = 2
 ; I don't agree with these policies, and disabled them.
 [-Miscellanea::RequireRcsKeywords]
 [-Documentation::RequirePodAtEnd]
+[-Documentation::RequirePodLinksIncludeText]
 [-ControlStructures::ProhibitUnlessBlocks]
 [-ControlStructures::ProhibitPostfixControls]
 [-References::ProhibitDoubleSigils]
 [-RegularExpressions::RequireExtendedFormatting]
 [-RegularExpressions::RequireLineBoundaryMatching]
 [-Subroutines::RequireFinalReturn]
+[-Subroutines::ProhibitUnusedPrivateSubroutines]
 [-BuiltinFunctions::ProhibitStringyEval]
 [-Modules::RequireEndWithOne]
 [-Modules::RequireVersionVar]

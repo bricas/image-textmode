@@ -33,7 +33,7 @@ sub _read {
 
     seek( $fh, 0, 0 );
 
-    my ( $argbuf, $ch );
+    my $ch;
     while ( read( $fh, $ch, 1 ) ) {
         if ( $ch eq "\N{SUBSTITUTE}" ) {
             last;
@@ -122,7 +122,7 @@ sub _read {
                 read( $fh, $n, 1 );
                 read( $fh, $buf, ord $n );
                 read( $fh, $i, 1 );
-                my @chars = split m{}, $buf;
+                my @chars = split //s, $buf;
 
                 # According to spec, this can contain AVT/0 codes and should
                 # probably be written back to the stream for parsing.
@@ -185,7 +185,7 @@ sub move_left {
     $self->x( $x );
 }
 
-sub scroll {
+sub scroll { ## no critic (Subroutines::ProhibitManyArgs)
     my( $self, $dir, $n, $x0, $y0, $x1, $y1 ) = @_;
     $x0--; $y0--; $x1--; $y1--;
 

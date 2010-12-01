@@ -38,14 +38,14 @@ sub _read {
 
     # slurp in file so we can do code replacement
     seek( $fh, 0, 0 );
-    my $pcb = do { local $/; <$fh> };
+    my $pcb = do { local $/ = undef; <$fh> };
 
-    my $code_re = join( '|', keys %{ $self->codes } );
-    $pcb =~ s{\@($code_re)\@}{$self->codes->{ $1 }}ge;
+    my $code_re = join( q(|), keys %{ $self->codes } );
+    $pcb =~ s{\@($code_re)\@}{$self->codes->{ $1 }}gse;
 
     $self->state( $S_TXT );
 
-    my @str = split m{}, $pcb;
+    my @str = split( //s, $pcb );
     while( defined( my $ch = shift @str ) ) {
         my $state = $self->state;
 
@@ -81,7 +81,7 @@ sub _read {
                 shift @str for 1..3;
 
                 my $x = shift @str;
-                $x .= shift @str if $str[ 0 ] ne '@';
+                $x .= shift @str if $str[ 0 ] ne q(@);
                 $x--;
 
                 shift @str;
@@ -89,7 +89,7 @@ sub _read {
                 $self->x( $x );
             }
             else { # not a valid OP
-                $self->store( '@' );
+                $self->store( q(@) );
                 $self->store( $ch );
             }
             $self->state( $S_TXT );
