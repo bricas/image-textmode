@@ -24,7 +24,11 @@ has 'y' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
 
 has 'state' => ( is => 'rw', isa => 'Int', default => sub { $S_TXT } );
 
-has 'codes' => ( is => 'rw', isa => 'HashRef', default => sub { { POFF => '', WAIT => '' } } );
+has 'codes' => (
+    is      => 'rw',
+    isa     => 'HashRef',
+    default => sub { { POFF => '', WAIT => '' } }
+);
 
 sub _read {
     my ( $self, $image, $fh, $options ) = @_;
@@ -46,7 +50,7 @@ sub _read {
     $self->state( $S_TXT );
 
     my @str = split( //s, $pcb );
-    while( defined( my $ch = shift @str ) ) {
+    while ( defined( my $ch = shift @str ) ) {
         my $state = $self->state;
 
         if ( $state == $S_TXT ) {
@@ -60,6 +64,7 @@ sub _read {
                 $self->new_line;
             }
             elsif ( $ch eq "\r" ) {
+
                 # do nothing
             }
             elsif ( $ch eq "\t" ) {
@@ -70,15 +75,15 @@ sub _read {
             }
         }
         elsif ( $state == $S_OP ) {
-            if( $ch eq 'X' ) {
+            if ( $ch eq 'X' ) {
                 $self->set_attributes( hex shift @str, hex shift @str );
             }
-            elsif( join( '', $ch, @str[ 0..2 ] ) eq 'CLS@' ) {
-                shift @str for 1..3;
+            elsif ( join( '', $ch, @str[ 0 .. 2 ] ) eq 'CLS@' ) {
+                shift @str for 1 .. 3;
                 $self->clear_screen;
             }
-            elsif( join( '', $ch, @str[ 0..2 ] ) eq 'POS:' ) {
-                shift @str for 1..3;
+            elsif ( join( '', $ch, @str[ 0 .. 2 ] ) eq 'POS:' ) {
+                shift @str for 1 .. 3;
 
                 my $x = shift @str;
                 $x .= shift @str if $str[ 0 ] ne q(@);
@@ -88,7 +93,7 @@ sub _read {
 
                 $self->x( $x );
             }
-            else { # not a valid OP
+            else {    # not a valid OP
                 $self->store( q(@) );
                 $self->store( $ch );
             }
@@ -155,7 +160,6 @@ sub store {
         $self->new_line;
     }
 }
-
 
 no Moose;
 

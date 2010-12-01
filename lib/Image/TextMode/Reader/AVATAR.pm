@@ -42,6 +42,7 @@ sub _read {
             $self->new_line;
         }
         elsif ( $ch eq "\r" ) {
+
             # do nothing
         }
         elsif ( $ch eq "\t" ) {
@@ -55,58 +56,60 @@ sub _read {
         elsif ( ord $ch == 25 ) {
             my $i;
             read( $fh, $ch, 1 );
-            read( $fh, $i, 1 );
+            read( $fh, $i,  1 );
             $self->store( $ch ) for 1 .. ord $i;
         }
         elsif ( ord $ch == 22 ) {
             read( $fh, $ch, 1 );
             my $c = ord $ch;
-            if( $c == 1 ) {
+            if ( $c == 1 ) {
                 my $a;
                 read( $fh, $a, 1 );
                 $self->attr( ord $a & 0x7f );
             }
-            elsif( $c == 2 ) {
+            elsif ( $c == 2 ) {
                 $self->attr( $self->attr | 0x80 );
             }
-            elsif( $c == 3 ) {
+            elsif ( $c == 3 ) {
                 $self->move_up;
             }
-            elsif( $c == 4 ) {
+            elsif ( $c == 4 ) {
                 $self->move_down;
             }
-            elsif( $c == 5 ) {
+            elsif ( $c == 5 ) {
                 $self->move_left;
             }
-            elsif( $c == 6 ) {
+            elsif ( $c == 6 ) {
                 $self->move_right;
             }
-            elsif( $c == 7 ) {
+            elsif ( $c == 7 ) {
                 $self->clear_line;
             }
-            elsif( $c == 8 ) {
-                my( $x, $y );
+            elsif ( $c == 8 ) {
+                my ( $x, $y );
                 read( $fh, $y, 1 );
                 read( $fh, $x, 1 );
                 $self->set_position( ord $y, ord $x );
             }
+
             # AVT/0+ spec starts here
-            elsif( $c == 9 ) {
+            elsif ( $c == 9 ) {
                 $self->insert( 1 );
             }
-            elsif( $c == 10 || $c == 11 ) {
-                my( $n, $x0, $y0, $x1, $y1 );
-                read( $fh, $n, 1 );
+            elsif ( $c == 10 || $c == 11 ) {
+                my ( $n, $x0, $y0, $x1, $y1 );
+                read( $fh, $n,  1 );
                 read( $fh, $x0, 1 );
                 read( $fh, $y0, 1 );
                 read( $fh, $x1, 1 );
                 read( $fh, $y1, 1 );
 
-                $self->scroll( $c == 10 ? 'up' : 'down', $n, $x0, $y0, $x1, $y1 );
+                $self->scroll( $c == 10 ? 'up' : 'down',
+                    $n, $x0, $y0, $x1, $y1 );
             }
-            elsif( $c == 12 || $c == 13 ) {
-                my( $a, $char, $rows, $cols );
-                read( $fh, $a, 1 );
+            elsif ( $c == 12 || $c == 13 ) {
+                my ( $a, $char, $rows, $cols );
+                read( $fh, $a,    1 );
                 read( $fh, $char, 1 ) if $c == 13;
                 read( $fh, $rows, 1 );
                 read( $fh, $cols, 1 );
@@ -114,20 +117,21 @@ sub _read {
                 $self->attr( ord $a & 0x7f );
                 $self->clear_box( ord $rows, ord $cols, $char );
             }
-            elsif( $c == 14 ) {
-                splice( @{ $self->image->pixeldata->[ $self->y ] }, $self->x, 1 );
+            elsif ( $c == 14 ) {
+                splice( @{ $self->image->pixeldata->[ $self->y ] },
+                    $self->x, 1 );
             }
-            elsif( $c == 25 ) { 
-                my( $n, $buf, $i );
-                read( $fh, $n, 1 );
+            elsif ( $c == 25 ) {
+                my ( $n, $buf, $i );
+                read( $fh, $n,   1 );
                 read( $fh, $buf, ord $n );
-                read( $fh, $i, 1 );
+                read( $fh, $i,   1 );
                 my @chars = split //s, $buf;
 
                 # According to spec, this can contain AVT/0 codes and should
                 # probably be written back to the stream for parsing.
                 # We'll send it directly to the screen for now.
-                for( 1 .. ord $i ) {
+                for ( 1 .. ord $i ) {
                     $self->store( $_ ) for @chars;
                 }
             }
@@ -185,42 +189,46 @@ sub move_left {
     $self->x( $x );
 }
 
-sub scroll { ## no critic (Subroutines::ProhibitManyArgs)
-    my( $self, $dir, $n, $x0, $y0, $x1, $y1 ) = @_;
-    $x0--; $y0--; $x1--; $y1--;
+sub scroll {    ## no critic (Subroutines::ProhibitManyArgs)
+    my ( $self, $dir, $n, $x0, $y0, $x1, $y1 ) = @_;
+    $x0--;
+    $y0--;
+    $x1--;
+    $y1--;
 
     my $pixeldata = $self->image->pixeldata;
-    my $cols = $x1 - $x0;
-    my @rows = $y0..$y1;
-    if( $dir eq 'down' ) {
+    my $cols      = $x1 - $x0;
+    my @rows      = $y0 .. $y1;
+    if ( $dir eq 'down' ) {
         @rows = reverse @rows;
     }
     else {
         $n = 0 - $n;
     }
-    
-    my $attr  = $self->attr;
+
+    my $attr = $self->attr;
     my @blank = ( { char => ' ', attr => $attr } ) x $cols;
 
     for my $from ( @rows ) {
         my $to = $from + $n;
         next if $to < 0;
-        splice( @{ $pixeldata->[ $to ] }, $x0, $cols, @{ $pixeldata->[ $from ] }[ $x0..$x1 ] );
+        splice( @{ $pixeldata->[ $to ] },
+            $x0, $cols, @{ $pixeldata->[ $from ] }[ $x0 .. $x1 ] );
         splice( @{ $pixeldata->[ $from ] }, $x0, $cols, @blank );
     }
 }
 
 sub clear_box {
-    my( $self, $rows, $cols, $char ) = @_;
+    my ( $self, $rows, $cols, $char ) = @_;
 
-    $char  = ' ' unless defined $char;
+    $char = ' ' unless defined $char;
     my $sx = $self->x;
     my $sy = $self->y;
 
     for my $x ( map { $sx + $_ } 0 .. $cols - 1 ) {
         for my $y ( map { $sy + $_ } 0 .. $rows - 1 ) {
             $self->store( $char, $x, $y );
-        }                    
+        }
     }
 
     $self->x( $sx );
@@ -264,10 +272,10 @@ sub store {
     my $y    = shift;
     my $attr = shift || $self->attr;
 
-    if( $self->insert ) {
+    if ( $self->insert ) {
         my $col = $self->x;
         my $row = $self->image->pixeldata->[ $self->y ];
-        splice( @$row, $col + 1, @$row - 1 - $col, @{ $row }[ $col..-1 ] );
+        splice( @$row, $col + 1, @$row - 1 - $col, @{ $row }[ $col .. -1 ] );
     }
 
     if ( defined $x and defined $y ) {

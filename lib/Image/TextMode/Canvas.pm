@@ -144,7 +144,8 @@ sub as_ascii {
     my $output = '';
     for my $row ( @{ $self->pixeldata } ) {
         for my $col ( @$row ) {
-            $output .= defined $col && defined $col->{ char } ? $col->{ char } : ' ';
+            $output .= defined $col
+                && defined $col->{ char } ? $col->{ char } : ' ';
         }
         $output .= "\n";
     }

@@ -63,7 +63,7 @@ sub _xs_or_not {
     my ( $class, $type ) = @_;
     ( my $name = ( ref $class || $class ) ) =~ s{\bFormat\b}{$type}s;
 
-    unless( $ENV{ IMAGE_TEXTMODE_NOXS } ) {
+    unless ( $ENV{ IMAGE_TEXTMODE_NOXS } ) {
         my $xs = $name . '::XS';
         my $result = eval { Class::MOP::load_class( $xs ); };
         if ( $result && !$@ ) { return $xs->new; }
