@@ -229,26 +229,12 @@ sub clear_box {
 
 sub clear_line {
     my $self = shift;
-    my $arg  = shift;
 
-    if ( !$arg ) {    # clear to end of line
-        $self->image->clear_line( $self->y, [ $self->x, -1 ] );
-    }
-    elsif ( $arg == 1 ) {    # clear to start of line
-        $self->image->clear_line( $self->y, [ 0, $self->x ] );
-    }
-    elsif ( $arg == 2 ) {    #clear whole line
-        $self->image->clear_line( $self->y );
-    }
+    $self->image->clear_line( $self->y, [ $self->x, -1 ] );
 }
 
 sub clear_screen {
     my $self = shift;
-    my $arg  = shift;
-
-    # no args - clear to end of screen, including cursor
-    # 1 - clear to start of screen, including cursor
-    # 2 - clear whole screen
 
     $self->image->clear_screen;
 }
@@ -310,6 +296,13 @@ Image::TextMode::Reader::AVATAR - Reads AVATAR files
 
 Provides reading capabilities for the AVATAR format.
 
+=head1 COMPATIBILITY
+
+The reader implements all of the AVT/0 specification as well as the majority
+of the AVT/0+ specification. The main difference being that AVT/0+ character
+expansion is not re-interpreted, thus expansions containing further AVT/0
+codes will simply be written as characters to the canvas. 
+
 =head1 ACCESSORS
 
 =over 4
@@ -366,9 +359,9 @@ columns using C<$char> as the character.
 
 Clears all data on the canvas.
 
-=head2 clear_line( $y )
+=head2 clear_line( )
 
-Clears the line at C<$y>.
+Clears the remainder of the current line.
 
 =head2 new_line( )
 

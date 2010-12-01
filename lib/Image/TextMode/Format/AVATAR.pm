@@ -16,6 +16,10 @@ Image::TextMode::Format::AVATAR - read and write AVATAR files
 
 =head1 DESCRIPTION
 
+AVATAR stands for Advanced Video Attribute Terminal Assembler and Recreator. 
+By using shorter, binary-based "escape codes" the AVATAR format generally
+produces smaller files in comparison to ANSI-standard files.
+
 =head1 METHODS
 
 =head2 new( %args )
