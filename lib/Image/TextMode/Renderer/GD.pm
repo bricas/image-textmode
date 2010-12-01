@@ -4,6 +4,7 @@ use Moose;
 use GD;
 use Image::TextMode::Palette::ANSI;
 use Carp 'croak';
+use File::ShareDir;
 
 =head1 NAME
 
@@ -237,13 +238,23 @@ sub _render_frame {
 
 sub _font_to_gd {
     my ( $font, $options ) = @_;
+    my $ninth = $options->{ '9th_bit' };
+    my $name = ( split( m{\::}, ref $font ) )[ -1 ];
+
+    if (my $fn = eval {
+            File::ShareDir::dist_file( 'Image-TextMode',
+                lc $name . ( $ninth ? '_9b' : '' ) . '.fnt' );
+        }
+        )
+    {
+        return GD::Font->load( $fn );
+    }
 
     require File::Temp;
     my $temp = File::Temp->new;
 
     binmode( $temp );
 
-    my $ninth     = $options->{ '9th_bit' };
     my $chars     = $font->chars;
     my $font_size = @$chars;
 

@@ -14,12 +14,13 @@ requires 'GD'    => '2.30';
 requires 'Module::Pluggable';
 requires 'Getopt::Long';
 requires 'Pod::Usage';
+requires 'File::ShareDir';
 
 test_requires 'Test::More';
-
 tests_recursive;
 
 install_script 'textmode2png';
+install_share;
 
 repository 'http://github.com/bricas/image-textmode';
 
