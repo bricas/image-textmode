@@ -2,6 +2,7 @@ Revision history for Perl extension Image::TextMode.
 
 0.10  TO BE RELEASED
     - save cpu cycles by shipping pre-built GD fonts
+    - add PCBoard format support
 
 0.09  Fri Mar 19 2010
     - clean whitespace from argument buffer in ANSI reader
