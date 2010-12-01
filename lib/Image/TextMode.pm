@@ -48,9 +48,13 @@ image such as an ANSI file.
 
 =item * L<Image::TextMode::Format::ANSIMation>
 
+=item * L<Image::TextMode::Format::AVATAR>
+
 =item * L<Image::TextMode::Format::Bin>
 
 =item * L<Image::TextMode::Format::IDF>
+
+=item * L<Image::TextMode::Format::PCBoard>
 
 =item * L<Image::TextMode::Format::Tundra>
 
