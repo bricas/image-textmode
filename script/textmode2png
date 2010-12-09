@@ -29,27 +29,8 @@ my $method         = $options{ thumbnail } ? 'thumbnail' : 'fullscale';
 my $force_filename = ( @files > 1 || !$options{ output } ) ? 1 : 0;
 my $renderer       = Image::TextMode::Renderer::GD->new;
 
-my ( $font, $pal ) = @options{ qw( font pal ) };
-if ( $font ) {
-    my $class = "Image::TextMode::Font::${font}";
-    my $return = eval "use $class;";
-
-    if( !$return && $@ ) {
-        croak "Unable to load font '$font'";
-    }
-
-    $font = $class->new;
-}
-if ( $pal ) {
-    my $class = "Image::TextMode::Palette::${pal}";
-    my $return = eval "use $class;";
-
-    if( !$return && $@ ) {
-        croak "Unable to load palette '$pal'";
-    }
-
-    $pal = $class->new;
-}
+$render_options->{ font    } ||= $options{ font };
+$render_options->{ palette } ||= $options{ pal };
 
 for my $file ( @files ) {
     croak "file not found: '$file'"    if !-e $file;
@@ -82,9 +63,6 @@ for my $file ( @files ) {
     $output =~ s{[^.]+?$}{gif}s
         if $output ne q{-}
             && $image->isa( 'Image::TextMode::Format::ANSIMation' );
-
-    $image->font( $font )   if $font;
-    $image->palette( $pal ) if $pal;
 
     my $data = $renderer->$method( $image, $render_options );
 

@@ -1,5 +1,9 @@
 Revision history for Perl extension Image::TextMode.
 
+0.11  TO BE RELEASED
+    - allow simple font and palette overrides in GD renderer; fix
+      textmode2png script to match
+
 0.10  Wed Dec 01 2010
     - save cpu cycles by shipping pre-built GD fonts
     - add PCBoard format support

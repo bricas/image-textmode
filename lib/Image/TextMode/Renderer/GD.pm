@@ -137,6 +137,10 @@ following options to change the output:
 
 =item * ced - CED mode (black text on gray background) (default: false)
 
+=item * font - override the image font; either a font object, or the last part of the clas name (e.g. 8x8)
+
+=item * palette - override the image palette; either a palette object, or the last part of the class name (e.g. VGA)
+
 =item * format - the output format (default: png)
 
 =back
@@ -169,22 +173,37 @@ sub fullscale {
 sub _prepare_options {
     my ( $self, $source, $options ) = @_;
 
-    my $font = _font_to_gd( $source->font,
+    $options->{ font }    ||= $source->font;
+    $options->{ palette } ||= $source->palette;
+    $options->{ palette } = Image::TextMode::Palette::ANSI->new
+        if $options->{ ced };
+
+    for ( qw( font palette ) ) {
+        next if ref $options->{ $_ };
+
+        my $class
+            = 'Image::TextMode::' . ucfirst( $_ ) . '::' . $options->{ $_ };
+
+        if ( !eval { Class::MOP::load_class( $class ) } ) {
+            croak sprintf( "Unable to load ${_} '%s'", $options->{ $_ } );
+        }
+
+        $options->{ $_ } = $class->new;
+
+    }
+
+    $options->{ font } = _font_to_gd( $options->{ font },
         { '9th_bit' => delete $options->{ '9th_bit' } } );
 
     $options->{ truecolor } ||= 0;
-    $options->{ font } = $font;
-    $options->{ palette }
-        = $options->{ ced }
-        ? Image::TextMode::Palette::ANSI->new
-        : $source->palette;
-    $options->{ format } ||= 'png';
+    $options->{ format }    ||= 'png';
 
     my ( $width, $height ) = $source->dimensions;
     $height = $options->{ crop } if $options->{ crop };
-    $options->{ full_dimensions }
-        = [ $width * $font->width, $height * $font->height ];
-
+    $options->{ full_dimensions } = [
+        $width * $options->{ font }->width,
+        $height * $options->{ font }->height
+    ];
 }
 
 sub _render_frame {
