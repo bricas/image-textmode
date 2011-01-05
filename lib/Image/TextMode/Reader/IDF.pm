@@ -68,7 +68,7 @@ sub _parse_palette {
     my @colors;
     for ( 0 .. 15 ) {
         my $offset = $_ * 3;
-        push @colors, [ map { $_ << 2 } @pal[ $offset .. $offset + 2 ] ],;
+        push @colors, [ map { $_ << 2 | $_ >> 4 } @pal[ $offset .. $offset + 2 ] ],;
     }
 
     $image->palette(

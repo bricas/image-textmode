@@ -102,9 +102,9 @@ sub _parse_palette {
     for my $i ( 0 .. @values / 3 - 1 ) {
         my $offset = $i * 3;
         $palette[ $i ] = [
-            $values[ $offset ] * 4,
-            $values[ $offset + 1 ] * 4,
-            $values[ $offset + 2 ] * 4,
+            $values[ $offset ] << 2 | $values[ $offset ] >> 4,
+            $values[ $offset + 1 ] << 2 | $values[ $offset + 1 ] >> 4,
+            $values[ $offset + 2 ] << 2 | $values[ $offset + 2 ] >> 4,
         ];
     }
 
