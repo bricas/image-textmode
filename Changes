@@ -1,6 +1,6 @@
 Revision history for Perl extension Image::TextMode.
 
-0.12  TO BE RELEASED
+0.12  Thu Jan 06 2011
     - use proper color intensity in palettes
     - use proper bitshifting when parsing XBin/IDF/ADF palettes
     - updated 8x16 font to match original MSDOS font
