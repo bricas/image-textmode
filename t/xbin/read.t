@@ -35,7 +35,7 @@ use_ok( 'Image::TextMode::Format::XBin' );
     isa_ok( $pal, 'Image::TextMode::Palette' );
 
     # modified 'brown' color
-    is_deeply( $pal->colors->[ 6 ], [ 252, 252, 252 ],
+    is_deeply( $pal->colors->[ 6 ], [ 255, 255, 255 ],
         'pal: modified brown' );
 
     is_deeply(
