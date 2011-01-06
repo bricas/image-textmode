@@ -4,6 +4,7 @@ Revision history for Perl extension Image::TextMode.
     - use proper color intensity in palettes
     - use proper bitshifting when parsing XBin/IDF/ADF palettes
     - updated 8x16 font to match original MSDOS font
+    - do not combine current attr with new bg/fg values in PCBoard reader
 
 0.11  Thu Dec 11 2010
     - allow simple font and palette overrides in GD renderer; fix

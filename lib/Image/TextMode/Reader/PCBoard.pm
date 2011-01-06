@@ -113,8 +113,7 @@ sub _read {
 sub set_attributes {
     my ( $self, $bg, $fg ) = @_;
 
-    my $attr = $self->attr;
-    $self->attr( $attr & ( $bg << 4 ) + $fg );
+    $self->attr( ( $bg << 4 ) + $fg );
 }
 
 sub clear_screen {
