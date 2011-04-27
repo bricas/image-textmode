@@ -103,6 +103,17 @@ sub _read {
                 elsif ( $ch eq 'D' ) {
                     $self->move_left( @args );
                 }
+                elsif ( $ch eq 'E' ) {
+                    $self->move_down( @args );
+                    $self->x( 0 );
+                }
+                elsif ( $ch eq 'F' ) {
+                    $self->move_up( @args );
+                    $self->x( 0 );
+                }
+                elsif ( $ch eq 'G' ) {
+                    $self->x( ( $args[ 0 ] || 1 ) - 1 );
+                }
                 elsif ( $ch eq 's' ) {
                     $self->save_position( @args );
                 }
@@ -174,7 +185,6 @@ sub move_up {
     my $self = shift;
     my $y = $self->y - ( shift || 1 );
     $y = 0 if $y < 0;
-
     $self->y( $y );
 }
 
@@ -187,9 +197,11 @@ sub move_down {
 
 sub move_right {
     my $self = shift;
-    my $x = shift || 1;
+    my $x = $self->x + ( shift || 1 );
 
-    $self->x( $self->x + $x );
+    # check $x against $self->linewrap?
+
+    $self->x( $x );
 }
 
 sub move_left {
@@ -239,6 +251,9 @@ sub clear_screen {
     # 2 - clear whole screen
 
     $self->image->clear_screen;
+
+    $self->x( 0 );
+    $self->y( 0 );
 }
 
 sub new_line {

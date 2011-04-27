@@ -1,5 +1,9 @@
 Revision history for Perl extension Image::TextMode.
 
+0.13  TO BE RELEASED
+    - implement ANSI parsing for codes E, F and G
+    - reset cursor to (0,0) after a clear screen
+
 0.12  Thu Jan 06 2011
     - use proper color intensity in palettes
     - use proper bitshifting when parsing XBin/IDF/ADF palettes
