@@ -1,71 +1,71 @@
 Revision history for Perl extension Image::TextMode.
 
-0.13  TO BE RELEASED
-    - implement ANSI parsing for codes E, F and G
-    - reset cursor to (0,0) after a clear screen
+0.13 2011-04-27
+ - implement ANSI parsing for codes E, F and G
+ - reset cursor to (0,0) after a clear screen
 
-0.12  Thu Jan 06 2011
-    - use proper color intensity in palettes
-    - use proper bitshifting when parsing XBin/IDF/ADF palettes
-    - updated 8x16 font to match original MSDOS font
-    - do not combine current attr with new bg/fg values in PCBoard reader
+0.12 2011-01-06
+ - use proper color intensity in palettes
+ - use proper bitshifting when parsing XBin/IDF/ADF palettes
+ - updated 8x16 font to match original MSDOS font
+ - do not combine current attr with new bg/fg values in PCBoard reader
 
-0.11  Thu Dec 11 2010
-    - allow simple font and palette overrides in GD renderer; fix
-      textmode2png script to match
+0.11 2010-12-11
+ - allow simple font and palette overrides in GD renderer; fix textmode2png
+   script to match
 
-0.10  Wed Dec 01 2010
-    - save cpu cycles by shipping pre-built GD fonts
-    - add PCBoard format support
-    - add AVATAR format support
+0.10 2010-12-01
+ - save cpu cycles by shipping pre-built GD fonts
+ - add PCBoard format support
+ - add AVATAR format support
 
-0.09  Fri Mar 19 2010
-    - clean whitespace from argument buffer in ANSI reader
-    - add as_ascii() method to animations
-    - attempt to handle undef datatypes and filetypes in general
-    - handle invalid datatypes in Loader to match invalid filetypes
+0.09 2010-03-19
+ - clean whitespace from argument buffer in ANSI reader
+ - add as_ascii() method to animations
+ - attempt to handle undef datatypes and filetypes in general
+ - handle invalid datatypes in Loader to match invalid filetypes
 
-0.08  Tue Feb 23 2010
-    - documentation cleanup for Renderer/GD.pm and textmode2png script
-    - convert read/render options specified as "true" and "false" strings
-      to boolean values
-    - avoid undef warnings in Loader when working with files with SAUCE
-      metadata, but no filetype
-    - avoid autovivification in as_ascii method
-    - add IMAGE_TEXTMODE_NOXS ENV variable to ignore XS extensions
+0.08 2010-02-23
+ - documentation cleanup for Renderer/GD.pm and textmode2png script
+ - convert read/render options specified as "true" and "false" strings to
+   boolean values
+ - avoid undef warnings in Loader when working with files with SAUCE
+   metadata, but no filetype
+ - avoid autovivification in as_ascii method
+ - add IMAGE_TEXTMODE_NOXS ENV variable to ignore XS extensions
 
-0.07  Fri Jan 01 2010
-    - fix readopt option in textmode2png script
-    - Add basic nearest neighbor textmode scaling 
-    - fix pod typo in SAUCE.pm and Renderer/GD.pm
-    - reduce code complexity in as_ascii method
+0.07 2010-01-01
+ - fix readopt option in textmode2png script
+ - Add basic nearest neighbor textmode scaling 
+ - fix pod typo in SAUCE.pm and Renderer/GD.pm
+ - reduce code complexity in as_ascii method
 
-0.06  Thu Oct 29 2009
-    - conform to Perl::Critic policies
-    - add binmode for output from textmode2png script
-    - fix undef warning when no output format is specified for thumbnail()
-    - fix docs for truecolor rendering option
+0.06 2009-10-29
+ - conform to Perl::Critic policies
+ - add binmode for output from textmode2png script
+ - fix undef warning when no output format is specified for thumbnail()
+ - fix docs for truecolor rendering option
 
-0.05  Fri Feb 13 2009
-    - tidy up ANSI and ANSIMation write() to only write the columns needed
-    - add basic RLE encoding to ANSI and ANSIMation write()
-    - fix up sauce read on files less than 128 bytes
-    - reset the state of the ANSI parser for each read()
+0.05 2009-02-13
+ - tidy up ANSI and ANSIMation write() to only write the columns needed
+ - add basic RLE encoding to ANSI and ANSIMation write()
+ - fix up sauce read on files less than 128 bytes
+ - reset the state of the ANSI parser for each read()
 
-0.04  Mon Feb 09 2009
-    - fix XBin write()
-    - convert "use constant" to "my $var"
+0.04 2009-02-09
+ - fix XBin write()
+ - convert "use constant" to "my $var"
 
-0.03  Thu Feb 05 2009
-    - implement write() for IDF format
-    - implement write() for Tundra format
-    - implement write() for XBin format
-    - implement write() for ANSI format
-    - implement write() for ANSIMation format
+0.03 2009-02-05
+ - implement write() for IDF format
+ - implement write() for Tundra format
+ - implement write() for XBin format
+ - implement write() for ANSI format
+ - implement write() for ANSIMation format
 
-0.02  Wed Jan 14 2009
-    - pod fixes
+0.02 2009-01-14
+ - pod fixes
 
-0.01  Fri Oct 03 2008
-    - original version
+0.01 2008-10-03
+ - original version
 

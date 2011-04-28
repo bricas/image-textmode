@@ -44,11 +44,10 @@ my @tests = (
         ],
     },
     {   file     => 'clearscreen.ans',
-        width    => 12,
+        width    => 4,
         height   => 1,
         expected => [
-            [   ( undef ) x 8,
-                { char => 'T', attr => 8 },
+            [   { char => 'T', attr => 8 },
                 { char => 'E', attr => 207 },
                 { char => 'S', attr => 68 },
                 { char => 'T', attr => 35 },
