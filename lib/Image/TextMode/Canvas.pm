@@ -132,6 +132,22 @@ sub clear_line {
     $self->width( $y ) if $y > $self->width;
 }
 
+=head2 delete_line( $y )
+
+Removes the line from the canvas, moving all subsquent lines up.
+
+=cut
+
+sub delete_line {
+    my $self  = shift;
+    my $y     = shift;
+
+    return unless exists $self->pixeldata->[ $y ];
+
+    delete @{ $self->pixeldata }[ $y ];
+    $self->height( $self->height - 1 );
+}
+
 =head2 as_ascii( )
 
 Returns only the character data stored in the canvas.

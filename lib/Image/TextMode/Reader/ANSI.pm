@@ -246,14 +246,20 @@ sub clear_screen {
     my $self = shift;
     my $arg  = shift;
 
-    # no args - clear to end of screen, including cursor
-    # 1 - clear to start of screen, including cursor
-    # 2 - clear whole screen
-
-    $self->image->clear_screen;
-
-    $self->x( 0 );
-    $self->y( 0 );
+    if( !$arg ) { # clear to end of screen, including cursor
+        my $next = $self->y + 1;
+        $self->image->delete_line( $next ) for 1..$self->image->height - $next + 1;
+        $self->image->clear_line( $self->y, [ $self->x, -1 ] );
+    }
+    elsif( $arg == 1 ) { # clear to start of screen, including cursor
+        $self->image->clear_line( $_ ) for 0..$self->y - 1;
+        $self->image->clear_line( $self->y, [ 0, $self->x ] );
+    }
+    elsif( $arg == 2 ) { # clear whole screen
+        $self->image->clear_screen;
+        $self->x( 0 );
+        $self->y( 0 );
+    }
 }
 
 sub new_line {
