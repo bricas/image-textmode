@@ -1,5 +1,8 @@
 Revision history for Perl extension Image::TextMode.
 
+0.15 TO BE RELEASED
+ - make sure line is defined before we try to clear it
+
 0.14 2011-05-02
  - add delete_line() to canvas, which removes the line entirely instead of 
    just clearing its contents

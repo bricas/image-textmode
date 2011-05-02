@@ -121,6 +121,8 @@ sub clear_line {
     my $y     = shift;
     my $range = shift;
 
+    return unless defined $self->pixeldata->[ $y ];
+
     if ( !$range ) {
         $self->pixeldata->[ $y ] = [];
     }
