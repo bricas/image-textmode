@@ -125,11 +125,10 @@ sub clear_line {
         $self->pixeldata->[ $y ] = [];
     }
     else {
+        $range->[ 1 ] = @{ $self->pixeldata->[ $y ] } - 1 if $range->[ 1 ] == -1;
         $self->pixeldata->[ $y ]->[ $_ ] = undef
             for $range->[ 0 ] .. $range->[ 1 ];
     }
-
-    $self->width( $y ) if $y > $self->width;
 }
 
 =head2 delete_line( $y )

@@ -1,4 +1,4 @@
-use Test::More tests => 36;
+use Test::More tests => 64;
 
 use strict;
 use warnings;
@@ -43,7 +43,35 @@ my @tests = (
             ]
         ],
     },
-    {   file     => 'clearscreen.ans',
+    {   file     => 'clearscreen-0.ans',
+        width    => 1,
+        height   => 4,
+        expected => [
+            [   { char => 'T', attr => 8 },
+            ],
+            [   { char => 'E', attr => 207 },
+            ],
+            [   { char => 'S', attr => 68 },
+            ],
+            [   { char => 'T', attr => 35 },
+            ]
+        ],
+    },
+    {   file     => 'clearscreen-1.ans',
+        width    => 7,
+        height   => 2,
+        expected => [
+            [
+            ],
+            [   ( undef ) x 3,
+                { char => 'T', attr => 8 },
+                { char => 'E', attr => 207 },
+                { char => 'S', attr => 68 },
+                { char => 'T', attr => 35 },
+            ]
+        ],
+    },
+    {   file     => 'clearscreen-2.ans',
         width    => 4,
         height   => 1,
         expected => [
@@ -54,7 +82,31 @@ my @tests = (
             ]
         ],
     },
-    {   file     => 'clearline.ans',
+    {   file     => 'clearline-0.ans',
+        width    => 4,
+        height   => 1,
+        expected => [
+            [
+                { char => 'T', attr => 8 },
+                { char => 'E', attr => 207 },
+                { char => 'S', attr => 68 },
+                { char => 'T', attr => 35 },
+            ]
+        ],
+    },
+    {   file     => 'clearline-1.ans',
+        width    => 7,
+        height   => 1,
+        expected => [
+            [   ( undef ) x 3,
+                { char => 'T', attr => 8 },
+                { char => 'E', attr => 207 },
+                { char => 'S', attr => 68 },
+                { char => 'T', attr => 35 },
+            ]
+        ],
+    },
+    {   file     => 'clearline-2.ans',
         width    => 12,
         height   => 1,
         expected => [
