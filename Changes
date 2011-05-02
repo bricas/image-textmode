@@ -1,6 +1,6 @@
 Revision history for Perl extension Image::TextMode.
 
-0.15 TO BE RELEASED
+0.15 2011-05-02
  - make sure line is defined before we try to clear it
 
 0.14 2011-05-02
