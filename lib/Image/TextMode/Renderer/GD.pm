@@ -182,7 +182,7 @@ sub _prepare_options {
         next if ref $options->{ $_ };
 
         my $class
-            = 'Image::TextMode::' . ucfirst( $_ ) . '::' . $options->{ $_ };
+            = 'Image::TextMode::' . ucfirst( $_ ) . q(::) . $options->{ $_ };
 
         if ( !eval { Class::MOP::load_class( $class ) } ) {
             croak sprintf( "Unable to load ${_} '%s'", $options->{ $_ } );
