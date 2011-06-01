@@ -1,5 +1,9 @@
 Revision history for Perl extension Image::TextMode.
 
+0.16 TO BE RELEASED
+ - dos_aspect, a DOS aspect ratio emulation mode option, has been added to 
+   the GD renderer
+
 0.15 2011-05-02
  - make sure line is defined before we try to clear it
 

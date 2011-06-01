@@ -135,6 +135,8 @@ following options to change the output:
 
 =item * 9th_bit - compatibility option to enable a ninth column in the font (default: false)
 
+=item * dos_apsect - emulate the aspect ratio from DOS (default: false)
+
 =item * ced - CED mode (black text on gray background) (default: false)
 
 =item * font - override the image font; either a font object, or the last part of the clas name (e.g. 8x8)
@@ -193,7 +195,7 @@ sub _prepare_options {
     }
 
     $options->{ font } = _font_to_gd( $options->{ font },
-        { '9th_bit' => delete $options->{ '9th_bit' } } );
+        { '9th_bit' => $options->{ '9th_bit' } } );
 
     $options->{ truecolor } ||= 0;
     $options->{ format }    ||= 'png';
@@ -204,6 +206,12 @@ sub _prepare_options {
         $width * $options->{ font }->width,
         $height * $options->{ font }->height
     ];
+
+    if ( $options->{ dos_aspect } ) {
+        my $ratio = $options->{ '9th_bit' } ? 1.35 : 1.2;
+        $options->{ full_dimensions }->[ 1 ]
+            = int( $options->{ full_dimensions }->[ 1 ] * $ratio + 0.5 );
+    }
 }
 
 sub _render_frame {
@@ -247,6 +255,14 @@ sub _render_frame {
                 $pixel->char, $colors->[ $ced ? 0 : $pixel->fg ]
             );
         }
+    }
+
+    if ( $options->{ dos_aspect } ) {
+        my $resized = GD::Image->new( $image->getBounds, 1 );
+        $resized->copyResampled( $image, 0, 0, 0, 0,
+            @{ $options->{ full_dimensions } },
+            $image->width, $height * $ftheight );
+        $image = $resized;
     }
 
     my $output = $options->{ format };
