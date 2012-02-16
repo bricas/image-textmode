@@ -8,7 +8,11 @@ use Image::TextMode::Renderer::GD;
 my @corpus = (
     {   input  => '42_WOLVR.XB',
         class  => 'XBin',
-        output => 'xbin',
+        output => 'xbin_uncompressed',
+    },
+    {   input  => 'CT-XBIN.XB',
+        class  => 'XBin',
+        output => 'xbin_compressed',
     },
     {   input      => '0994MEMB.CIA',
         class      => 'ANSI',
