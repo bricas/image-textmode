@@ -21,7 +21,8 @@ sub _read {
     # font and palette data are stored at the bottom of the file
     seek( $fh, -48 - 4096, 2 );
     if ( $image->has_sauce ) {
-        seek( $fh, -128, 1 );
+        my $s = $image->sauce;
+        seek( $fh, -128 - ( $s->comment_count ? 5 + 64 * $s->comment_count : 0 ), 1 );
     }
 
     my $max = tell( $fh );
