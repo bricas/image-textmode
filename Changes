@@ -1,5 +1,8 @@
 Revision history for Perl extension Image::TextMode.
 
+0.17 TO BE RELEASED
+ - fix IDF reading when a SAUCE record is found
+
 0.16 2012-02-15
  - dos_aspect, a DOS aspect ratio emulation mode option, has been added to 
    the GD renderer
