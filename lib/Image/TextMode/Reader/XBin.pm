@@ -121,7 +121,7 @@ sub _parse_compressed {
     my $height = $image->header->{ height };
     my $info;
 
-    while ( read( $fh, $info, 1 ) ) {
+    READ: while ( read( $fh, $info, 1 ) ) {
         $info = unpack( 'C', $info );
         last if $info == 26;
 
@@ -159,7 +159,7 @@ sub _parse_compressed {
             if ( $x == $width ) {
                 $x = 0;
                 $y++;
-                last if $y == $height;
+                last READ if $y == $height;
             }
         }
     }
