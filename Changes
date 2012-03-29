@@ -1,5 +1,8 @@
 Revision history for Perl extension Image::TextMode.
 
+0.18 TO BE RELEASE
+ - do not special case chr(26) in XBin reading, as it likely does not mean EOF
+
 0.17 2012-02-27
  - fix IDF reading when a SAUCE record is found
  - fix XBin reading to stop when the height indicated in the header is reached

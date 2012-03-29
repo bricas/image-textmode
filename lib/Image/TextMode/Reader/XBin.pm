@@ -123,7 +123,6 @@ sub _parse_compressed {
 
     READ: while ( read( $fh, $info, 1 ) ) {
         $info = unpack( 'C', $info );
-        last if $info == 26;
 
         my $type    = $info & $COMPRESSION_TYPE;
         my $counter = ( $info & $COMPRESSION_COUNTER ) + 1;
@@ -174,7 +173,6 @@ sub _parse_uncompressed {
     my $height = $image->header->{ height };
     while ( read( $fh, $chardata, 2 ) ) {
         my @data = unpack( 'aC', $chardata );
-        last if $data[ 0 ] eq $eof_char;
 
         $image->putpixel( { char => $data[ 0 ], attr => $data[ 1 ] },
             $x, $y, );
