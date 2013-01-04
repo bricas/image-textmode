@@ -242,7 +242,7 @@ sub _render_frame {
                 $image->filledRectangle(
                     $x * $ftwidth,
                     $y * $ftheight,
-                    ( $x + 1 ) * $ftwidth,
+                    ( $x + 1 ) * $ftwidth - 1,
                     ( $y + 1 ) * $ftheight - 1,
                     $colors->[ $ced ? 7 : $pixel->bg ]
                 );
@@ -333,7 +333,7 @@ Brian Cassidy E<lt>bricas@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2008-2012 by Brian Cassidy
+Copyright 2008-2013 by Brian Cassidy
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 

@@ -1,5 +1,8 @@
 Revision history for Perl extension Image::TextMode.
 
+0.19 2013-01-03
+ - fix off-by-one error in background rendering
+
 0.18 2012-03-30
  - do not special case chr(26) in XBin reading, as it likely does not mean EOF
 
