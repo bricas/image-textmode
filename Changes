@@ -1,5 +1,8 @@
 Revision history for Perl extension Image::TextMode.
 
+0.20 2013-03-12
+ - update to proper 8x16 amiga font
+
 0.19 2013-01-03
  - fix off-by-one error in background rendering
 
