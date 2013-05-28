@@ -270,6 +270,26 @@ sub write {    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
 
 }
 
+=head2 record_size( )
+
+Return the size of the SAUCE record in bytes.
+
+=cut
+
+sub record_size {
+    my $self = shift;
+
+    return 0 unless $self->has_sauce;
+
+    my $size = 128;
+
+    if( $self->comment_count ) {
+        $size += 5 + ( 64 * $self->comment_count );
+    }
+
+    return $size;
+}
+
 =head2 datatype( )
 
 The string name of the data represented in datatype_id.

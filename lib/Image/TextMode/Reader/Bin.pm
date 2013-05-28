@@ -17,7 +17,7 @@ sub _read {
     my $chardata;
     while ( read( $fh, $chardata, 2 ) ) {
         my @data = unpack( 'aC', $chardata );
-        last if $data[ 0 ] eq $eof;
+        last if tell( $fh ) > $options->{ filesize } || $data[ 0 ] eq $eof;
         $image->putpixel( { char => $data[ 0 ], attr => $data[ 1 ] }, $x,
             $y );
 

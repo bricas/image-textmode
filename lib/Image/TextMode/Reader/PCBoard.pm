@@ -53,6 +53,8 @@ sub _read {
     while ( defined( my $ch = shift @str ) ) {
         my $state = $self->state;
 
+        last if tell( $fh ) > $options->{ filesize };
+
         if ( $state == $S_TXT ) {
             if ( $ch eq "\N{SUBSTITUTE}" ) {
                 $self->state( $S_END );

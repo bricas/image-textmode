@@ -35,6 +35,7 @@ sub _read {
 
     my $ch;
     while ( read( $fh, $ch, 1 ) ) {
+        last if tell( $fh ) > $options->{ filesize };
         if ( $ch eq "\N{SUBSTITUTE}" ) {
             last;
         }

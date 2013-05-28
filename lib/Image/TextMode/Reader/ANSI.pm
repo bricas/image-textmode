@@ -49,6 +49,7 @@ sub _read {
     my ( $argbuf, $ch );
     while ( read( $fh, $ch, 1 ) ) {
         my $state = $self->state;
+        last if tell( $fh ) > $options->{ filesize };
         if ( $state == $S_TXT ) {
             if ( $ch eq "\N{SUBSTITUTE}" ) {
                 $self->state( $S_END );

@@ -23,6 +23,8 @@ sub _read {
     $pal->colors->[ $pal_index++ ] = [ 0, 0, 0 ];
 
     while ( read( $fh, $buffer, 1 ) ) {
+        last if tell( $fh ) > $options->{ filesize };
+
         my $command = ord( $buffer );
 
         if ( $command == 1 ) {    # position
