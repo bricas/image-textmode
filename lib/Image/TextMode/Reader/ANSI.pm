@@ -23,6 +23,10 @@ has 'y' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
 
 has 'attr' => ( is => 'rw', isa => 'Int', default => sub { 7 } );
 
+has 'rgbattr' => ( is => 'rw', isa => 'HashRef', default => sub { { fg => [ 0xaa, 0xaa, 0xaa ], bg => [ 0, 0, 0 ] } } );
+
+has 'is_truecolor' => ( is => 'rw', isa => 'Bool', default => sub { 0 } );
+
 has 'state' => ( is => 'rw', isa => 'Int', default => sub { $S_TXT } );
 
 has 'image' => ( is => 'rw', isa => 'Object' );
@@ -124,6 +128,9 @@ sub _read {
                 elsif ( $ch eq 's' ) {
                     $self->save_position( @args );
                 }
+                elsif ( $ch eq 't' ) {
+                    $self->rgb( @args );
+                }
                 elsif ( $ch eq 'u' ) {
                     $self->restore_position( @args );
                 }
@@ -169,35 +176,48 @@ sub set_attributes {
 
     # TODO: Handle calls when truecolor exists
     my $attr = $self->attr;
+    my $rgba = $self->rgbattr;
+    my $pal  = $self->image->palette->colors;
 
     foreach ( @args ) {
         if ( $_ == 0 ) {
             $attr = 7;
+            $rgba->{ fg } = $pal->[ 7 ];
+            $rgba->{ bg } = $pal->[ 0 ];
         }
         elsif ( $_ == 1 ) {
             $attr |= 8;
+            $rgba->{ fg } = $pal->[ ( $attr & 15 ) ];
         }
         elsif ( $_ == 2 || $_ == 22 ) {
             $attr &= 247;
+            $rgba->{ fg } = $pal->[ ( $attr & 15 ) ];
         }
         elsif ( $_ == 5 ) {
             $attr |= 128;
+            $rgba->{ bg } = $pal->[ ( $attr & 240 ) >> 4 ];
         }
         elsif ( $_ == 7 || $_ == 27 ) {
             my $oldfg = $attr & 15;
             my $oldbg = ( $attr & 240 ) >> 4;
             $attr = $oldbg | ( $oldfg << 4 );
+            
+            $rgba->{ fg } = $pal->[ ( $attr & 15 ) ];
+            $rgba->{ bg } = $pal->[ ( $attr & 240 ) >> 4 ];
         }
         elsif ( $_ == 25 ) {
             $attr &= 127;
+            $rgba->{ bg } = $pal->[ ( $attr & 240 ) >> 4 ];
         }
         elsif ( $_ >= 30 and $_ <= 37 ) {
             $attr &= 248;
             $attr |= ( $_ - 30 );
+            $rgba->{ fg } = $pal->[ ( $attr & 15 ) ];
         }
         elsif ( $_ >= 40 and $_ <= 47 ) {
             $attr &= 143;
             $attr |= ( ( $_ - 40 ) << 4 );
+            $rgba->{ bg } = $pal->[ ( $attr & 240 ) >> 4 ];
         }
     }
 
@@ -285,6 +305,17 @@ sub clear_screen {
     }
 }
 
+sub rgb {
+    my $self = shift;
+    my $mode = shift;
+    my @rgb  = @_;
+
+    $self->image->render_options->{ truecolor } = 1;
+    $self->is_truecolor( 1 );
+
+    $self->rgbattr->{ $mode == 0 ? 'bg' : 'fg' } = [ @rgb ];
+}
+
 sub feature_on {
     my $self = shift;
     my $arg  = shift;
@@ -326,13 +357,25 @@ sub store {
     my $char = shift;
     my $x    = shift;
     my $y    = shift;
-    my $attr = shift || $self->attr;
+    my $attr = shift;
+
+    my $pal = $self->image->palette->colors;
+
+    my %colors = ( attr => defined $attr ? $attr : $self->attr );
+    if( $self->is_truecolor ) {
+        delete $colors{ attr };
+        $attr = defined $attr ? $attr : $self->rgbattr;
+        push @{ $pal }, $attr->{ fg };
+        $colors{ fg } = scalar @{ $pal } - 1;
+        push @{ $pal }, $attr->{ bg };
+        $colors{ bg } = scalar @{ $pal } - 1;
+    }
 
     if ( defined $x and defined $y ) {
-        $self->image->putpixel( { char => $char, attr => $attr }, $x, $y );
+        $self->image->putpixel( { char => $char, %colors }, $x, $y );
     }
     else {
-        $self->image->putpixel( { char => $char, attr => $attr },
+        $self->image->putpixel( { char => $char, %colors },
             $self->x, $self->y );
         $self->x( $self->x + 1 );
     }
@@ -419,6 +462,10 @@ Clears all data on the canvas.
 =head2 clear_line( $y )
 
 Clears the line at C<$y>.
+
+=head2 rgb( $mode, $r, $g, $b )
+
+Set the attribute to RGB color. Also, sets image to true-color mode.
 
 =head2 feature_on( $code )
 
