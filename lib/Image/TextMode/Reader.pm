@@ -32,7 +32,9 @@ sub read {    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
 
     $image->sauce->read( $fh );
 
-    $options->{ filesize } = -s $fh;
+    seek( $fh, 0, 2 );
+    $options->{ filesize } = tell $fh;
+    seek( $fh, 0, 0 );
 
     if( $image->has_sauce ) {
         if ( !$options->{ width } ) {
