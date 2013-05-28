@@ -114,6 +114,12 @@ sub _read {
                 elsif ( $ch eq 'G' ) {
                     $self->x( ( $args[ 0 ] || 1 ) - 1 );
                 }
+                elsif ( $ch eq 'h' ) {
+                    $self->feature_on( $args[ 0 ] );
+                }
+                elsif ( $ch eq 'l' ) {
+                    $self->feature_off( $args[ 0 ] );
+                }
                 elsif ( $ch eq 's' ) {
                     $self->save_position( @args );
                 }
@@ -262,6 +268,24 @@ sub clear_screen {
     }
 }
 
+sub feature_on {
+    my $self = shift;
+    my $arg  = shift;
+
+    if( $arg eq '?33' ) {
+        $self->image->render_options->{ blink_mode } = 0;
+    }
+}
+
+sub feature_off {
+    my $self = shift;
+    my $arg  = shift;
+
+    if( $arg eq '?33' ) {
+        $self->image->render_options->{ blink_mode } = 1;
+    }
+}
+
 sub new_line {
     my $self = shift;
 
@@ -378,6 +402,14 @@ Clears all data on the canvas.
 =head2 clear_line( $y )
 
 Clears the line at C<$y>.
+
+=head2 feature_on( $code )
+
+Enables a feature.
+
+=head2 feature_off( $code )
+
+Disables a feature.
 
 =head2 new_line( )
 
