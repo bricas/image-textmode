@@ -170,15 +170,25 @@ sub set_attributes {
     my $attr = $self->attr;
 
     foreach ( @args ) {
-        # TODO: Handle 2/22/25/7/27
         if ( $_ == 0 ) {
             $attr = 7;
         }
         elsif ( $_ == 1 ) {
             $attr |= 8;
         }
+        elsif ( $_ == 2 || $_ == 22 ) {
+            $attr &= 247;
+        }
         elsif ( $_ == 5 ) {
             $attr |= 128;
+        }
+        elsif ( $_ == 7 || $_ == 27 ) {
+            my $oldfg = $attr & 15;
+            my $oldbg = ( $attr & 240 ) >> 4;
+            $attr = $oldbg | ( $oldfg << 4 );
+        }
+        elsif ( $_ == 25 ) {
+            $attr &= 127;
         }
         elsif ( $_ >= 30 and $_ <= 37 ) {
             $attr &= 248;
