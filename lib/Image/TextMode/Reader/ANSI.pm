@@ -166,25 +166,31 @@ sub set_position {
 sub set_attributes {
     my ( $self, @args ) = @_;
 
+    # TODO: Handle calls when truecolor exists
+    my $attr = $self->attr;
+
     foreach ( @args ) {
+        # TODO: Handle 2/22/25/7/27
         if ( $_ == 0 ) {
-            $self->attr( 7 );
+            $attr = 7;
         }
         elsif ( $_ == 1 ) {
-            $self->attr( $self->attr | 8 );
+            $attr |= 8;
         }
         elsif ( $_ == 5 ) {
-            $self->attr( $self->attr | 128 );
+            $attr |= 128;
         }
         elsif ( $_ >= 30 and $_ <= 37 ) {
-            $self->attr( $self->attr & 248 );
-            $self->attr( $self->attr | ( $_ - 30 ) );
+            $attr &= 248;
+            $attr |= ( $_ - 30 );
         }
         elsif ( $_ >= 40 and $_ <= 47 ) {
-            $self->attr( $self->attr & 143 );
-            $self->attr( $self->attr | ( ( $_ - 40 ) << 4 ) );
+            $attr &= 143;
+            $attr |= ( ( $_ - 40 ) << 4 );
         }
     }
+
+    $self->attr( $attr );
 }
 
 sub move_up {
