@@ -8,6 +8,8 @@ use Image::TextMode::Palette::ANSI;
 
 has '+palette' => ( default => sub { Image::TextMode::Palette::ANSI->new } );
 
+has '+render_options' => ( default => sub { { blink_mode => 1 } } );
+
 sub extensions { return 'ans', 'cia', 'ice' }
 
 no Moose;

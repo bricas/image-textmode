@@ -129,7 +129,7 @@ following options to change the output:
 
 =item * crop - limit the display to this many rows (default: no limit)
 
-=item * blink_mode - disables the 8th bit of an attribute byte to be used with the background color (aka iCEColor) (default: false)
+=item * blink_mode - when false, use the 8th bit of an attribute byte as part of the background color (aka iCEColor) (default: differs by format)
 
 =item * truecolor - set this to true to enable true color image output (default: false)
 

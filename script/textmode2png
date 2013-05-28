@@ -116,8 +116,8 @@ textmode2png - Convert text mode files to png
 
     Render options:
     crop        limit the display to this many rows (default: no limit)
-    blink_mode  disable the 8th bit of an attribute byte to be used with the
-                background color (aka iCEColor) (default: false)
+    blink_mode  when false, use the 8th bit of an attribute byte as part of the
+                background color (aka iCEColor) (default: differs by format)
     truecolor   enable true color image output (default: false)
     9th_bit     enable a ninth column in the font (default: false)
     ced         CED mode (black text on gray background) (default: false)
