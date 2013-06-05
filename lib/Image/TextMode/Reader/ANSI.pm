@@ -174,7 +174,6 @@ sub set_position {
 sub set_attributes {
     my ( $self, @args ) = @_;
 
-    # TODO: Handle calls when truecolor exists
     my $attr = $self->attr;
     my $rgba = $self->rgbattr;
     my $pal  = $self->image->palette->colors;
