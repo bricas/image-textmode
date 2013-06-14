@@ -1,4 +1,4 @@
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use strict;
 use warnings;
@@ -16,6 +16,7 @@ for my $file ( @files ) {
     isa_ok( $ansi, 'Image::TextMode::Format::ANSI' );
     is( $ansi->width,  4, "${ file } width()" );
     is( $ansi->height, 1, "${ file } height()" );
+    is( $ansi->render_options->{ truecolor }, 1, "${ file } truecolor" );
 
     isa_ok( $ansi->font,    'Image::TextMode::Font::8x16' );
     isa_ok( $ansi->palette, 'Image::TextMode::Palette::ANSI' );
