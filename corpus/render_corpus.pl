@@ -92,6 +92,10 @@ my @corpus = (
         class  => 'PCBoard',
         output => 'pcb',
     },
+    {   input  => 'ROBOINTR.ATA',
+        class  => 'ATASCII',
+        output => 'ata',
+    },
 );
 
 my $renderer = Image::TextMode::Renderer::GD->new;
