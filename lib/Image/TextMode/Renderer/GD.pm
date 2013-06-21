@@ -274,11 +274,11 @@ sub _render_frame {
 sub _font_to_gd {
     my ( $font, $options ) = @_;
     my $ninth = $options->{ '9th_bit' };
-    my $name = ( split( /\::/s, ref $font ) )[ -1 ];
+    my $name = lc( ( split( /\::/s, ref $font ) )[ -1 ] );
 
     if (my $fn = eval {
             File::ShareDir::dist_file( 'Image-TextMode',
-                lc $name . ( $ninth ? '_9b' : '' ) . '.fnt' );
+                $name . ( $ninth ? '_9b' : '' ) . '.fnt' );
         }
         )
     {
@@ -287,13 +287,22 @@ sub _font_to_gd {
 
     require File::Temp;
     my $temp = File::Temp->new;
+    _save_gd_font( $font, $options, $temp );
+    close $temp or croak "Unable to close temp file: $!";
 
-    binmode( $temp );
+    return GD::Font->load( $temp->filename );
+}
 
+sub _save_gd_font {
+    my ( $font, $options, $fh ) = @_;
+
+    binmode( $fh );
+
+    my $ninth     = $options->{ '9th_bit' };
     my $chars     = $font->chars;
     my $font_size = @$chars;
 
-    print $temp pack( 'VVVV',
+    print $fh pack( 'VVVV',
         $font_size, 0, $font->width + ( $ninth ? 1 : 0 ),
         $font->height );
 
@@ -308,12 +317,9 @@ sub _font_to_gd {
                         and $charval <= 0xdf ? $binary[ -1 ] : 0 );
             }
 
-            print $temp pack( 'C*', @binary );
+            print $fh pack( 'C*', @binary );
         }
     }
-    close $temp or croak "Unable to close temp file: $!";
-
-    return GD::Font->load( $temp->filename );
 }
 
 sub _fill_gd_palette {
