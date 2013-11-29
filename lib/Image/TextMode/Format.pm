@@ -2,7 +2,7 @@ package Image::TextMode::Format;
 
 use Moose;
 
-require Class::MOP;
+use Module::Runtime ();
 use Image::TextMode::Font::8x16;
 use Image::TextMode::Palette::VGA;
 use Image::TextMode::SAUCE;
@@ -65,11 +65,11 @@ sub _xs_or_not {
 
     unless ( $ENV{ IMAGE_TEXTMODE_NOXS } ) {
         my $xs = $name . '::XS';
-        my $result = eval { Class::MOP::load_class( $xs ); };
+        my $result = eval { Module::Runtime::require_module( $xs ); };
         if ( $result && !$@ ) { return $xs->new; }
     }
 
-    Class::MOP::load_class( $name );
+    Module::Runtime::require_module( $name );
     return $name->new;
 }
 

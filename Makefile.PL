@@ -12,6 +12,7 @@ all_from 'lib/Image/TextMode.pm';
 requires 'Moose' => '0.51';
 requires 'GD'    => '2.30';
 requires 'Module::Pluggable';
+requires 'Module::Runtime';
 requires 'Getopt::Long';
 requires 'Pod::Usage';
 requires 'File::ShareDir';

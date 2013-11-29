@@ -1,6 +1,7 @@
 package Image::TextMode::Renderer::GD;
 
 use Moose;
+use Module::Runtime ();
 use GD;
 use Image::TextMode::Palette::ANSI;
 use Carp 'croak';
@@ -186,7 +187,7 @@ sub _prepare_options {
         my $class
             = 'Image::TextMode::' . ucfirst( $_ ) . q(::) . $options->{ $_ };
 
-        if ( !eval { Class::MOP::load_class( $class ) } ) {
+        if ( !eval { Module::Runtime::require_module( $class ) } ) {
             croak sprintf( "Unable to load ${_} '%s'", $options->{ $_ } );
         }
 
