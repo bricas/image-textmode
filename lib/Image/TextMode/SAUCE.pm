@@ -121,7 +121,7 @@ my $filetypes = {
     },
     Character => {
         filetypes =>
-            [ qw( ASCII ANSi ANSiMation RIP PCBoard Avatar HTML Source ) ],
+            [ qw( ASCII ANSi ANSiMation RIP PCBoard Avatar HTML Source TundraDraw ) ],
         flags => [ 'None', 'iCE Color' ],
         tinfo => [
             ( { tinfo1 => 'Width', tinfo2 => 'Height' } ) x 3,
@@ -308,6 +308,11 @@ The string name of the data represented in filetype_id.
 =cut
 
 sub filetype {
+    # Filetype for "BinaryText" (id: 5) is used to encode the image width
+    if( $_[ 0 ]->datatype_id == 5 ) {
+        return 'Undefined';
+    }
+
     return $filetypes->{ $_[ 0 ]->datatype }->{ filetypes }
         ->[ $_[ 0 ]->filetype_id || 0 ];
 }
