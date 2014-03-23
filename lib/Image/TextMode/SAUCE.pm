@@ -371,6 +371,14 @@ no Moose;
 
 __PACKAGE__->meta->make_immutable;
 
+=head1 SEE ALSO
+
+=over 4
+
+=item * http://www.acid.org/info/sauce/sauce.htm
+
+=back
+
 =head1 AUTHOR
 
 Brian Cassidy E<lt>bricas@cpan.orgE<gt>
