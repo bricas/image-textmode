@@ -129,7 +129,7 @@ my $filetypes = {
             ( { tinfo1 => 'Width', tinfo2 => 'Height' } ) x 2
         ]
     },
-    Graphics => {
+    Bitmap => {
         filetypes => [
             qw( GIF PCX LBM/IFF TGA FLI FLC BMP GL DL WPG PNG JPG MPG AVI )
         ],
@@ -146,7 +146,7 @@ my $filetypes = {
         filetypes => [ qw( DXF DWG WPG 3DS ) ],
         flags     => [ 'None' ],
     },
-    Sound => {
+    Audio => {
         filetypes => [
             qw( MOD 669 STM S3M MTM FAR ULT AMF DMF OKT ROL CMF MIDI SADT VOC WAV SMP8 SMP8S SMP16 SMP16S PATCH8 PATCH16 XM HSC IT )
         ],
