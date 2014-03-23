@@ -203,7 +203,8 @@ sub read {    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     seek( $fh, -128, 2 );
     my $size = read( $fh, $buffer, 128 );
 
-    if ( substr( $buffer, 0, 5 ) ne $SAUCE_ID ) {
+    # Check for "SAUCE00" header
+    if ( substr( $buffer, 0, 7 ) ne "$SAUCE_ID$SAUCE_VERSION" ) {
         $self->has_sauce( 0 );
         return;
     }

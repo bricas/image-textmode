@@ -1,5 +1,9 @@
 Revision history for Perl extension Image::TextMode.
 
+0.24 TBD
+ - When reading SAUCE records, check for "SAUCE00" for header instead of 
+   just "SAUCE" as we only support version "00"
+
 0.23 2013-11-28
  - Basic ATASCII support
  - Use Module::Runtime for loading modules (RT #90928)
