@@ -372,6 +372,17 @@ sub tinfo4_name {
         ->[ $_[ 0 ]->filetype_id ]->{ tinfo4 };
 }
 
+=head2 tinfos( )
+
+An alias for filler() to match the SAUCE 00.5 specification. The value may be 
+a font name for ASCII, ANSI, ANSiMation, and BinaryText files. 
+
+=cut
+
+sub tinfos {
+    shift->filler( @_ );
+}
+
 no Moose;
 
 __PACKAGE__->meta->make_immutable;
