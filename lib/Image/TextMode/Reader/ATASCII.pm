@@ -1,6 +1,6 @@
 package Image::TextMode::Reader::ATASCII;
 
-use Moose;
+use Moo;
 use charnames ':full';
 
 extends 'Image::TextMode::Reader';

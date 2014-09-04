@@ -1,6 +1,6 @@
 package Image::TextMode::Format::Bin;
 
-use Moose;
+use Moo;
 
 extends 'Image::TextMode::Format', 'Image::TextMode::Canvas';
 

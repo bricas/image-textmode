@@ -1,6 +1,6 @@
 package Image::TextMode::Pixel;
 
-use Moose;
+use Moo;
 use Moose::Util::TypeConstraints;
 
 subtype 'Image::TextMode::Pixel::Char' => as 'Str' =>

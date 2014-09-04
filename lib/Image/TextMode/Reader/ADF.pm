@@ -1,6 +1,6 @@
 package Image::TextMode::Reader::ADF;
 
-use Moose;
+use Moo;
 
 extends 'Image::TextMode::Reader';
 

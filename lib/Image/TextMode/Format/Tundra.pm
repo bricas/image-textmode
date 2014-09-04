@@ -1,6 +1,6 @@
 package Image::TextMode::Format::Tundra;
 
-use Moose;
+use Moo;
 
 extends 'Image::TextMode::Format', 'Image::TextMode::Canvas';
 

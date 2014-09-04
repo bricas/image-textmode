@@ -1,6 +1,6 @@
 package Image::TextMode::Palette::ANSI;
 
-use Moose;
+use Moo;
 
 extends 'Image::TextMode::Palette';
 

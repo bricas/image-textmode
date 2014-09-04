@@ -1,6 +1,6 @@
 package Image::TextMode::Format;
 
-use Moose;
+use Moo;
 
 use Module::Runtime ();
 use Image::TextMode::Font::8x16;

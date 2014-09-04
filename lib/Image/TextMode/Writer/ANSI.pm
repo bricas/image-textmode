@@ -1,6 +1,6 @@
 package Image::TextMode::Writer::ANSI;
 
-use Moose;
+use Moo;
 use charnames ':full';
 
 extends 'Image::TextMode::Writer';

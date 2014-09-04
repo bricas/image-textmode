@@ -1,6 +1,6 @@
 package Image::TextMode::Palette::VGA;
 
-use Moose;
+use Moo;
 
 extends 'Image::TextMode::Palette';
 

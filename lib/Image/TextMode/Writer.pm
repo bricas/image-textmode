@@ -1,6 +1,6 @@
 package Image::TextMode::Writer;
 
-use Moose;
+use Moo;
 use Carp 'croak';
 
 =head1 NAME

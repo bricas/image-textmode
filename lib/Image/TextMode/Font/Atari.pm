@@ -1,6 +1,6 @@
 package Image::TextMode::Font::Atari;
 
-use Moose;
+use Moo;
 
 extends 'Image::TextMode::Font';
 

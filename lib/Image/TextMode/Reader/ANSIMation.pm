@@ -1,6 +1,6 @@
 package Image::TextMode::Reader::ANSIMation;
 
-use Moose;
+use Moo;
 use Image::TextMode::Canvas;
 
 extends 'Image::TextMode::Reader::ANSI';

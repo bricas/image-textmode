@@ -1,6 +1,6 @@
 package Image::TextMode::Reader::Bin;
 
-use Moose;
+use Moo;
 
 extends 'Image::TextMode::Reader';
 

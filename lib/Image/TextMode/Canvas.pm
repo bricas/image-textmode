@@ -1,6 +1,6 @@
 package Image::TextMode::Canvas;
 
-use Moose;
+use Moo;
 
 use Image::TextMode::Pixel;
 

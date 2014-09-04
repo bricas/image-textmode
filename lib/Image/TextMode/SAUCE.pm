@@ -1,6 +1,6 @@
 package Image::TextMode::SAUCE;
 
-use Moose;
+use Moo;
 
 # some SAUCE constants
 my $SAUCE_ID      = 'SAUCE';

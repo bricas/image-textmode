@@ -1,6 +1,6 @@
 package Image::TextMode::Format::XBin;
 
-use Moose;
+use Moo;
 
 # Flag byte constants
 my $FLAG_PALETTE          = 1;

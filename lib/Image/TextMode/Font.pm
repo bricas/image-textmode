@@ -1,12 +1,13 @@
 package Image::TextMode::Font;
 
-use Moose;
+use Moo;
+use Types::Standard qw( Int ArrayRef );
 
-has 'width' => ( is => 'rw', isa => 'Int', default => 0 );
+has 'width' => ( is => 'rw', isa => Int, default => 0 );
 
-has 'height' => ( is => 'rw', isa => 'Int', default => 0 );
+has 'height' => ( is => 'rw', isa => Int, default => 0 );
 
-has 'chars' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
+has 'chars' => ( is => 'rw', isa => ArrayRef, default => sub { [] } );
 
 no Moose;
 

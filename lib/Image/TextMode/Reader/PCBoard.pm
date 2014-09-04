@@ -1,6 +1,6 @@
 package Image::TextMode::Reader::PCBoard;
 
-use Moose;
+use Moo;
 use charnames ':full';
 
 extends 'Image::TextMode::Reader';

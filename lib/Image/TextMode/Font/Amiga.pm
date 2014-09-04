@@ -1,6 +1,6 @@
 package Image::TextMode::Font::Amiga;
 
-use Moose;
+use Moo;
 
 extends 'Image::TextMode::Font';
 

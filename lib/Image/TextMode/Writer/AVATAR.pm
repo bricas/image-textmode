@@ -1,6 +1,6 @@
 package Image::TextMode::Writer::AVATAR;
 
-use Moose;
+use Moo;
 
 extends 'Image::TextMode::Writer';
 

@@ -1,6 +1,6 @@
 package Image::TextMode::Font::8x8;
 
-use Moose;
+use Moo;
 
 extends 'Image::TextMode::Font';
 

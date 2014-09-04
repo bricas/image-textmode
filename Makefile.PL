@@ -9,8 +9,8 @@ perl_version '5.008';
 name 'Image-TextMode';
 all_from 'lib/Image/TextMode.pm';
 
-requires 'Moose' => '0.51';
-requires 'GD'    => '2.30';
+requires 'Moo' => '1.005000';
+requires 'GD'  => '2.30';
 requires 'Module::Pluggable';
 requires 'Module::Runtime';
 requires 'Getopt::Long';

@@ -1,6 +1,6 @@
 package Image::TextMode::Renderer::GD;
 
-use Moose;
+use Moo;
 use Module::Runtime ();
 use GD;
 use Image::TextMode::Palette::ANSI;

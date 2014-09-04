@@ -1,6 +1,6 @@
 package Image::TextMode::Reader::Tundra;
 
-use Moose;
+use Moo;
 
 extends 'Image::TextMode::Reader';
 

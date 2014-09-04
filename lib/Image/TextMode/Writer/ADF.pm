@@ -1,6 +1,6 @@
 package Image::TextMode::Writer::ADF;
 
-use Moose;
+use Moo;
 
 extends 'Image::TextMode::Writer';
 

@@ -1,6 +1,6 @@
 package Image::TextMode::Reader;
 
-use Moose;
+use Moo;
 
 use Carp 'croak';
 

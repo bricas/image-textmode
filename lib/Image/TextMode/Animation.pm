@@ -1,6 +1,6 @@
 package Image::TextMode::Animation;
 
-use Moose;
+use Moo;
 use Symbol ();
 
 BEGIN {

@@ -1,6 +1,6 @@
 package Image::TextMode::Palette;
 
-use Moose;
+use Moo;
 
 has 'colors' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
 
