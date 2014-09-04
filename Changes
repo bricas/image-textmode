@@ -3,6 +3,7 @@ Revision history for Perl extension Image::TextMode.
 0.24 TBD
  - When reading SAUCE records, check for "SAUCE00" for header instead of 
    just "SAUCE" as we only support version "00"
+ - Set proper default filler
 
 0.23 2013-11-28
  - Basic ATASCII support
