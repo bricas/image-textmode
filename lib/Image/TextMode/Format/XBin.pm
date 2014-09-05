@@ -1,6 +1,7 @@
 package Image::TextMode::Format::XBin;
 
 use Moo;
+use Types::Standard qw( HashRef );
 
 # Flag byte constants
 my $FLAG_PALETTE          = 1;
@@ -13,7 +14,7 @@ extends 'Image::TextMode::Format', 'Image::TextMode::Canvas';
 
 has 'header' => (
     is      => 'rw',
-    isa     => 'HashRef',
+    isa     => HashRef,
     default => sub {
         {   id      => 'XBIN',
             eofchar => chr( 26 ),
@@ -44,7 +45,7 @@ sub has_fivetwelve_chars {
 
 sub extensions { return 'xb', 'xbin' }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

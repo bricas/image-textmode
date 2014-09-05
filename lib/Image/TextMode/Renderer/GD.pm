@@ -330,7 +330,7 @@ sub _fill_gd_palette {
     return \@allocations;
 }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

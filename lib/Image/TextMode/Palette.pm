@@ -1,10 +1,10 @@
 package Image::TextMode::Palette;
 
 use Moo;
+use Types::Standard qw( ArrayRef );
+has 'colors' => ( is => 'rw', isa => ArrayRef, default => sub { [] } );
 
-has 'colors' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
 
-no Moose;
 
 __PACKAGE__->meta->make_immutable;
 

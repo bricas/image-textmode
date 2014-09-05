@@ -31,7 +31,7 @@ sub _read {
     return $image;
 }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

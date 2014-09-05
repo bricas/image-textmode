@@ -54,7 +54,7 @@ sub _pack_pal {
     return pack( 'C*', map { @$_ } @full_pal );
 }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

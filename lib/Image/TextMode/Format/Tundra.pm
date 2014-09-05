@@ -1,12 +1,13 @@
 package Image::TextMode::Format::Tundra;
 
 use Moo;
+use Types::Standard qw( HashRef );
 
 extends 'Image::TextMode::Format', 'Image::TextMode::Canvas';
 
 has 'header' => (
     is      => 'rw',
-    isa     => 'HashRef',
+    isa     => HashRef,
     default => sub { { int_id => 24, id => 'TUNDRA24' } }
 );
 
@@ -14,7 +15,7 @@ has '+render_options' => ( default => sub { { truecolor => 1 } } );
 
 sub extensions { return 'tnd' }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

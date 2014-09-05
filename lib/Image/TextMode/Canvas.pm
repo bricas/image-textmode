@@ -1,7 +1,7 @@
 package Image::TextMode::Canvas;
 
 use Moo;
-
+use Types::Standard qw( Int ArrayRef );
 use Image::TextMode::Pixel;
 
 =head1 NAME
@@ -27,11 +27,11 @@ of pixels.
 
 =cut
 
-has 'width' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+has 'width' => ( is => 'rw', lazy => 1, isa => Int, default => 0 );
 
-has 'height' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+has 'height' => ( is => 'rw', lazy => 1, isa => Int, default => 0 );
 
-has 'pixeldata' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
+has 'pixeldata' => ( is => 'rw', lazy => 1, isa => ArrayRef, default => sub { [] } );
 
 =head1 METHODS
 
@@ -231,7 +231,7 @@ sub ansiscale {
     return $new;
 }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

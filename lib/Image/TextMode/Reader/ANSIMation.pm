@@ -30,7 +30,7 @@ sub next_frame {
     $animation->add_frame( Image::TextMode::Canvas->new );
 }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

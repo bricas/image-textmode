@@ -10,6 +10,7 @@ name 'Image-TextMode';
 all_from 'lib/Image/TextMode.pm';
 
 requires 'Moo' => '1.005000';
+requires 'Type::Tiny';
 requires 'GD'  => '2.30';
 requires 'Module::Pluggable';
 requires 'Module::Runtime';

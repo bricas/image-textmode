@@ -6,7 +6,7 @@ extends 'Image::TextMode::Format', 'Image::TextMode::Canvas';
 
 sub extensions { return 'pcb' }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

@@ -270,7 +270,7 @@ has '+chars' => (
     }
 );
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

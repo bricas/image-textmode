@@ -1,15 +1,16 @@
 package Image::TextMode::Format::ADF;
 
 use Moo;
+use Types::Standard qw( HashRef );
 
 extends 'Image::TextMode::Format', 'Image::TextMode::Canvas';
 
 has 'header' =>
-    ( is => 'rw', isa => 'HashRef', default => sub { { version => 1 } } );
+    ( is => 'rw', isa => HashRef, default => sub { { version => 1 } } );
 
 sub extensions { return 'adf' }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

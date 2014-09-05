@@ -96,7 +96,7 @@ sub _parse_font {
     );
 }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

@@ -33,7 +33,7 @@ sub _assemble_pal {
         | ( $color->[ 2 ] );
 }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

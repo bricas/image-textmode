@@ -12,7 +12,7 @@ has '+render_options' => ( default => sub { { blink_mode => 1 } } );
 
 sub extensions { return 'ans', 'cia', 'ice' }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

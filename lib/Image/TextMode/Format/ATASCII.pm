@@ -12,7 +12,7 @@ has '+palette' => ( default => sub { Image::TextMode::Palette::Atari->new } );
 
 sub extensions { return 'ata' }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

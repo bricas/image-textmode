@@ -1,10 +1,7 @@
 package Image::TextMode::Pixel;
 
 use Moo;
-use Moose::Util::TypeConstraints;
-
-subtype 'Image::TextMode::Pixel::Char' => as 'Str' =>
-    where { length( $_ ) == 1 };
+use Types::Standard qw( Int );
 
 # Attribute byte constants
 my $ATTR_BG_NB = 240;
@@ -12,23 +9,23 @@ my $ATTR_BLINK = 128;
 my $ATTR_BG    = 112;
 my $ATTR_FG    = 15;
 
-has 'char' => ( is => 'rw', isa => 'Image::TextMode::Pixel::Char' );
+has 'char' => ( is => 'rw', isa => sub { die '$_[ 0 ] is not a single character' unless length( $_[ 0 ] ) == 1 } );
 
 has 'fg' => (
     is      => 'rw',
-    isa     => 'Int',
+    isa     => Int,
     default => 0,
 );
 
 has 'bg' => (
     is      => 'rw',
-    isa     => 'Int',
+    isa     => Int,
     default => 0,
 );
 
 has 'blink' => (
     is      => 'rw',
-    isa     => 'Int',
+    isa     => Int,
     default => 0,
 );
 
@@ -103,7 +100,7 @@ sub _attr_to_components {
     return \%data;
 }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

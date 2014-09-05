@@ -7,10 +7,10 @@ extends 'Image::TextMode::Writer';
 sub _write {
     my ( $self, $image, $fh, $options ) = @_;
 
-    Moose->throw_error( 'Not yet written' );
+    die( 'Not yet written' );
 }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

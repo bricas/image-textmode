@@ -1,19 +1,20 @@
 package Image::TextMode::Format::IDF;
 
 use Moo;
+use Types::Standard qw( HashRef );
 
 extends 'Image::TextMode::Format', 'Image::TextMode::Canvas';
 
 has 'header' => (
     is  => 'rw',
-    isa => 'HashRef',
+    isa => HashRef,
     default =>
         sub { { id => '\x{04}1.4', x0 => 0, y0 => 0, x1 => 0, y1 => 0 } }
 );
 
 sub extensions { return 'idf' }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

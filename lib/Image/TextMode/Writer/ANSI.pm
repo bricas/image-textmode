@@ -47,7 +47,7 @@ sub _gen_args {
     return join( q{;}, grep { length } ( $bl, $in, $fg, $bg ) );
 }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

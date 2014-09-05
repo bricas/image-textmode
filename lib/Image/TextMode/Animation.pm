@@ -1,6 +1,7 @@
 package Image::TextMode::Animation;
 
 use Moo;
+use Types::Standard qw( ArrayRef );
 use Symbol ();
 
 BEGIN {
@@ -32,7 +33,7 @@ for display.
 
 =cut
 
-has 'frames' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
+has 'frames' => ( is => 'rw', lazy => 1, isa => ArrayRef, default => sub { [] } );
 
 =head1 METHODS
 
@@ -117,7 +118,7 @@ The following methods are proxies to the last element in C<frames>.
 
 =cut
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

@@ -1,6 +1,7 @@
 package Image::TextMode::SAUCE;
 
 use Moo;
+use Types::Standard qw( Int Str ArrayRef Bool );
 
 # some SAUCE constants
 my $SAUCE_ID      = 'SAUCE';
@@ -63,53 +64,53 @@ record stored after an EOF char at the end of a given file.
 
 =cut
 
-has 'sauce_id' => ( is => 'rw', isa => 'Str', default => sub { $SAUCE_ID } );
+has 'sauce_id' => ( is => 'rw', isa => Str, default => sub { $SAUCE_ID } );
 
 has 'version' =>
-    ( is => 'rw', isa => 'Str', default => sub { $SAUCE_VERSION } );
+    ( is => 'rw', isa => Str, default => sub { $SAUCE_VERSION } );
 
-has 'title' => ( is => 'rw', isa => 'Str', default => sub { '' } );
+has 'title' => ( is => 'rw', isa => Str, default => sub { '' } );
 
-has 'author' => ( is => 'rw', isa => 'Str', default => sub { '' } );
+has 'author' => ( is => 'rw', isa => Str, default => sub { '' } );
 
-has 'group' => ( is => 'rw', isa => 'Str', default => sub { '' } );
+has 'group' => ( is => 'rw', isa => Str, default => sub { '' } );
 
 has 'date' => (
     is      => 'rw',
-    isa     => 'Str',
+    isa     => Str,
     default => sub {
         my @t = ( localtime )[ 5, 4, 3 ];
         return sprintf '%4d%02d%02d', 1900 + $t[ 0 ], $t[ 1 ] + 1, $t[ 2 ];
     }
 );
 
-has 'filesize' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+has 'filesize' => ( is => 'rw', isa => Int, default => 0 );
 
-has 'filetype_id' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+has 'filetype_id' => ( is => 'rw', isa => Int, default => 0 );
 
-has 'datatype_id' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+has 'datatype_id' => ( is => 'rw', isa => Int, default => 0 );
 
-has 'tinfo1' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+has 'tinfo1' => ( is => 'rw', isa => Int, default => 0 );
 
-has 'tinfo2' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+has 'tinfo2' => ( is => 'rw', isa => Int, default => 0 );
 
-has 'tinfo3' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+has 'tinfo3' => ( is => 'rw', isa => Int, default => 0 );
 
-has 'tinfo4' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+has 'tinfo4' => ( is => 'rw', isa => Int, default => 0 );
 
-has 'comment_count' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+has 'comment_count' => ( is => 'rw', isa => Int, default => 0 );
 
-has 'flags_id' => ( is => 'rw', isa => 'Int', default => sub { 0 } );
+has 'flags_id' => ( is => 'rw', isa => Int, default => 0 );
 
 has 'filler' =>
-    ( is => 'rw', isa => 'Str', default => sub { $SAUCE_FILLER } );
+    ( is => 'rw', isa => Str, default => sub { $SAUCE_FILLER } );
 
 has 'comment_id' =>
-    ( is => 'rw', isa => 'Str', default => sub { $COMNT_ID } );
+    ( is => 'rw', isa => Str, default => sub { $COMNT_ID } );
 
-has 'comments' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
+has 'comments' => ( is => 'rw', isa => ArrayRef, default => sub { [] } );
 
-has 'has_sauce' => ( is => 'rw', isa => 'Bool' );
+has 'has_sauce' => ( is => 'rw', isa => Bool );
 
 # define datatypes and filetypes as per SAUCE specs
 my @datatypes
@@ -383,7 +384,7 @@ sub tinfos {
     shift->filler( @_ );
 }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

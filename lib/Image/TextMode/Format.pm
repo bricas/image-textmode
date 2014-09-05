@@ -1,7 +1,7 @@
 package Image::TextMode::Format;
 
 use Moo;
-
+use Types::Standard qw( Object HashRef InstanceOf );
 use Module::Runtime ();
 use Image::TextMode::Font::8x16;
 use Image::TextMode::Palette::VGA;
@@ -38,15 +38,13 @@ common attributes (e.g. font and palette).
 =cut
 
 has 'reader' => (
-    is         => 'ro',
-    isa        => 'Image::TextMode::Reader',
-    lazy_build => 1,
+    is         => 'lazy',
+    isa        => InstanceOf['Image::TextMode::Reader'],
 );
 
 has 'writer' => (
-    is         => 'ro',
-    isa        => 'Image::TextMode::Writer',
-    lazy_build => 1,
+    is         => 'lazy',
+    isa        => InstanceOf['Image::TextMode::Writer'],
 );
 
 sub _build_reader {
@@ -75,25 +73,25 @@ sub _xs_or_not {
 
 has 'font' => (
     is      => 'rw',
-    isa     => 'Object',
+    isa     => Object,
     default => sub { Image::TextMode::Font::8x16->new }
 );
 
 has 'palette' => (
     is      => 'rw',
-    isa     => 'Object',
+    isa     => Object,
     default => sub { Image::TextMode::Palette::VGA->new }
 );
 
 has 'sauce' => (
     is      => 'rw',
-    isa     => 'Object',
+    isa     => Object,
     default => sub { Image::TextMode::SAUCE->new },
     handles => [ qw( author title group has_sauce ) ]
 );
 
 has 'render_options' =>
-    ( is => 'rw', isa => 'HashRef', default => sub { {} } );
+    ( is => 'rw', isa => HashRef, default => sub { {} } );
 
 =head1 METHODS
 
@@ -141,7 +139,7 @@ The following methods are proxies to C<sauce>.
 
 =cut
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

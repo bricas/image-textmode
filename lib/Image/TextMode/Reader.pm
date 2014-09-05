@@ -63,7 +63,7 @@ sub _get_fh {
     return $fh;
 }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

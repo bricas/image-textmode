@@ -9,7 +9,7 @@ has 'height' => ( is => 'rw', isa => Int, default => 0 );
 
 has 'chars' => ( is => 'rw', isa => ArrayRef, default => sub { [] } );
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 

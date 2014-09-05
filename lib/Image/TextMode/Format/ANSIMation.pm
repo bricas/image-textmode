@@ -10,7 +10,7 @@ has '+palette' => ( default => sub { Image::TextMode::Palette::ANSI->new } );
 
 sub extensions { return }
 
-no Moose;
+
 
 __PACKAGE__->meta->make_immutable;
 
