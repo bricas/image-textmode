@@ -107,6 +107,14 @@ Proxies to the reader's C<read()> method.
 
 sub read {    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     my ( $self, @rest ) = @_;
+
+    # Work-around RT#99225 until we switch to proper roles
+    if( $self->isa( 'Image::TextMode::Canvas' ) ) {
+        $self->pixeldata;
+        $self->width;
+        $self->height;
+    }
+
     $self->reader->read( $self, @rest );
 }
 
