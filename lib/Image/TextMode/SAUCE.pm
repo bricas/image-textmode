@@ -176,7 +176,7 @@ my $filetypes = {
 };
 
 # vars for use with pack() and unpack()
-my $sauce_template = 'A5 A2 A35 A20 A20 A8 V C C v v v v C C A22';
+my $sauce_template = 'A5 A2 A35 A20 A20 A8 V C C v v v v C C Z22';
 my @sauce_fields
     = qw( sauce_id version title author group date filesize datatype_id filetype_id tinfo1 tinfo2 tinfo3 tinfo4 comment_count flags_id filler );
 my $comnt_template = 'A5 A64';
