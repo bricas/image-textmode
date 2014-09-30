@@ -1,6 +1,7 @@
 Revision history for Perl extension Image::TextMode.
 
 0.24 TBD
+ - Switched from Moose to Moo and Type::Tiny
  - When reading SAUCE records, check for "SAUCE00" for header instead of 
    just "SAUCE" as we only support version "00"
  - Set proper default filler
