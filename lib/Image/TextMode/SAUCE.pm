@@ -123,18 +123,20 @@ my $filetypes = {
     Character => {
         filetypes =>
             [ qw( ASCII ANSi ANSiMation RIP PCBoard Avatar HTML Source TundraDraw ) ],
-        flags => [ 'None', 'iCE Color' ],
+        flags => [ ( 'ANSiFlags' ) x 3, ( 'None' ) x 6 ],
         tinfo => [
             ( { tinfo1 => 'Width', tinfo2 => 'Height' } ) x 3,
             { tinfo1 => 'Width', tinfo2 => 'Height', tinfo3 => 'Colors' },
-            ( { tinfo1 => 'Width', tinfo2 => 'Height' } ) x 2
+            ( { tinfo1 => 'Width', tinfo2 => 'Height' } ) x 2,
+            ( {} ) x 2,
+            { tinfo1 => 'Width', tinfo2 => 'Height' }
         ]
     },
     Bitmap => {
         filetypes => [
             qw( GIF PCX LBM/IFF TGA FLI FLC BMP GL DL WPG PNG JPG MPG AVI )
         ],
-        flags => [ 'None' ],
+        flags => [ ( 'None' ) x 14 ],
         tinfo => [
             (   {   tinfo1 => 'Width',
                     tinfo2 => 'Height',
@@ -145,18 +147,18 @@ my $filetypes = {
     },
     Vector => {
         filetypes => [ qw( DXF DWG WPG 3DS ) ],
-        flags     => [ 'None' ],
+        flags     => [ ( 'None' ) x 4 ],
     },
     Audio => {
         filetypes => [
             qw( MOD 669 STM S3M MTM FAR ULT AMF DMF OKT ROL CMF MIDI SADT VOC WAV SMP8 SMP8S SMP16 SMP16S PATCH8 PATCH16 XM HSC IT )
         ],
-        flags => [ 'None' ],
+        flags => [ ( 'None' ) x 20 ],
         tinfo => [ ( {} ) x 16, ( { tinfo1 => 'Sampling Rate' } ) x 4 ]
     },
     BinaryText => {
         filetypes => [ qw( Undefined ) ],
-        flags     => [ 'None', 'iCE Color' ],
+        flags     => [ 'ANSiFlags' ],
     },
     XBin => {
         filetypes => [ qw( Undefined ) ],
@@ -165,7 +167,7 @@ my $filetypes = {
     },
     Archive => {
         filetypes => [ qw( ZIP ARJ LZH ARC TAR ZOO RAR UC2 PAK SQZ ) ],
-        flags     => [ 'None' ],
+        flags     => [ ( 'None' ) x 10 ],
     },
     Executable => {
         filetypes => [ qw( Undefined ) ],
@@ -326,7 +328,7 @@ The string name of the data represented in flags_id.
 
 sub flags {
     return $filetypes->{ $_[ 0 ]->datatype }->{ flags }
-        ->[ $_[ 0 ]->flags_id ];
+        ->[ $_[ 0 ]->filetype_id ];
 }
 
 =head2 tinfo1_name( )
