@@ -214,9 +214,6 @@ sub read {    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
 
     @info{ @sauce_fields } = unpack( $sauce_template, $buffer );
 
-    # because trailing spaces are stripped....
-    $info{ filler } = $SAUCE_FILLER;
-
     # Do we have any comments?
     my $comment_count = $info{ comment_count };
 
