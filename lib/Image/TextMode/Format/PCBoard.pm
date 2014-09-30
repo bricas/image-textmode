@@ -6,10 +6,6 @@ extends 'Image::TextMode::Format', 'Image::TextMode::Canvas';
 
 sub extensions { return 'pcb' }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Format::PCBoard - read and write PCBoard files

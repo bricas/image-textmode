@@ -47,10 +47,6 @@ sub _gen_args {
     return join( q{;}, grep { length } ( $bl, $in, $fg, $bg ) );
 }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Writer::ANSI - Writes ANSI files

@@ -15,10 +15,6 @@ has '+render_options' => ( default => sub { { truecolor => 1 } } );
 
 sub extensions { return 'tnd' }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Format::Tundra - read and write Tundra files

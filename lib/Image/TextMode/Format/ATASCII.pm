@@ -12,10 +12,6 @@ has '+palette' => ( default => sub { Image::TextMode::Palette::Atari->new } );
 
 sub extensions { return 'ata' }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Format::ATASCII - read ATASCII files

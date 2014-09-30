@@ -4,10 +4,6 @@ use Moo;
 use Types::Standard qw( ArrayRef );
 has 'colors' => ( is => 'rw', isa => ArrayRef, default => sub { [] } );
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Palette - A base class for text mode palettes

@@ -6,10 +6,6 @@ extends 'Image::TextMode::Format', 'Image::TextMode::Canvas';
 
 sub extensions { return 'bin' }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Format::Bin - read and write Bin files

@@ -45,10 +45,6 @@ sub has_fivetwelve_chars {
 
 sub extensions { return 'xb', 'xbin' }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Format::XBin - read and write XBin files

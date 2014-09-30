@@ -270,10 +270,6 @@ has '+chars' => (
     }
 );
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Font::8x8 - 8 x 8 text mode font

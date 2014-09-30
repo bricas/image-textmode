@@ -116,12 +116,6 @@ The following methods are proxies to the last element in C<frames>.
 
 =back
 
-=cut
-
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 AUTHOR
 
 Brian Cassidy E<lt>bricas@cpan.orgE<gt>

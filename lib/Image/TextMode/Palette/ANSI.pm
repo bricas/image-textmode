@@ -27,10 +27,6 @@ has '+colors' => (
     }
 );
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Palette::ANSI - 16-color ANSI palette

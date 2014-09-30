@@ -10,10 +10,6 @@ sub _write {
     die( 'Not yet written' );
 }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Writer::PCBoard - Writes PCBoard files

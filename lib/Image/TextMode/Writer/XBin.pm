@@ -35,10 +35,6 @@ sub _write {
     }
 }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Writer::XBin - Writes XBin files

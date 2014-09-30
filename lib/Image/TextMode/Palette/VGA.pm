@@ -26,10 +26,6 @@ has '+colors' => (
     }
 );
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Palette::VGA - 16-color VGA palette

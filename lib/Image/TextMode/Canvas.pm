@@ -231,10 +231,6 @@ sub ansiscale {
     return $new;
 }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 AUTHOR
 
 Brian Cassidy E<lt>bricas@cpan.orgE<gt>

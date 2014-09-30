@@ -96,10 +96,6 @@ sub _parse_font {
     );
 }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Reader::IDF - Reads IDF files

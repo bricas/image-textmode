@@ -12,10 +12,6 @@ has '+colors' => (
     }
 );
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Palette::Atari - 2-color Atari palette

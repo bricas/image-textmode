@@ -270,10 +270,6 @@ has '+chars' => (
     }
 );
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Font::Atari - Atari text mode font for ATASCII

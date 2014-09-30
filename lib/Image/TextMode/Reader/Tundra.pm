@@ -93,10 +93,6 @@ sub _read {
     return $image;
 }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Reader::Tundra - Reads Tundra files

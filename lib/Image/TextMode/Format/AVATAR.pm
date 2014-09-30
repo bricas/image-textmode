@@ -6,10 +6,6 @@ extends 'Image::TextMode::Format', 'Image::TextMode::Canvas';
 
 sub extensions { return 'avt' }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Format::AVATAR - read and write AVATAR files

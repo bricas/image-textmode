@@ -14,10 +14,6 @@ has 'header' => (
 
 sub extensions { return 'idf' }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Format::IDF - read and write IDF files

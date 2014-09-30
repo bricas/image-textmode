@@ -163,10 +163,6 @@ sub store {
     }
 }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Reader::PCBoard - Reads PCBoard files

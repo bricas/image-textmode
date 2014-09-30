@@ -294,10 +294,6 @@ sub store {
     }
 }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Reader::AVATAR - Reads AVATAR files

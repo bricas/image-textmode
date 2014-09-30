@@ -186,10 +186,6 @@ sub _parse_uncompressed {
     }
 }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Reader::XBin - Reads XBin files

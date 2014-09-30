@@ -384,10 +384,6 @@ sub tinfos {
     shift->filler( @_ );
 }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 SEE ALSO
 
 =over 4

@@ -330,10 +330,6 @@ sub _fill_gd_palette {
     return \@allocations;
 }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 AUTHOR
 
 Brian Cassidy E<lt>bricas@cpan.orgE<gt>

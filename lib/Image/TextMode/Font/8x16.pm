@@ -782,10 +782,6 @@ has '+chars' => (
     }
 );
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Font::8x16 - 8 x 16 text mode font

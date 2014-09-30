@@ -12,10 +12,6 @@ has '+render_options' => ( default => sub { { blink_mode => 1 } } );
 
 sub extensions { return 'ans', 'cia', 'ice' }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Format::ANSI - read and write ANSI files

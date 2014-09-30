@@ -9,10 +9,6 @@ has 'height' => ( is => 'rw', isa => Int, default => 0 );
 
 has 'chars' => ( is => 'rw', isa => ArrayRef, default => sub { [] } );
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Font - A base class for text mode fonts

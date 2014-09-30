@@ -54,10 +54,6 @@ sub _pack_pal {
     return pack( 'C*', map { @$_ } @full_pal );
 }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Writer::ADF - Writes ADF files

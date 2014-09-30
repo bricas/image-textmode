@@ -33,10 +33,6 @@ sub _assemble_pal {
         | ( $color->[ 2 ] );
 }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Writer::Tundra - Writes Tundra files

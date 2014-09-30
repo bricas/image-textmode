@@ -10,10 +10,6 @@ has '+palette' => ( default => sub { Image::TextMode::Palette::ANSI->new } );
 
 sub extensions { return }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Format::ANSIMation - read and write ANSIMation files

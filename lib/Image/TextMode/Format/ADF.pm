@@ -10,10 +10,6 @@ has 'header' =>
 
 sub extensions { return 'adf' }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Format::ADF - read and write ADF files

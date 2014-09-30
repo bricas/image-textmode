@@ -14,10 +14,6 @@ sub _write {
     }
 }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Writer::Bin - Writes Bin files

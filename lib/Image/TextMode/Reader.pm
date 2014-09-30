@@ -63,10 +63,6 @@ sub _get_fh {
     return $fh;
 }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 AUTHOR
 
 Brian Cassidy E<lt>bricas@cpan.orgE<gt>

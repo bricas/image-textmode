@@ -782,10 +782,6 @@ has '+chars' => (
     }
 );
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Font::Amiga - Amiga-style text mode font

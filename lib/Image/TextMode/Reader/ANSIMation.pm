@@ -30,10 +30,6 @@ sub next_frame {
     $animation->add_frame( Image::TextMode::Canvas->new );
 }
 
-
-
-__PACKAGE__->meta->make_immutable;
-
 =head1 NAME
 
 Image::TextMode::Reader::ANSIMation - Reads ANSI Animation files
