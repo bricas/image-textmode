@@ -6,7 +6,7 @@ use Types::Standard qw( Int Str ArrayRef Bool );
 # some SAUCE constants
 my $SAUCE_ID      = 'SAUCE';
 my $SAUCE_VERSION = '00';
-my $SAUCE_FILLER  = '\0' x 22;
+my $SAUCE_FILLER  = "\0" x 22;
 my $COMNT_ID      = 'COMNT';
 
 =head1 NAME
