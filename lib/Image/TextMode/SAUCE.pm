@@ -383,6 +383,39 @@ sub tinfos {
     shift->filler( @_ );
 }
 
+=head2 parse_ansiflags( )
+
+For filetypes that support it, extract the metadata embeded in the flags. 
+Currently, those fields are:
+
+=over 4
+
+=item * blink_mode
+
+=item * 9th_bit
+
+=item * dos_aspect
+
+=back
+
+=cut
+
+sub parse_ansiflags {
+    my $self  = shift;
+    my $flags = {};
+
+    my $dt = $self->datatype_id;
+    my $ft = $self->filetype_id;
+    return $flags unless $dt == 5 || ( $dt == 1 && $ft <= 2 );
+
+    my $fid = $self->flags_id;
+    $flags->{ 'blink_mode' } = ($fid & 1) ^ 1;
+    $flags->{ '9th_bit' } = ($fid & 6) == 4;
+    $flags->{ 'dos_aspect' } = ($fid & 24) == 8; 
+
+    return $flags;
+}
+
 =head1 SEE ALSO
 
 =over 4
