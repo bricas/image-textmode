@@ -136,7 +136,7 @@ following options to change the output:
 
 =item * 9th_bit - compatibility option to enable a ninth column in the font (default: false)
 
-=item * dos_apsect - emulate the aspect ratio from DOS (default: false)
+=item * dos_aspect - emulate the aspect ratio from DOS (default: false)
 
 =item * ced - CED mode (black text on gray background) (default: false)
 
