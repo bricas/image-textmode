@@ -43,7 +43,7 @@ sub _read {
     }
 
     if ( $image->has_sauce ) {
-        $image->render_options->{ blink_mode } = $image->sauce->flags_id ^ 1;
+        $image->render_options->{ blink_mode } = ($image->sauce->flags_id & 1) ^ 1;
     }
 
     seek( $fh, 0, 0 );

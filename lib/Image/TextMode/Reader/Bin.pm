@@ -8,7 +8,7 @@ sub _read {
     my ( $self, $image, $fh, $options ) = @_;
 
     if ( $image->has_sauce ) {
-        $image->render_options->{ blink_mode } = $image->sauce->flags_id ^ 1;
+        $image->render_options->{ blink_mode } = ($image->sauce->flags_id & 1) ^ 1;
     }
 
     my $width = $options->{ width } || 160;
