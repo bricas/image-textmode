@@ -6,11 +6,13 @@ extends 'Image::TextMode::Writer';
 
 sub _write {
     my ( $self, $image, $fh, $options ) = @_;
+    my ( $width, $height ) = $image->dimensions;
 
-    for my $row ( @{ $image->pixeldata } ) {
-        print $fh
-            join( '',
-            map { pack( 'aC', @{ $_ }{ qw( char attr ) } ) } @$row );
+    for my $y ( 0 .. $height - 1 ) {
+        for my $x ( 0 .. $width - 1 ) {
+            my $pixel = $image->getpixel( $x, $y ) || { char => ' ', attr => 7 };
+            print $fh pack( 'aC', $pixel->{ char }, $pixel->{ attr } );
+        }
     }
 }
 
